@@ -1,0 +1,282 @@
+import { useState, useEffect, useRef } from "react";
+import { Music, Moon, Sun, ArrowRight, Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+  const hasInteractedRef = useRef(false);
+
+  useEffect(() => {
+    // Create audio object
+    const audio = new Audio("/ambient.mp3");
+    audio.loop = true;
+    audio.volume = 0.25; // Soft background music volume
+    audioRef.current = audio;
+
+    const startAudio = () => {
+      if (hasInteractedRef.current) return;
+      hasInteractedRef.current = true;
+      audio.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.log("Autoplay was prevented by browser. Click the music button to play.", err);
+        });
+      cleanup();
+    };
+
+    const cleanup = () => {
+      window.removeEventListener("click", startAudio);
+      window.removeEventListener("scroll", startAudio);
+      window.removeEventListener("touchstart", startAudio);
+      window.removeEventListener("keypress", startAudio);
+    };
+
+    window.addEventListener("click", startAudio);
+    window.addEventListener("scroll", startAudio);
+    window.addEventListener("touchstart", startAudio);
+    window.addEventListener("keypress", startAudio);
+
+    return () => {
+      cleanup();
+      audio.pause();
+    };
+  }, []);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    hasInteractedRef.current = true;
+
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.error("Audio play failed:", err);
+        });
+    }
+  };
+
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.add("light");
+      return "light";
+    } else {
+      document.documentElement.classList.remove("light");
+      return "dark";
+    }
+  });
+
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+      setTheme("light");
+    } else {
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+      setTheme("dark");
+    }
+  };
+
+  const handleLogoDoubleClick = () => {
+    const pin = prompt("Enter Admin Access Pin to toggle Edit Mode:");
+    if (pin === "pratik2026") {
+      const current = localStorage.getItem("prtx_admin_mode") === "true";
+      if (current) {
+        localStorage.removeItem("prtx_admin_mode");
+        alert("Admin Edit Mode Deactivated.");
+        window.location.reload();
+      } else {
+        localStorage.setItem("prtx_admin_mode", "true");
+        alert("Admin Edit Mode Activated! You can now edit your About Me photo and Projects.");
+        window.location.reload();
+      }
+    } else if (pin !== null) {
+      alert("Access Denied.");
+    }
+  };
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/#about" },
+    { name: "Skills", path: "/#skills" },
+    { name: "Projects", path: "/#projects" },
+    { name: "Experience", path: "/#experience" },
+    { name: "Achievements", path: "/#achievements" },
+    { name: "Contact", path: "/#contact" },
+  ];
+
+  return (
+    <div>
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0c]/80 backdrop-blur-md border-b border-gray-800/40 px-6 py-4 md:px-12">
+        <div className="flex items-center justify-between mx-auto max-w-7xl">
+          {/* Logo Style: Pratik.OS */}
+          <div
+            onDoubleClick={handleLogoDoubleClick}
+            title="Double-click to toggle admin mode"
+            className="flex items-center space-x-1 font-mono text-xl font-bold tracking-wide cursor-pointer select-none"
+          >
+            <span className="text-[#f59e0b]">&lt;/&gt;</span>
+            <span className="text-white">Pratik</span>
+            <span className="font-normal text-gray-400">.OS</span>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <div className="items-center hidden space-x-8 lg:flex">
+            {navLinks.map((link) => {
+              const isActive = link.path.includes('#')
+                ? location.hash === link.path.substring(link.path.indexOf('#'))
+                : location.pathname === link.path && !location.hash;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`relative text-sm font-medium transition-colors duration-300 hover:text-[#f59e0b] ${
+                    isActive ? "text-[#f59e0b]" : "text-gray-300"
+                  }`}
+                >
+                  {link.name}
+                  {/* Active Indicator Underline */}
+                  {isActive && (
+                    <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#f59e0b] rounded-full shadow-[0_0_8px_#f59e0b]" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Right Side Controls & CTA */}
+          <div className="items-center hidden space-x-4 md:flex">
+            {/* Ambient Audio Button */}
+            <button 
+              onClick={togglePlay}
+              className={`p-2.5 border rounded-full transition-all duration-300 shadow-inner relative flex items-center justify-center cursor-pointer ${
+                isPlaying 
+                  ? "bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]" 
+                  : "bg-gray-900/60 border-gray-800 text-gray-400 hover:text-white hover:border-gray-700"
+              }`}
+              aria-label="Toggle background music"
+            >
+              <Music size={16} className={isPlaying ? "animate-pulse text-amber-500" : ""} />
+              {isPlaying && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full">
+                  <span className="absolute inset-0 rounded-full bg-amber-400 animate-ping opacity-75" />
+                </span>
+              )}
+            </button>
+
+            {/* Theme Toggle Button */}
+            <button 
+              onClick={toggleTheme}
+              className="p-2.5 bg-gray-900/60 border border-gray-800 rounded-full text-gray-400 hover:text-white hover:border-gray-700 transition-all shadow-inner"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+
+            {/* "Let's Talk" CTA Button with Amber Gradient & Glow */}
+            <Link
+              to="/#contact"
+              className="
+                            flex items-center space-x-2 
+                            px-5 py-2.5 
+                            text-white 
+                            font-medium 
+                            text-sm 
+                            rounded-xl 
+                            border border-[#f59e0b]/30
+                            shadow-[0_0_15px_rgba(217,119,6,0.15)]
+                            hover:shadow-[0_0_25px_rgba(217,119,6,0.35)]
+                            transition-all duration-300
+
+                            bg-gradient-to-l
+                            from-[#6b3e1e]
+                            to-[#f97316]
+                            "
+            >
+              <span>Let's Talk</span>
+
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex items-center space-x-3 lg:hidden">
+            <button 
+              onClick={toggleTheme}
+              className="p-2 text-gray-400 bg-gray-900 border border-gray-800 rounded-full"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-gray-400 hover:text-white focus:outline-none"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isOpen && (
+          <div className="lg:hidden absolute top-full left-0 w-full bg-[#0a0a0c] border-b border-gray-800 px-6 py-6 space-y-4 shadow-xl">
+            {navLinks.map((link) => {
+              const isActive = link.path.includes('#')
+                ? location.hash === link.path.substring(link.path.indexOf('#'))
+                : location.pathname === link.path && !location.hash;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`block text-base font-medium ${
+                    isActive ? "text-[#f59e0b]" : "text-gray-300"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+            <div className="flex items-center justify-between pt-4 border-t border-gray-800">
+              <button 
+                onClick={togglePlay}
+                className={`flex items-center p-2 space-x-2 transition-colors cursor-pointer ${
+                  isPlaying ? "text-amber-500" : "text-gray-400 hover:text-white"
+                }`}
+              >
+                <Music size={16} className={isPlaying ? "animate-pulse" : ""} />
+                <span className="text-sm font-medium">
+                  {isPlaying ? "Mute Background Music" : "Play Background Music"}
+                </span>
+              </button>
+              <Link
+                to="/#contact"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center space-x-2 px-4 py-2 bg-linear-to-r from-[#d97706] to-[#b45309] text-white text-sm rounded-xl"
+              >
+                <span className="text-[#d6a15d]">Let's Talk</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        )}
+      </nav>
+    </div>
+  );
+};
+
+export default Navbar;
+
