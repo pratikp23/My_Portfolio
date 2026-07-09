@@ -1,427 +1,360 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import gsap from "gsap";
-import { Code2, Server, Database, Settings, Shield, Cpu, ChevronLeft, ChevronRight, Pin } from "lucide-react";
+import { Code2, Server, Database, Settings, Cpu } from "lucide-react";
 
-const PencilGraphic = () => (
-  <svg width="24" height="120" viewBox="0 0 30 150" fill="none" className="transition-opacity duration-300 opacity-40 hover:opacity-90">
-    <path d="M15 150 L10 135 L20 135 Z" fill="#64748b" />
-    <path d="M10 135 L20 135 L22 120 L8 120 Z" fill="#d97706" opacity="0.6" />
-    <rect x="8" y="25" width="14" height="95" fill="#f59e0b" rx="2" opacity="0.8" />
-    <rect x="8" y="12" width="14" height="13" fill="#94a3b8" />
-    <path d="M8 12 L22 12 C22 5, 8 5, 8 12 Z" fill="#fda4af" />
+// CUSTOM HIGH-QUALITY DEVELOPER SVG ICONS
+const ReactIcon = ({ size = 16, className }) => (
+  <svg viewBox="-11.5 -10.23174 23 20.46348" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
+    <g stroke="#61dafb" strokeWidth="1" fill="none">
+      <ellipse rx="11" ry="4.2"/>
+      <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+      <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+    </g>
   </svg>
 );
 
-const PenGraphic = () => (
-  <svg width="24" height="120" viewBox="0 0 30 150" fill="none" className="transition-opacity duration-300 opacity-40 hover:opacity-90">
-    <rect x="9" y="30" width="12" height="95" rx="6" fill="#0f172a" stroke="#f59e0b" strokeWidth="1.5" />
-    <rect x="18" y="45" width="2.5" height="35" rx="1" fill="#f59e0b" />
-    <rect x="9" y="75" width="12" height="4" fill="#f59e0b" />
-    <path d="M15 150 L9 130 L12 120 L18 120 L21 130 Z" fill="#f59e0b" />
-    <line x1="15" y1="120" x2="15" y2="142" stroke="#0f172a" strokeWidth="1" />
+const JsIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0V0zm22.034 18.268c-.156-.843-.728-1.502-1.745-1.905-.626-.26-1.12-.416-1.716-.626-.507-.183-.755-.377-.755-.729 0-.365.313-.61.886-.61.547 0 .926.222 1.25.612l1.628-1.041c-.586-.926-1.42-1.394-2.825-1.394-1.928 0-3.218 1.12-3.218 2.76 0 1.704 1.094 2.37 2.657 2.92.703.247 1.34.48 1.758.74.455.285.663.585.663.974 0 .495-.417.82-1.133.82-.924 0-1.407-.468-1.81-1.107l-1.693 1.053c.69 1.182 1.732 1.833 3.49 1.833 2.188 0 3.518-1.105 3.518-2.928zm-11.666-.35c-.17-.585-.625-.975-1.314-.975-.715 0-1.157.442-1.157 1.365 0 1.027.403 1.43 1.144 1.43.61 0 1.04-.286 1.274-.832l1.742 1.014c-.663 1.196-1.833 1.638-3.094 1.638-2.82 0-4.043-1.69-4.043-3.835 0-2.457 1.456-3.86 4.108-3.86 1.547 0 2.665.65 3.146 1.86l-1.807 1.19z" fill="#f7df1e"/>
   </svg>
 );
+
+const TsIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0V0zm22.034 18.268c-.156-.843-.728-1.502-1.745-1.905-.626-.26-1.12-.416-1.716-.626-.507-.183-.755-.377-.755-.729 0-.365.313-.61.886-.61.547 0 .926.222 1.25.612l1.628-1.041c-.586-.926-1.42-1.394-2.825-1.394-1.928 0-3.218 1.12-3.218 2.76 0 1.704 1.094 2.37 2.657 2.92.703.247 1.34.48 1.758.74.455.285.663.585.663.974 0 .495-.417.82-1.133.82-.924 0-1.407-.468-1.81-1.107l-1.693 1.053c.69 1.182 1.732 1.833 3.49 1.833 2.188 0 3.518-1.105 3.518-2.928zM10.96 11.23h1.86v7.71h-1.86v-7.71zm-2.88 0h7.62v1.54H9.94v6.17H8.08v-7.71z" fill="#3178c6"/>
+  </svg>
+);
+
+const NextIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 180 180" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="nextMask" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
+      <circle cx="90" cy="90" r="90" fill="black" />
+    </mask>
+    <g mask="url(#nextMask)">
+      <circle cx="90" cy="90" r="90" fill="black" />
+      <path d="M149.508 157.52L69.142 54H54V126H67.97V72.281L138.837 163.662C142.593 161.802 146.166 159.743 149.508 157.52Z" fill="url(#nextGrad)" />
+      <rect x="115" y="54" width="14" height="72" fill="url(#nextGrad2)" />
+    </g>
+    <defs>
+      <linearGradient id="nextGrad" x1="109" y1="116.5" x2="144.5" y2="160.5" gradientUnits="userSpaceOnUse">
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
+      </linearGradient>
+      <linearGradient id="nextGrad2" x1="122" y1="54" x2="122" y2="122" gradientUnits="userSpaceOnUse">
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+const TailwindIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C7.666 17.818 9.027 19 12.001 19c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z" fill="#38bdf8"/>
+  </svg>
+);
+
+const NodeIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2L4.5 6.3v8.7L12 19.3l7.5-4.3V6.3L12 2zm6 12.1l-6 3.4-6-3.4V7.2l6-3.4 6 3.4v6.9z" fill="#6cc24a" stroke="#6cc24a" strokeWidth="1" />
+    <path d="M12 5.5l5 2.9v5.8l-5 2.9-5-2.9v-5.8l5-2.9z" fill="#6cc24a" opacity="0.35" />
+  </svg>
+);
+
+const MongoIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C11.5 2 7 6.5 7 11.5c0 4 2.5 6.5 5 8.5 2.5-2 5-4.5 5-8.5C17 6.5 12.5 2 12 2zm0 17c-1.5-1.2-3.5-3.2-3.5-6.5C8.5 9 11.2 5.2 12 4.2c.8 1 3.5 4.8 3.5 8.3 0 3.3-2 5.3-3.5 6.5z" fill="#47a248" />
+    <path d="M12 22v-3.5M12 2v2.2" stroke="#47a248" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+const GitIcon = ({ size = 16, className }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.2 11.8l9.6-9.6c.4-.4 1.1-.4 1.5 0l8.5 8.5c.4.4.4 1.1 0 1.5L12.2 21.8c-.4.4-1.1.4-1.5 0L2.2 13.3c-.4-.4-.4-1.1 0-1.5z" stroke="#f05032" strokeWidth="1.5" />
+    <circle cx="12" cy="12" r="2" fill="#f05032" />
+    <circle cx="8" cy="12" r="2" fill="#f05032" />
+    <circle cx="12" cy="8" r="2" fill="#f05032" />
+    <path d="M12 10v4M8 12h4" stroke="#f05032" strokeWidth="1.5" />
+  </svg>
+);
+
+// Map of Custom SVG icons
+const TechIcons = {
+  react: <ReactIcon size={14} />,
+  js: <JsIcon size={14} />,
+  ts: <TsIcon size={14} />,
+  next: <NextIcon size={14} className="bg-black rounded-full" />,
+  tailwind: <TailwindIcon size={14} />,
+  node: <NodeIcon size={14} />,
+  mongodb: <MongoIcon size={14} />,
+  git: <GitIcon size={14} />,
+  css: <Cpu size={14} className="text-amber-500" />,
+  express: <Server size={14} className="text-emerald-500" />,
+  sql: <Database size={14} className="text-purple-500" />,
+  docker: <Settings size={14} className="text-blue-500" />,
+  postman: <Settings size={14} className="text-orange-500" />,
+  vite: <Settings size={14} className="text-yellow-500" />,
+  npm: <Settings size={14} className="text-red-500" />,
+  html: <Code2 size={14} className="text-cyan-500" />,
+};
 
 const Skills = () => {
   const location = useLocation();
   const isStandalone = location.pathname === "/skills";
 
-  const carouselRef = useRef(null);
-  const autoTweenRef = useRef(null);
-  const resumeTimerRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  // Load interactive display and body fonts dynamically on mount
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Space+Grotesk:wght@500;700&family=Outfit:wght@300;500;700&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
 
+  // Skill categories with tailored neon color definitions
   const skillCategories = [
     {
       title: "Frontend Essentials",
-      icon: <Code2 className="text-amber-500" size={24} />,
+      icon: <Code2 size={20} />,
+      color: "cyan",
+      textClass: "text-cyan-400",
+      borderClass: "group-hover:border-cyan-500/30",
+      shadowGlow: "group-hover:shadow-[0_15px_30px_-10px_rgba(6,182,212,0.22)]",
+      barGradient: "from-cyan-500 to-blue-500",
       skills: [
-        { name: "React", level: "90%", icon: "⚛️" },
-        // { name: "Next.js", level: "85%", icon: "▲" },
-        // { name: "TypeScript", level: "80%", icon: "🔷" },
-        { name: "JavaScript", level: "90%", icon: "🟨" },
+        { name: "React", iconKey: "react" },
+        { name: "JavaScript", iconKey: "js" },
       ],
     },
     {
       title: "Styling & Layouts",
-      icon: <Cpu className="text-amber-500" size={24} />,
+      icon: <Cpu size={20} />,
+      color: "amber",
+      textClass: "text-amber-400",
+      borderClass: "group-hover:border-amber-500/30",
+      shadowGlow: "group-hover:shadow-[0_15px_30px_-10px_rgba(245,158,11,0.22)]",
+      barGradient: "from-amber-500 to-orange-500",
       skills: [
-        { name: "Tailwind CSS", level: "95%", icon: "🌊" },
-        { name: "Vanilla CSS", level: "90%", icon: "🎨" },
-        { name: "Responsive Layouts", level: "95%", icon: "📱" },
-        { name: "HTML5 Semantics", level: "90%", icon: "🌐" },
+        { name: "Tailwind CSS", iconKey: "tailwind" },
+        { name: "Vanilla CSS", iconKey: "css" },
+        { name: "Responsive Layouts", iconKey: "html" },
+        { name: "HTML5 Semantics", iconKey: "html" },
       ],
     },
     {
       title: "Backend Systems",
-      icon: <Server className="text-amber-500" size={24} />,
+      icon: <Server size={20} />,
+      color: "emerald",
+      textClass: "text-emerald-400",
+      borderClass: "group-hover:border-emerald-500/30",
+      shadowGlow: "group-hover:shadow-[0_15px_30px_-10px_rgba(16,185,129,0.22)]",
+      barGradient: "from-emerald-500 to-teal-500",
       skills: [
-        { name: "Node.js", level: "85%", icon: "🟢" },
-        { name: "Express.js", level: "80%", icon: "🚂" },
-        { name: "REST APIs", level: "90%", icon: "🔗" },
-        { name: "JWT Auth", level: "85%", icon: "🔑" },
+        { name: "Node.js", iconKey: "node" },
+        { name: "Express.js", iconKey: "express" },
+        { name: "REST APIs", iconKey: "node" },
+        { name: "JWT Auth", iconKey: "express" },
       ],
     },
     {
       title: "Database Engineering",
-      icon: <Database className="text-amber-500" size={24} />,
+      icon: <Database size={20} />,
+      color: "purple",
+      textClass: "text-purple-400",
+      borderClass: "group-hover:border-purple-500/30",
+      shadowGlow: "group-hover:shadow-[0_15px_30px_-10px_rgba(168,85,247,0.22)]",
+      barGradient: "from-purple-500 to-indigo-500",
       skills: [
-        { name: "MongoDB", level: "80%", icon: "🍃" },
-        // { name: "PostgreSQL", level: "75%", icon: "🐘" },
-        { name: "SQL Queries", level: "80%", icon: "📊" },
-        { name: "Mongoose ODM", level: "85%", icon: "📁" },
+        { name: "MongoDB", iconKey: "mongodb" },
+        { name: "SQL Queries", iconKey: "sql" },
+        { name: "Mongoose ODM", iconKey: "mongodb" },
       ],
     },
-    // {
-    //   title: "DevOps & Automation",
-    //   icon: <Shield className="text-amber-500" size={24} />,
-    //   skills: [
-    //     { name: "Docker Containers", level: "70%", icon: "🐳" },
-    //     { name: "GitHub Actions", level: "80%", icon: "⚙️" },
-    //     { name: "CI/CD Pipelines", level: "75%", icon: "🔄" },
-    //     { name: "Cloud Deploy", level: "70%", icon: "☁️" },
-    //   ],
-    // },
     {
       title: "Development Tools",
-      icon: <Settings className="text-amber-500" size={24} />,
+      icon: <Settings size={20} />,
+      color: "rose",
+      textClass: "text-rose-400",
+      borderClass: "group-hover:border-rose-500/30",
+      shadowGlow: "group-hover:shadow-[0_15px_30px_-10px_rgba(244,63,94,0.22)]",
+      barGradient: "from-rose-500 to-red-500",
       skills: [
-        { name: "Git & GitHub", level: "88%", icon: "🐙" },
-        { name: "Vite Bundler", level: "90%", icon: "⚡" },
-        { name: "Postman testing", level: "85%", icon: "🚀" },
-        { name: "NPM scripts", level: "90%", icon: "📦" },
+        { name: "Git & GitHub", iconKey: "git" },
+        { name: "Vite Bundler", iconKey: "vite" },
+        { name: "Postman testing", iconKey: "postman" },
+        { name: "NPM scripts", iconKey: "npm" },
       ],
     },
   ];
 
-  // Desktop Left Column Pinned Sticky Notes
-  const leftSkills = [
-    { name: "React", level: "90%", icon: "⚛️", rot: "-6deg", anim: "floating-item-1" },
-    { name: "Next.js", level: "85%", icon: "▲", rot: "4deg", anim: "floating-item-2" },
-    { name: "TypeScript", level: "80%", icon: "🔷", rot: "-3deg", anim: "floating-item-1" },
-    { name: "JavaScript", level: "90%", icon: "🟨", rot: "5deg", anim: "floating-item-2" },
-    { name: "Tailwind", level: "95%", icon: "🌊", rot: "-5deg", anim: "floating-item-1" },
+  // Top Row Pinned Sticky Notes (Upside)
+  const upsideSkills = [
+    { name: "React", iconKey: "react", rot: "-4deg", anim: "floating-up-1" },
+    { name: "Next.js", iconKey: "next", rot: "3deg", anim: "floating-up-2" },
+    { name: "TypeScript", iconKey: "ts", rot: "-2deg", anim: "floating-up-1" },
+    { name: "JavaScript", iconKey: "js", rot: "4deg", anim: "floating-up-2" },
+    { name: "Tailwind", iconKey: "tailwind", rot: "-3deg", anim: "floating-up-1" },
   ];
 
-  // Desktop Right Column Pinned Sticky Notes
-  const rightSkills = [
-    { name: "Node.js", level: "85%", icon: "🟢", rot: "6deg", anim: "floating-item-2" },
-    { name: "Express", level: "80%", icon: "🚂", rot: "-4deg", anim: "floating-item-1" },
-    { name: "MongoDB", level: "80%", icon: "🍃", rot: "5deg", anim: "floating-item-2" },
-    { name: "PostgreSQL", level: "75%", icon: "🐘", rot: "-3deg", anim: "floating-item-1" },
-    { name: "Docker", level: "70%", icon: "🐳", rot: "4deg", anim: "floating-item-2" },
-    { name: "Git & GitHub", level: "88%", icon: "🐙", rot: "-5deg", anim: "floating-item-1" },
+  // Bottom Row Pinned Sticky Notes (Downside)
+  const downsideSkills = [
+    { name: "Node.js", iconKey: "node", rot: "4deg", anim: "floating-down-1" },
+    { name: "Express.js", iconKey: "express", rot: "-3deg", anim: "floating-down-2" },
+    { name: "MongoDB", iconKey: "mongodb", rot: "3deg", anim: "floating-down-1" },
+    { name: "PostgreSQL", iconKey: "sql", rot: "-2deg", anim: "floating-down-2" },
+    { name: "Docker", iconKey: "docker", rot: "4deg", anim: "floating-down-1" },
+    { name: "Git & GitHub", iconKey: "git", rot: "-4deg", anim: "floating-down-2" },
   ];
-
-  // Combined List for Mobile Grid Fallback
-  const allSkillsList = [...leftSkills, ...rightSkills];
-
-  const startAutoRotation = () => {
-    if (autoTweenRef.current) autoTweenRef.current.kill();
-
-    // Rotate the carousel very slowly continuously (360 degrees in 45 seconds)
-    autoTweenRef.current = gsap.to(carouselRef.current, {
-      rotateY: "-=360",
-      duration: 45,
-      repeat: -1,
-      ease: "none",
-      onUpdate: () => {
-        const currentAngle = gsap.getProperty(carouselRef.current, "rotateY");
-        const normalized = ((currentAngle % 360) + 360) % 360;
-        const idx = Math.round((360 - normalized) / 60) % 6;
-        setActiveIndex(idx);
-      }
-    });
-  };
-
-  useEffect(() => {
-    startAutoRotation();
-
-    return () => {
-      if (autoTweenRef.current) autoTweenRef.current.kill();
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    };
-  }, []);
-
-  const handlePrev = (e) => {
-    e.stopPropagation();
-    if (autoTweenRef.current) autoTweenRef.current.kill();
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-
-    const currentAngle = gsap.getProperty(carouselRef.current, "rotateY");
-    const targetAngle = Math.round(currentAngle / 60) * 60 + 60;
-
-    gsap.to(carouselRef.current, {
-      rotateY: targetAngle,
-      duration: 0.8,
-      ease: "power2.out",
-      onUpdate: () => {
-        const normalized = ((targetAngle % 360) + 360) % 360;
-        const idx = Math.round((360 - normalized) / 60) % 6;
-        setActiveIndex(idx);
-      },
-      onComplete: () => {
-        resumeTimerRef.current = setTimeout(() => {
-          startAutoRotation();
-        }, 3000);
-      }
-    });
-  };
-
-  const handleNext = (e) => {
-    e.stopPropagation();
-    if (autoTweenRef.current) autoTweenRef.current.kill();
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-
-    const currentAngle = gsap.getProperty(carouselRef.current, "rotateY");
-    const targetAngle = Math.round(currentAngle / 60) * 60 - 60;
-
-    gsap.to(carouselRef.current, {
-      rotateY: targetAngle,
-      duration: 0.8,
-      ease: "power2.out",
-      onUpdate: () => {
-        const normalized = ((targetAngle % 360) + 360) % 360;
-        const idx = Math.round((360 - normalized) / 60) % 6;
-        setActiveIndex(idx);
-      },
-      onComplete: () => {
-        resumeTimerRef.current = setTimeout(() => {
-          startAutoRotation();
-        }, 3000);
-      }
-    });
-  };
-
-  const radius = 260; // Distance of cards from center of cylinder (in pixels)
 
   return (
-    <div className="relative w-full min-h-screen bg-[#070708] text-white flex flex-col justify-center items-center overflow-hidden pt-32 pb-24">
+    <div className="relative w-full min-h-screen bg-[#070708] text-white flex flex-col justify-center items-center overflow-hidden py-20 px-4">
+      
       {/* Background Glow */}
-      <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[550px] h-[550px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
-      {/* DESKTOP SPATIAL WORKSPACE - LEFT SIDEBAR ITEMS */}
-      <div className="absolute z-10 flex-col items-center hidden gap-8 lg:flex left-8 xl:left-20 top-24 w-28">
-        <div className="mb-4 floating-pencil">
-          <PencilGraphic />
-        </div>
-        {leftSkills.map((skill, idx) => (
-          <div
-            key={idx}
-            style={{ "--rot": skill.rot }}
-            className={`w-24 h-24 p-2 flex flex-col justify-between hover:scale-110 hover:rotate-0 hover:shadow-[0_0_20px_rgba(245,158,11,0.12)] transition-all duration-300 relative group cursor-pointer sticky-note ${skill.anim}`}
-          >
-            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_5px_#f59e0b] group-hover:scale-125 transition-transform" />
-            <div className="mt-2 text-lg text-center">{skill.icon}</div>
-            <div className="text-center mb-0.5">
-              <h4 className="text-[9px] font-mono font-bold tracking-wider uppercase card-title">{skill.name}</h4>
-              <span className="text-[8px] font-bold font-mono text-amber-500">{skill.level}</span>
-            </div>
-          </div>
-        ))}
+      {/* Main Header */}
+      <div className="relative z-10 mb-14 text-center">
+        <span className="text-[10px] font-bold tracking-[0.35em] text-amber-500 uppercase block mb-3">Skills Board</span>
+        <h1 className="mb-3 text-4xl font-extrabold text-white md:text-6xl">
+          My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Skills</span>
+          {!isStandalone && (
+            <Link to="/skills" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
+              [Full View ↗]
+            </Link>
+          )}
+        </h1>
+        <p className="max-w-xl mx-auto text-xs font-light text-slate-400 md:text-sm font-body">
+          Interactive developer workspace. Pinned notes float around the main category cards.
+        </p>
       </div>
 
-      {/* MAIN CONTAINER */}
-      <div className="relative z-10 flex flex-col items-center w-full max-w-5xl px-6 mx-auto">
+      {/* Stacked Workspace Container */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col gap-14 items-center">
         
-        {/* Header Block */}
-        <div className="mb-12 text-center">
-          <h1 className="mb-3 text-4xl font-extrabold text-white md:text-6xl">
-            My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Skills</span>
-            {!isStandalone && (
-              <Link to="/skills" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
-                [Full View ↗]
-              </Link>
-            )}
-          </h1>
-          <p className="max-w-xl mx-auto text-xs font-light text-gray-405 md:text-sm">
-            Watch the 3D cylinder spin slowly, or use the side arrow controls to manually rotate and explore categories.
-          </p>
-        </div>
-
-        {/* 3D Skills Carousel Scene Container */}
-        <div 
-          className="relative w-full max-w-md h-[400px] flex items-center justify-center"
-          style={{ perspective: "1500px" }}
-        >
-          {/* Left Sidebar Manual Control */}
-          <button
-            onClick={handlePrev}
-            className="absolute left-[-40px] md:left-[-100px] p-3 rounded-full bg-gray-950/80 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.05)] z-20 cursor-pointer"
-            aria-label="Previous Category"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          {/* Rotating Carousel Container */}
-          <div
-            ref={carouselRef}
-            className="relative flex items-center justify-center w-full h-full transition-all duration-300"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            {skillCategories.map((category, idx) => {
-              const cardAngle = idx * 60; // 360 / 6 = 60 degrees per card
-              
-              // Shortest distance to active card in the circle
-              const diff = Math.abs(idx - activeIndex);
-              const dist = Math.min(diff, 6 - diff);
-              
-              const isActive = dist === 0;
-              const isPeeking = dist === 1;
-              const isHidden = dist >= 2;
-
-              return (
-                <div
-                  key={idx}
-                  className="absolute w-full h-full max-w-[320px] rounded-3xl p-6 backdrop-blur-sm flex flex-col justify-between transition-all duration-750 select-none border skills-card"
-                  style={{
-                    transform: `rotateY(${cardAngle}deg) translateZ(${radius}px)`,
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                    opacity: isHidden ? 0 : isPeeking ? 0.35 : 1,
-                    filter: isHidden ? "blur(6px)" : isPeeking ? "blur(2.5px)" : "blur(0px)",
-                    scale: isHidden ? "0.8" : isPeeking ? "0.9" : "1.0",
-                    pointerEvents: isActive ? "auto" : "none",
-                    boxShadow: isActive ? "0 0 50px rgba(245,158,11,0.08)" : "none",
-                  }}
-                >
-                  <div>
-                    {/* Category Header */}
-                    <div className="flex items-center pb-4 mb-6 space-x-3 border-b border-gray-800/40">
-                      {category.icon}
-                      <h3 className="text-xl font-bold card-title">{category.title}</h3>
-                    </div>
-
-                    {/* Skill items */}
-                    <div className="space-y-4">
-                      {category.skills.map((skill, sIdx) => (
-                        <div key={sIdx} className="space-y-2">
-                          <div className="flex items-center justify-between font-mono text-xs font-medium md:text-sm">
-                            <span className="flex items-center gap-2 card-text">
-                              <span>{skill.icon}</span> {skill.name}
-                            </span>
-                            <span className="font-bold text-amber-500">{skill.level}</span>
-                          </div>
-                          
-                          {/* Skill level progress bar */}
-                          <div className="w-full h-1.5 bg-gray-950 border border-gray-900 rounded-full overflow-hidden">
-                            <div
-                              className="h-full transition-all rounded-full bg-gradient-to-r from-amber-500 to-orange-600 duration-750"
-                              style={{ width: isActive ? skill.level : "0%" }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Card Footer */}
-                  <div className="flex items-center justify-between text-[10px] font-mono pt-4 border-t border-gray-800/40 card-subtle">
-                    <span>Index: {idx + 1}/6</span>
-                    <span>Verified Specs</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Right Sidebar Manual Control */}
-          <button
-            onClick={handleNext}
-            className="absolute right-[-40px] md:right-[-100px] p-3 rounded-full bg-gray-950/80 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.05)] z-20 cursor-pointer"
-            aria-label="Next Category"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
-        {/* MOBILE GRID FALLBACK - Shows only on small viewports */}
-        <div className="relative z-10 w-full pt-12 mt-16 border-t lg:hidden border-gray-800/20">
-          <h2 className="flex items-center justify-center gap-2 mb-10 text-2xl font-bold text-center text-white">
-            <Pin className="rotate-45 text-amber-500" size={22} /> Pinned Skills Board
-          </h2>
-          
-          <div className="flex flex-wrap justify-center gap-4 px-4">
-            {allSkillsList.map((skill, index) => {
-              const rotations = ["-4deg", "3deg", "-2deg", "5deg", "-5deg", "2deg", "-3deg", "4deg"];
-              const rotation = rotations[index % rotations.length];
-
-              return (
-                <div
-                  key={index}
-                  style={{ transform: `rotate(${rotation})` }}
-                  className="w-24 h-24 p-2.5 flex flex-col justify-between hover:scale-110 hover:rotate-0 hover:shadow-[0_0_20px_rgba(245,158,11,0.12)] transition-all duration-300 relative group cursor-pointer sticky-note"
-                >
-                  <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_5px_#f59e0b] group-hover:scale-125 transition-transform" />
-                  <div className="mt-2 text-lg text-center">{skill.icon}</div>
-                  <div className="text-center mb-0.5">
-                    <h4 className="text-[9px] font-mono font-bold tracking-wider uppercase card-title">{skill.name}</h4>
-                    <span className="text-[8px] font-bold font-mono text-amber-500">{skill.level}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-      </div>
-
-      {/* DESKTOP SPATIAL WORKSPACE - RIGHT SIDEBAR ITEMS */}
-      <div className="absolute z-10 flex-col items-center hidden gap-8 lg:flex right-8 xl:right-20 top-24 w-28">
-        <div className="mb-4 floating-pen">
-          <PenGraphic />
-        </div>
-        {rightSkills.map((skill, idx) => (
-          <div
-            key={idx}
-            style={{ "--rot": skill.rot }}
-            className={`w-24 h-24 p-2 flex flex-col justify-between hover:scale-110 hover:rotate-0 hover:shadow-[0_0_20px_rgba(245,158,11,0.12)] transition-all duration-300 relative group cursor-pointer sticky-note ${skill.anim}`}
-          >
-            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_5px_#f59e0b] group-hover:scale-125 transition-transform" />
-            <div className="mt-2 text-lg text-center">{skill.icon}</div>
-            <div className="text-center mb-0.5">
-              <h4 className="text-[9px] font-mono font-bold tracking-wider uppercase card-title">{skill.name}</h4>
-              <span className="text-[8px] font-bold font-mono text-amber-500">{skill.level}</span>
+        {/* ROW 1: Upside Pinned Sticky Notes */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 w-full px-4">
+          {upsideSkills.map((skill, idx) => (
+            <div
+              key={idx}
+              style={{ "--rot": skill.rot }}
+              className={`w-24 h-24 p-2 flex flex-col justify-between hover:scale-110 hover:rotate-0 hover:shadow-[0_10px_20px_rgba(245,158,11,0.12)] transition-all duration-300 relative group cursor-pointer sticky-note ${skill.anim}`}
+            >
+              {/* Push Pin */}
+              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-rose-500 shadow-[0_2px_4px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform" />
+              <div className="mt-2 text-center flex justify-center items-center h-10">{TechIcons[skill.iconKey]}</div>
+              <div className="text-center mb-1">
+                <h4 className="text-[11px] font-bold tracking-wider uppercase font-display card-title">{skill.name}</h4>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* ROW 2: Vertical Skill Category Cards (In-Between) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 w-full px-4 my-2">
+          {skillCategories.map((category, idx) => (
+            <div
+              key={idx}
+              className={`rounded-2xl p-5 backdrop-blur-sm flex flex-col justify-start border skills-card transition-all duration-300 hover:-translate-y-1.5 ${category.borderClass} ${category.shadowGlow} group shadow-lg gap-4`}
+            >
+              {/* Category Header */}
+              <div className="flex items-center space-x-3 w-full pb-3 border-b border-white/[0.04]">
+                {/* Glowing Icon Frame */}
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center bg-slate-950/80 border border-white/[0.08] relative overflow-hidden transition-all duration-300 shadow-inner ${category.textClass}`}>
+                  <div className="absolute inset-0 bg-current opacity-0 group-hover:opacity-[0.06] transition-opacity duration-300 pointer-events-none" />
+                  <span className="relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    {category.icon}
+                  </span>
+                </div>
+                <h3 className="text-xs font-bold tracking-tight text-white card-title font-display">{category.title}</h3>
+              </div>
+
+              {/* Skills List (Stacked Vertically) */}
+              <div className="flex flex-col gap-2.5 w-full font-body">
+                {category.skills.map((skill, sIdx) => (
+                  <div 
+                    key={sIdx} 
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl border border-white/[0.04] bg-slate-950/40 text-slate-350 hover:text-amber-500 hover:border-amber-500/20 transition-all duration-300 group/skill cursor-default w-full"
+                  >
+                    <span className="w-4 h-4 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover/skill:scale-110">
+                      {TechIcons[skill.iconKey]}
+                    </span>
+                    <span className="text-[11px] font-medium tracking-wide">{skill.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ROW 3: Downside Pinned Sticky Notes */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 w-full px-4">
+          {downsideSkills.map((skill, idx) => (
+            <div
+              key={idx}
+              style={{ "--rot": skill.rot }}
+              className={`w-24 h-24 p-2 flex flex-col justify-between hover:scale-110 hover:rotate-0 hover:shadow-[0_10px_20px_rgba(245,158,11,0.12)] transition-all duration-300 relative group cursor-pointer sticky-note ${skill.anim}`}
+            >
+              {/* Push Pin */}
+              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#f59e0b] shadow-[0_2px_4px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform" />
+              <div className="mt-2 text-center flex justify-center items-center h-10">{TechIcons[skill.iconKey]}</div>
+              <div className="text-center mb-1">
+                <h4 className="text-[10px] font-bold tracking-wider uppercase font-display card-title">{skill.name}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
 
-      {/* Light/Dark responsiveness, 3D variables, and float keyframes */}
+      {/* Styling Overrides */}
       <style>{`
         :root {
-          --card-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(3, 7, 18, 0.9) 100%);
-          --card-border: rgba(245, 158, 11, 0.15);
+          --card-bg: linear-gradient(135deg, rgba(16, 15, 14, 0.8) 0%, rgba(10, 10, 11, 0.95) 100%);
+          --card-border: rgba(255, 255, 255, 0.04);
           --card-title: #ffffff;
-          --card-text: #cbd5e1;
-          --card-subtle: #9ca3af;
-          --note-bg: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.04) 100%);
-          --note-border: rgba(245, 158, 11, 0.22);
+          --card-text: #94a3b8;
+          --card-subtle: #4b5563;
+          --note-bg: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.02) 100%);
+          --note-border: rgba(245, 158, 11, 0.2);
         }
 
         html.light {
-          --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
-          --card-border: rgba(245, 158, 11, 0.35);
+          --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 1) 100%);
+          --card-border: rgba(15, 23, 42, 0.06);
           --card-title: #0f172a;
-          --card-text: #334155;
-          --card-subtle: #64748b;
-          --note-bg: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
-          --note-border: rgba(245, 158, 11, 0.3);
+          --card-text: #475569;
+          --card-subtle: #94a3b8;
+          --note-bg: linear-gradient(135deg, #fefce8 0%, #fef08a 100%);
+          --note-border: #fde047;
+        }
+
+        /* Set imported fonts */
+        .font-display {
+          font-family: 'Space Grotesk', sans-serif;
+          letter-spacing: -0.015em;
+        }
+        
+        .font-body {
+          font-family: 'Outfit', sans-serif;
         }
 
         .skills-card {
           background: var(--card-bg) !important;
           border-color: var(--card-border) !important;
           color: var(--card-text) !important;
+          box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6) !important;
         }
 
         .sticky-note {
           background: var(--note-bg) !important;
           border: 1px solid var(--note-border) !important;
           border-radius: 12px;
-          box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: 2px 5px 12px rgba(0, 0, 0, 0.15) !important;
+          font-family: 'Caveat', cursive;
         }
 
         .card-title {
@@ -436,32 +369,38 @@ const Skills = () => {
           color: var(--card-subtle) !important;
         }
 
-        @keyframes float-slow {
+        /* Floating keyframes for Top row notes (rise and fall) */
+        @keyframes floatUpSlow {
+          0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+          50% { transform: translateY(-8px) rotate(var(--rot)); }
+        }
+        @keyframes floatUpMedium {
           0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
           50% { transform: translateY(-12px) rotate(var(--rot)); }
         }
 
-        @keyframes float-medium {
+        /* Floating keyframes for Bottom row notes (fall and rise) */
+        @keyframes floatDownSlow {
           0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
-          50% { transform: translateY(-16px) rotate(var(--rot)); }
+          50% { transform: translateY(8px) rotate(var(--rot)); }
+        }
+        @keyframes floatDownMedium {
+          0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+          50% { transform: translateY(12px) rotate(var(--rot)); }
         }
 
-        .floating-item-1 {
-          animation: float-slow 7s ease-in-out infinite;
+        .floating-up-1 {
+          animation: floatUpSlow 6s ease-in-out infinite;
+        }
+        .floating-up-2 {
+          animation: floatUpMedium 7s ease-in-out infinite;
         }
 
-        .floating-item-2 {
-          animation: float-medium 8s ease-in-out infinite;
+        .floating-down-1 {
+          animation: floatDownSlow 6.5s ease-in-out infinite;
         }
-
-        .floating-pencil {
-          --rot: -22deg;
-          animation: float-slow 9s ease-in-out infinite;
-        }
-
-        .floating-pen {
-          --rot: 32deg;
-          animation: float-medium 10s ease-in-out infinite;
+        .floating-down-2 {
+          animation: floatDownMedium 7.5s ease-in-out infinite;
         }
       `}</style>
     </div>

@@ -7,7 +7,6 @@ const Navbar = () => {
   const location = useLocation();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const hasInteractedRef = useRef(false);
 
   useEffect(() => {
     // Create audio object
@@ -16,33 +15,7 @@ const Navbar = () => {
     audio.volume = 0.25; // Soft background music volume
     audioRef.current = audio;
 
-    const startAudio = () => {
-      if (hasInteractedRef.current) return;
-      hasInteractedRef.current = true;
-      audio.play()
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch((err) => {
-          console.log("Autoplay was prevented by browser. Click the music button to play.", err);
-        });
-      cleanup();
-    };
-
-    const cleanup = () => {
-      window.removeEventListener("click", startAudio);
-      window.removeEventListener("scroll", startAudio);
-      window.removeEventListener("touchstart", startAudio);
-      window.removeEventListener("keypress", startAudio);
-    };
-
-    window.addEventListener("click", startAudio);
-    window.addEventListener("scroll", startAudio);
-    window.addEventListener("touchstart", startAudio);
-    window.addEventListener("keypress", startAudio);
-
     return () => {
-      cleanup();
       audio.pause();
     };
   }, []);
@@ -50,8 +23,6 @@ const Navbar = () => {
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    hasInteractedRef.current = true;
 
     if (isPlaying) {
       audio.pause();
@@ -108,6 +79,57 @@ const Navbar = () => {
     }
   };
 
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    // Only run scroll spy on the main landing page "/"
+    if (location.pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const sections = ["about", "skills", "projects", "experience", "achievements", "contact"];
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      // Check if we are near the top of the page (Hero section)
+      if (window.scrollY < 120) {
+        setActiveSection("home");
+        return;
+      }
+
+      let currentSection = "home";
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            currentSection = sectionId;
+            break;
+          }
+        }
+      }
+
+      // If scrolled to the bottom of the page, force contact section highlight
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+        currentSection = "contact";
+      }
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Call once on mount to set initial active section
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
+
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/#about" },
@@ -136,9 +158,14 @@ const Navbar = () => {
           {/* Desktop Navigation Links */}
           <div className="items-center hidden space-x-8 lg:flex">
             {navLinks.map((link) => {
-              const isActive = link.path.includes('#')
-                ? location.hash === link.path.substring(link.path.indexOf('#'))
-                : location.pathname === link.path && !location.hash;
+              const isHomeLink = link.path === "/";
+              const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
+              
+              const isActive = activeSection 
+                ? (isHomeLink && activeSection === "home") || (hash && activeSection === hash.replace("#", ""))
+                : link.path.includes('#')
+                  ? location.hash === hash
+                  : location.pathname === link.path && !location.hash;
               return (
                 <Link
                   key={link.name}
@@ -234,9 +261,14 @@ const Navbar = () => {
         {isOpen && (
           <div className="lg:hidden absolute top-full left-0 w-full bg-[#0a0a0c] border-b border-gray-800 px-6 py-6 space-y-4 shadow-xl">
             {navLinks.map((link) => {
-              const isActive = link.path.includes('#')
-                ? location.hash === link.path.substring(link.path.indexOf('#'))
-                : location.pathname === link.path && !location.hash;
+              const isHomeLink = link.path === "/";
+              const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
+              
+              const isActive = activeSection 
+                ? (isHomeLink && activeSection === "home") || (hash && activeSection === hash.replace("#", ""))
+                : link.path.includes('#')
+                  ? location.hash === hash
+                  : location.pathname === link.path && !location.hash;
               return (
                 <Link
                   key={link.name}

@@ -131,8 +131,8 @@ const About = () => {
             <div className="flex pb-3 mb-6 space-x-6 text-sm font-medium border-b border-gray-800/80">
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`pb-3 relative transition-colors duration-300 ${
-                  activeTab === "profile" ? "text-amber-550 text-white" : "text-gray-500 hover:text-white"
+                className={`pb-3 relative transition-colors duration-300 font-medium ${
+                  activeTab === "profile" ? "text-amber-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 <span className="flex items-center gap-1.5"><User size={16} /> My Bio</span>
@@ -142,8 +142,8 @@ const About = () => {
               </button>
               <button
                 onClick={() => setActiveTab("education")}
-                className={`pb-3 relative transition-colors duration-300 ${
-                  activeTab === "education" ? "text-amber-550 text-white" : "text-gray-500 hover:text-white"
+                className={`pb-3 relative transition-colors duration-300 font-medium ${
+                  activeTab === "education" ? "text-amber-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 <span className="flex items-center gap-1.5"><GraduationCap size={16} /> Education</span>
@@ -153,8 +153,8 @@ const About = () => {
               </button>
               <button
                 onClick={() => setActiveTab("vision")}
-                className={`pb-3 relative transition-colors duration-300 ${
-                  activeTab === "vision" ? "text-amber-550 text-white" : "text-gray-500 hover:text-white"
+                className={`pb-3 relative transition-colors duration-300 font-medium ${
+                  activeTab === "vision" ? "text-amber-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 <span className="flex items-center gap-1.5"><Sparkles size={16} /> My Vision</span>

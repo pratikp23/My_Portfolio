@@ -1,10 +1,6 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ExternalLink, Layers, Terminal, ChevronLeft, ChevronRight, Upload } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const GithubIcon = ({ size = 16 }) => (
   <svg
@@ -27,14 +23,14 @@ const Projects = () => {
   const location = useLocation();
   const isStandalone = location.pathname === "/projects";
 
-  const triggerRef = useRef(null);
-  const cardsRef = useRef(null);
-  const scrollTriggerRef = useRef(null);
-  
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [activeDetailProject, setActiveDetailProject] = useState(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isManualMode, setIsManualMode] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Admin Mode detection: Checks '?edit=true' query parameter or localStorage flag
+  const manualTimeoutRef = useRef(null);
+
+  // Admin Mode detection
   const [isAdminMode, setIsAdminMode] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("edit") === "true") {
@@ -76,40 +72,7 @@ const Projects = () => {
         complexity: "High",
         category: "AI Integration",
         image: "/Project2.png",
-      },
-      // {
-      //   title: "Real-time Collaboration Platform",
-      //   description: "Collab tool featuring rich text editing, simultaneous user tracking, instant commenting, and WebRTC audio calling capabilities.",
-      //   fullDetails: "Created a real-time editor using Socket.io to synchronize document actions between users. Powered by a Node.js Express backend and a PostgreSQL relational schema for storing persistent document trees.",
-      //   tags: ["React", "Express", "Socket.io", "PostgreSQL"],
-      //   github: "https://github.com",
-      //   demo: "https://google.com",
-      //   complexity: "Expert",
-      //   category: "WebSockets",
-      //   image: "/project_collab.png",
-      // },
-      // {
-      //   title: "DevQuest Developer Platform",
-      //   description: "Interactive gamified roadmap platform for developers learning programming languages, with challenges, quizzes, and progression tracking.",
-      //   fullDetails: "Designed a gamified progression map using React and Vite. Leveraged Firebase Authentication for quick user signup and Firestore documents for tracking scores, achievement badges, and level metrics.",
-      //   tags: ["React", "Vite", "Tailwind CSS", "Firebase"],
-      //   github: "https://github.com",
-      //   demo: "https://google.com",
-      //   complexity: "Medium",
-      //   category: "Gamification",
-      //   image: "/project_quest.png",
-      // },
-      // {
-      //   title: "Cloud Native DevOps Pipeline",
-      //   description: "Automated CI/CD deployment pipeline for Kubernetes microservices using Docker configurations and GitHub Actions workflows.",
-      //   fullDetails: "Designed a multi-stage automated build and release system. Leveraged Docker container caching, Kubernetes cluster manifests, Helm charts, and AWS deployment integration to orchestrate live load balancing.",
-      //   tags: ["AWS", "Docker", "Kubernetes", "GitHub Actions"],
-      //   github: "https://github.com",
-      //   demo: "https://google.com",
-      //   complexity: "Expert",
-      //   category: "Cloud/DevOps",
-      //   image: "/project_saas.png",
-      // },
+      }
     ];
   });
 
@@ -137,92 +100,6 @@ const Projects = () => {
     setEditDemo(project?.demo || "");
     setEditComplexity(project?.complexity || "High");
     setEditImage(project?.image || "");
-  };
-
-  useEffect(() => {
-    const cards = cardsRef.current.querySelectorAll(".project-card");
-
-    // Set initial layout values
-    gsap.set(cards[0], { y: 0, scale: 1.0, opacity: 1.0, zIndex: 10 });
-    gsap.set(cards[1], { y: "100vh", scale: 0.95, opacity: 0, zIndex: 11 });
-    gsap.set(cards[2], { y: "100vh", scale: 0.95, opacity: 0, zIndex: 12 });
-    gsap.set(cards[3], { y: "100vh", scale: 0.95, opacity: 0, zIndex: 13 });
-    gsap.set(cards[4], { y: "100vh", scale: 0.95, opacity: 0, zIndex: 14 });
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1.0,
-          onUpdate: (self) => {
-            scrollTriggerRef.current = self;
-            const p = self.progress;
-            if (p < 0.20) setActiveCardIndex(0);
-            else if (p < 0.45) setActiveCardIndex(1);
-            else if (p < 0.70) setActiveCardIndex(2);
-            else if (p < 0.92) setActiveCardIndex(3);
-            else setActiveCardIndex(4);
-          }
-        }
-      });
-
-      // --- Stage 1: Card 1 slides over Card 0 ---
-      tl.to(cards[0], { scale: 0.94, y: -16, opacity: 0.65, ease: "none" }, "step1")
-        .to(cards[1], { y: 0, opacity: 1, ease: "none" }, "step1");
-
-      // --- Stage 2: Card 2 slides over Card 1 ---
-      tl.to(cards[0], { scale: 0.88, y: -32, opacity: 0.35, ease: "none" }, "step2")
-        .to(cards[1], { scale: 0.94, y: -16, opacity: 0.65, ease: "none" }, "step2")
-        .to(cards[2], { y: 0, opacity: 1, ease: "none" }, "step2");
-
-      // --- Stage 3: Card 3 slides over Card 2 ---
-      tl.to(cards[0], { scale: 0.82, y: -48, opacity: 0.15, ease: "none" }, "step3")
-        .to(cards[1], { scale: 0.88, y: -32, opacity: 0.35, ease: "none" }, "step3")
-        .to(cards[2], { scale: 0.94, y: -16, opacity: 0.65, ease: "none" }, "step3")
-        .to(cards[3], { y: 0, opacity: 1, ease: "none" }, "step3");
-
-      // --- Stage 4: Card 4 slides over Card 3 ---
-      tl.to(cards[1], { scale: 0.82, y: -48, opacity: 0.15, ease: "none" }, "step4")
-        .to(cards[2], { scale: 0.88, y: -32, opacity: 0.35, ease: "none" }, "step4")
-        .to(cards[3], { scale: 0.94, y: -16, opacity: 0.65, ease: "none" }, "step4")
-        .to(cards[4], { y: 0, opacity: 1, ease: "none" }, "step4");
-
-    }, triggerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const scrollToProject = (index) => {
-    const self = scrollTriggerRef.current;
-    if (self) {
-      const start = self.start;
-      const end = self.end;
-      const scrollRange = end - start;
-      const progressValues = [0.05, 0.32, 0.57, 0.81, 0.96];
-      const targetProgress = progressValues[index];
-      const targetScroll = start + targetProgress * scrollRange;
-      
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth"
-      });
-    }
-  };
-
-  const handlePrev = (e) => {
-    e.stopPropagation();
-    if (activeCardIndex > 0) {
-      scrollToProject(activeCardIndex - 1);
-    }
-  };
-
-  const handleNext = (e) => {
-    e.stopPropagation();
-    if (activeCardIndex < 4) {
-      scrollToProject(activeCardIndex + 1);
-    }
   };
 
   const handleImageChange = (e) => {
@@ -261,200 +138,266 @@ const Projects = () => {
     setIsAdminMode(false);
   };
 
+  // Switch slider to manual mode and handle autoplay resumption timeout
+  const switchToManual = (index) => {
+    setIsManualMode(true);
+    setActiveCardIndex(index);
+
+    if (manualTimeoutRef.current) {
+      clearTimeout(manualTimeoutRef.current);
+    }
+
+    // Resume the seamless CSS marquee after 8 seconds of inactivity
+    manualTimeoutRef.current = setTimeout(() => {
+      setIsManualMode(false);
+    }, 8000);
+  };
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    const prevIndex = (activeCardIndex - 1 + projectsList.length) % projectsList.length;
+    switchToManual(prevIndex);
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    const nextIndex = (activeCardIndex + 1) % projectsList.length;
+    switchToManual(nextIndex);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (manualTimeoutRef.current) {
+        clearTimeout(manualTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Duplicate list once to ensure a seamless CSS keyframe loop
+  const projectShowcaseList = [...projectsList, ...projectsList];
+
+  // Percentage translation for manual mode
+  const manualTranslatePercent = - (activeCardIndex / (projectsList.length * 2)) * 100;
+
   return (
-    <div ref={triggerRef} className="relative w-full h-[500vh] bg-black">
+    <div className="relative w-full bg-[#070708] py-16 md:py-24 overflow-hidden">
       
-      {/* Sticky Viewport Container */}
-      <div className="sticky top-0 flex flex-col items-center justify-center w-full h-screen overflow-hidden">
-        
-        {/* Background Glow */}
-        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
-        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[550px] h-[550px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
+      {/* Ambient background glows */}
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
-        <div className="relative z-10 flex flex-col items-center w-full max-w-4xl px-6 mx-auto">
-          
-          {/* Header Block */}
-          <div className="mb-12 text-center">
-            <h1 className="mb-3 text-4xl font-extrabold text-white md:text-6xl">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Projects</span>
-              {!isStandalone && (
-                <Link to="/projects" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
-                  [Full View ↗]
-                </Link>
-              )}
-            </h1>
-            <p className="max-w-xl mx-auto text-xs font-light text-gray-400 md:text-sm">
-              Scroll down or use the side manual control bars to browse through my projects.
-            </p>
-
-            {/* Admin mode active badge */}
-            {isAdminMode && (
-              <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px] uppercase tracking-wider">
-                <span>🔧 Admin Edit Mode Active</span>
-                <button
-                  onClick={handleExitAdmin}
-                  className="ml-1 font-bold text-red-400 cursor-pointer hover:text-red-300 hover:underline"
-                >
-                  [Exit]
-                </button>
-              </div>
+      {/* Header Block */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <span className="text-[10px] font-bold tracking-[0.35em] text-amber-500 uppercase block mb-2">Portfolio</span>
+          <h1 className="text-4xl font-extrabold text-white md:text-5xl">
+            My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Projects</span>
+            {!isStandalone && (
+              <Link to="/projects" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
+                [Full View ↗]
+              </Link>
             )}
-          </div>
+          </h1>
+        </div>
+        
+        <div className="flex flex-col md:items-end gap-2">
+          <p className="text-xs font-light text-slate-400 max-w-xs md:text-right">
+            CSS Marquee Slider. Hover to pause, or use the navigation chevrons below to browse.
+          </p>
+          {isAdminMode && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[9px] uppercase tracking-wider w-max">
+              <span>🔧 Admin Mode Active</span>
+              <button
+                onClick={handleExitAdmin}
+                className="font-bold text-red-400 cursor-pointer hover:text-red-300 hover:underline"
+              >
+                [Exit]
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
-          {/* Cards Stack Wrapper */}
-          <div
-            ref={cardsRef}
-            className="relative w-full max-w-[680px] h-[550px] flex items-center justify-center"
-            style={{ perspective: "1500px" }}
+      {/* Slider Viewport Layout */}
+      <div className="relative w-full z-10 px-1">
+        
+        {/* Marquee Track Container */}
+        <div 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="relative flex w-full overflow-hidden mask-linear py-6"
+        >
+          {/* Sliding Cards Track: toggles between Hero CSS marquee keyframe and React manual offset transform */}
+          <div 
+            className={`flex gap-8 md:gap-12 min-w-full select-none ${
+              isManualMode ? "" : "animate-[projectMarquee_35s_linear_infinite]"
+            } ${isHovered ? "paused-marquee" : ""}`}
+            style={{
+              transform: isManualMode ? `translateX(${manualTranslatePercent}%)` : undefined,
+              transition: isManualMode ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none"
+            }}
           >
-            {/* Left Manual Control Bar */}
-            <button
-              onClick={handlePrev}
-              disabled={activeCardIndex === 0}
-              className="hidden md:flex absolute left-4 p-3 rounded-full bg-gray-950/80 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.05)] z-30 cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-gray-800 disabled:hover:text-amber-500"
-              aria-label="Previous Project"
-            >
-              <ChevronLeft size={20} />
-            </button>
-
-            {projectsList.map((project, idx) => {
-              const isActive = activeCardIndex === idx;
+            {projectShowcaseList.map((project, idx) => {
+              const trueIdx = idx % projectsList.length;
 
               return (
                 <div
                   key={idx}
-                  className={`absolute w-full h-full max-w-[480px] rounded-[32px] transition-shadow duration-500 ${
-                    isActive
-                      ? "pointer-events-auto shadow-[0_25px_60px_rgba(245, 158, 11, 0.22)]"
-                      : "pointer-events-none"
-                  } project-card p-6`}
-                  style={{
-                    zIndex: 10 + idx
-                  }}
+                  className="w-[80vw] sm:w-[440px] md:w-[720px] lg:w-[800px] h-auto rounded-[24px] p-5 pt-14 pb-6 md:pb-5 md:pt-10 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-visible project-card group flex-shrink-0 whitespace-normal"
                 >
-                  <div className="flex flex-col items-center justify-between w-full h-full gap-4">
+                  {/* Card border decor */}
+                  <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
+
+                  {/* Left Side: Browser Mockup Frame */}
+                  <div className="relative w-full md:w-[48%] h-[150px] md:h-[220px] -mt-[40px] md:-mt-0 md:-ml-[35px] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-3 md:group-hover:-translate-y-1.5 md:group-hover:-translate-x-2 group-hover:scale-[1.02] group-hover:rotate-1 group-hover:shadow-[0_15px_30px_rgba(245,158,11,0.2)] border border-white/[0.05] flex flex-col bg-slate-950">
                     
-                    {/* Top Side: Showcase Image with Floating Badges */}
-                    <div className="w-full h-[220px] rounded-2xl overflow-hidden relative border border-gray-800/10 flex-shrink-0 group">
+                    {/* Browser header */}
+                    <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
+                      <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
+                        <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
+                      </div>
+                    </div>
+
+                    {/* Sliding Screenshot */}
+                    <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
                       />
-                      <span className="absolute top-3 left-3 bg-black/75 backdrop-blur-md border border-gray-800 text-amber-500 font-mono text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-lg font-bold shadow-md">
+                      
+                      {/* Floating label badges */}
+                      <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
                         {project.category}
                       </span>
-                      <span className={`absolute top-3 right-3 backdrop-blur-md border font-mono text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-lg font-bold shadow-md flex items-center gap-1.5 ${
+                      <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
                         project.complexity === "Expert"
                           ? "bg-red-950/80 border-red-500/30 text-red-400"
                           : project.complexity === "High"
                           ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
                           : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
                       }`}>
-                        <span className={`w-2 h-2 rounded-full ${
-                          project.complexity === "Expert"
-                            ? "bg-red-400"
-                            : project.complexity === "High"
-                            ? "bg-amber-400"
-                            : "bg-emerald-400"
-                        }`} />
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                          project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
+                        } animate-pulse`} />
                         {project.complexity}
                       </span>
                     </div>
+                  </div>
 
-                    {/* Bottom Side: Text & Actions */}
-                    <div className="flex flex-col justify-between flex-1 w-full px-1 text-left">
-                      <div>
-                        <h3 className="mb-1.5 text-xl font-bold tracking-tight md:text-2xl card-title hover:text-amber-500 transition-colors">
-                          {project.title}
-                        </h3>
-                        <p className="font-light text-[12px] leading-relaxed card-text line-clamp-3">
-                          {project.description}
-                        </p>
-                        
-                        {/* Tech tags with ambient layout */}
-                        <div className="flex flex-wrap gap-1.5 mt-3.5">
-                          {project.tags.map((tag, i) => (
-                            <span key={i} className="px-2.5 py-1 rounded-md text-[9px] font-mono border uppercase tracking-wider card-tag transition-colors hover:border-amber-500/30 hover:text-amber-400">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                  {/* Right Side: Details */}
+                  <div className="w-full md:w-[48%] flex flex-col justify-between text-left md:pr-2 py-1">
+                    <div>
+                      <h3 className="mb-1 text-lg font-bold tracking-tight sm:text-xl text-slate-100 group-hover:text-amber-400 transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      <p className="font-light text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
+                        {project.description}
+                      </p>
+                      
+                      {/* Tech Tags */}
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {project.tags.map((tag, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
+                            {tag}
+                          </span>
+                        ))}
                       </div>
+                    </div>
 
-                      {/* Action buttons row */}
-                      <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-800/40">
-                        <span className="flex items-center gap-1 text-[10px] font-mono card-subtle">
-                          {idx + 1} / 5
-                        </span>
-                        <div className="flex items-center gap-2">
+                    {/* Buttons row */}
+                    <div className="flex items-center justify-between pt-3 mt-4 border-t border-white/[0.04] z-20">
+                      <span className="text-[9px] font-mono text-slate-500">
+                        {trueIdx + 1} / {projectsList.length}
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setActiveDetailProject(project)}
+                          className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
+                        >
+                          <span>Specs</span>
+                        </button>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
+                        >
+                          <GithubIcon size={10} />
+                          <span>Code</span>
+                        </a>
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
+                        >
+                          <ExternalLink size={10} className="text-slate-400" />
+                          <span>Demo</span>
+                        </a>
+                        
+                        {isAdminMode && (
                           <button
-                            onClick={() => setActiveDetailProject(project)}
-                            className="flex items-center gap-1 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/5 hover:-translate-y-0.5"
+                            onClick={() => startEditingProject(trueIdx)}
+                            className="flex items-center gap-1 px-2 py-1 border rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
                           >
-                            <span>Specs</span>
+                            <span>Edit</span>
                           </button>
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1.5 px-3.5 py-2 border border-gray-800 bg-gray-950/40 rounded-xl text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-all font-mono hover:-translate-y-0.5"
-                            aria-label="GitHub Repository"
-                          >
-                            <GithubIcon size={13} />
-                            <span>Code</span>
-                          </a>
-                          <a
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1.5 px-3.5 py-2 border border-gray-800 bg-gray-950/40 rounded-xl text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-all font-mono hover:-translate-y-0.5"
-                            aria-label="Live Demo"
-                          >
-                            <ExternalLink size={13} />
-                            <span>Demo</span>
-                          </a>
-                          
-                          {/* Edit button only visible to the owner in Admin Mode */}
-                          {isAdminMode && (
-                            <button
-                              onClick={(e) => {
-                                  e.stopPropagation();
-                                  startEditingProject(idx);
-                              }}
-                              className="flex items-center gap-1 px-3 py-2 border rounded-xl text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
-                              aria-label="Edit Project Details"
-                            >
-                              <span>Edit</span>
-                            </button>
-                          )}
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
+
                 </div>
               );
             })}
-
-            {/* Right Manual Control Bar */}
-            <button
-              onClick={handleNext}
-              disabled={activeCardIndex === 4}
-              className="hidden md:flex absolute right-4 p-3 rounded-full bg-gray-950/80 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.05)] z-30 cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-gray-800 disabled:hover:text-amber-500"
-              aria-label="Next Project"
-            >
-              <ChevronRight size={20} />
-            </button>
           </div>
         </div>
+
+        {/* Combined Manual Control Bars Row - Placed directly below the cards */}
+        <div className="relative z-20 flex justify-center items-center gap-6 mt-6">
+          {/* Left Manual Control Bar */}
+          <button
+            onClick={handlePrev}
+            className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
+            aria-label="Scroll Left"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          {/* Pagination Indicators */}
+          <div className="flex gap-2">
+            {projectsList.map((_, index) => (
+              <button 
+                key={index} 
+                onClick={() => switchToManual(index)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  activeCardIndex === index ? "w-6 bg-amber-500" : "w-1.5 bg-slate-800 hover:bg-slate-600"
+                }`}
+                aria-label={`Scroll to project ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Right Manual Control Bar */}
+          <button
+            onClick={handleNext}
+            className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
+            aria-label="Scroll Right"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
       </div>
 
       {/* DETAILED SPECS MODAL OVERLAY */}
       {activeDetailProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-lg p-8 border shadow-2xl modal-bg rounded-3xl border-amber-500/15">
+          <div className="relative w-full max-w-lg p-6 sm:p-8 border shadow-2xl modal-bg rounded-3xl border-amber-500/15">
             <button
               onClick={() => setActiveDetailProject(null)}
               className="absolute text-lg font-bold text-gray-400 transition-colors cursor-pointer top-4 right-4 hover:text-amber-500"
@@ -656,29 +599,29 @@ const Projects = () => {
       {/* Light/Dark responsiveness and card styling */}
       <style>{`
         :root {
-          --card-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.35) 0%, rgba(15, 23, 42, 0.85) 100%);
-          --card-border: rgba(245, 158, 11, 0.28);
+          --card-bg: linear-gradient(135deg, rgba(16, 15, 14, 0.8) 0%, rgba(10, 10, 11, 0.95) 100%);
+          --card-border: rgba(255, 255, 255, 0.04);
           --card-title: #ffffff;
-          --card-text: #e2e8f0;
-          --card-tag-bg: rgba(245, 158, 11, 0.08);
-          --card-tag-border: rgba(245, 158, 11, 0.25);
-          --card-tag-text: #fbbf24;
-          --card-subtle: #94a3b8;
-          --card-btn-bg: rgba(30, 41, 59, 0.45);
-          --card-btn-border: rgba(245, 158, 11, 0.3);
-          --card-btn-text: #f1f5f9;
+          --card-text: #94a3b8;
+          --card-tag-bg: rgba(255, 255, 255, 0.02);
+          --card-tag-border: rgba(255, 255, 255, 0.04);
+          --card-tag-text: #94a3b8;
+          --card-subtle: #4b5563;
+          --card-btn-bg: rgba(255, 255, 255, 0.02);
+          --card-btn-border: rgba(255, 255, 255, 0.08);
+          --card-btn-text: #e2e8f0;
         }
 
         html.light {
           --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 1) 100%);
           --card-border: rgba(15, 23, 42, 0.06);
           --card-title: #0f172a;
-          --card-text: #334155;
-          --card-tag-bg: #f1f5f9;
-          --card-tag-border: #e2e8f0;
+          --card-text: #475569;
+          --card-tag-bg: #f8fafc;
+          --card-tag-border: #cbd5e1;
           --card-tag-text: #475569;
           --card-subtle: #94a3b8;
-          --card-btn-bg: #f8fafc;
+          --card-btn-bg: #ffffff;
           --card-btn-border: #cbd5e1;
           --card-btn-text: #0f172a;
         }
@@ -689,21 +632,7 @@ const Projects = () => {
           color: var(--card-text) !important;
           backdrop-filter: blur(24px);
           position: relative;
-          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 50px -10px rgba(245, 158, 11, 0.04) !important;
-        }
-
-        /* Ambient gradient border effect for dark mode cards */
-        html:not(.light) .project-card::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: 32px;
-          padding: 1.5px;
-          background: linear-gradient(135deg, rgba(245, 158, 11, 0.45) 0%, transparent 55%, rgba(59, 130, 246, 0.22) 100%);
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          pointer-events: none;
+          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 50px -10px rgba(245, 158, 11, 0.02) !important;
         }
 
         .modal-bg {
@@ -738,30 +667,31 @@ const Projects = () => {
           color: var(--card-subtle) !important;
         }
 
-        .card-action-btn {
-          background-color: var(--card-btn-bg) !important;
-          border-color: var(--card-btn-border) !important;
-          color: var(--card-btn-text) !important;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03) !important;
+        /* Tech-Stack styled CSS Keyframe Marquee Loop */
+        @keyframes projectMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
 
-        .card-action-btn:hover {
-          border-color: #f59e0b !important;
-          color: #f59e0b !important;
-          background-color: var(--card-btn-bg) !important;
+        .paused-marquee {
+          animation-play-state: paused !important;
         }
 
-        /* Hide scrollbars for chrome/safari */
+        .mask-linear {
+          mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
+        }
+
+        /* Hide scrollbars */
         .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
-        /* Hide scrollbars for IE/Edge/Firefox */
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
 
-        /* Modal input elements and label styles */
+        /* Modal inputs */
         .modal-input {
           background-color: rgba(15, 23, 42, 0.8) !important;
           border-color: rgba(245, 158, 11, 0.2) !important;
@@ -778,7 +708,7 @@ const Projects = () => {
           color: #94a3b8 !important;
         }
 
-        /* Light Mode input overrides */
+        /* Light Mode inputs */
         html.light .modal-input {
           background-color: #ffffff !important;
           border-color: #cbd5e1 !important;

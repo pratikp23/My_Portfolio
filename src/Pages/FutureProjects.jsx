@@ -84,13 +84,13 @@ const FutureProjects = () => {
               <div className="space-y-4">
                 {/* Progress bar */}
                 <div className="space-y-1">
-                  <div className="flex justify-between font-mono text-xs font-medium text-gray-500">
+                  <div className="flex justify-between font-mono text-xs font-medium text-gray-500 font-body">
                     <span>Progress</span>
-                    <span className="text-amber-550/90">{project.phase}</span>
+                    <span className="text-amber-500 font-bold">{project.phase}</span>
                   </div>
                   <div className="w-full h-1 overflow-hidden bg-gray-800 rounded-full">
                     <div
-                      className="h-full bg-gradient-to-r from-amber-550 to-orange-500"
+                      className="h-full bg-gradient-to-r from-amber-500 to-orange-500"
                       style={{ width: project.phase }}
                     />
                   </div>
@@ -101,7 +101,7 @@ const FutureProjects = () => {
                   {project.tech.map((t, idx) => (
                     <span
                       key={idx}
-                      className="px-2 py-0.5 text-[10px] font-mono rounded bg-gray-900 border border-gray-805 text-gray-400"
+                      className="px-2 py-0.5 text-[10px] font-mono rounded bg-gray-900 border border-gray-800 text-gray-400"
                     >
                       {t}
                     </span>
