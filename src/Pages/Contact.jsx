@@ -82,7 +82,7 @@ const Contact = () => {
 
         <div className="grid items-start grid-cols-1 gap-12 lg:grid-cols-12">
           {/* Contact Details Card */}
-          <div className="p-8 space-y-8 border shadow-2xl lg:col-span-5 bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm">
+          <div className="p-6 sm:p-8 space-y-8 border shadow-2xl lg:col-span-5 bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm">
             <h3 className="mb-6 text-2xl font-bold text-white">Contact Info</h3>
             
             <a
@@ -120,7 +120,7 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-7 bg-[#0b0b0d] border border-gray-800/80 rounded-3xl p-8 shadow-md w-full">
+          <div className="lg:col-span-7 bg-[#0b0b0d] border border-gray-800/80 rounded-3xl p-6 sm:p-8 shadow-md w-full">
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-16 space-y-4 text-center">
                 <div className="flex items-center justify-center w-16 h-16 text-3xl border rounded-full bg-emerald-500/10 border-emerald-500/30 text-emerald-400 animate-bounce">

@@ -177,7 +177,6 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Home</h1>
       <section className="relative flex flex-col items-center justify-center w-full min-h-screen pt-32 pb-16 overflow-hidden hero-bg-image">
       {/* Dark Overlay for Text Readability */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/85 via-black/55 to-black/30 md:from-black/75 md:via-black/45 md:to-transparent hero-overlay" />
@@ -189,7 +188,7 @@ const Home = () => {
         {/* Left Column (HeroContent) */}
         <div className="flex flex-col space-y-6 text-left lg:col-span-8">
           <h3 className="text-xl font-medium text-gray-400 md:text-2xl">Hi, I'm</h3>
-          <h1 className="text-5xl font-extrabold text-white md:text-7xl">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">{PROFILE.name}</span> {PROFILE.lastName}
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-300">

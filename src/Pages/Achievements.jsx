@@ -64,13 +64,13 @@ const Achievements = () => {
           {achievementsList.map((item, index) => (
             <div
               key={index}
-              className="flex items-start gap-6 p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm hover:border-amber-500/20 group"
+              className="flex items-start gap-6 p-6 sm:p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm hover:border-amber-500/20 group"
             >
               <div className="flex-shrink-0 p-4 transition-all duration-300 border border-gray-800 bg-gray-950 rounded-2xl group-hover:scale-105 group-hover:border-amber-500/30">
                 {item.icon}
               </div>
-              <div className="space-y-2">
-                <div className="flex items-baseline justify-between gap-2">
+              <div className="space-y-2 w-full">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                   <h3 className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-amber-500">
                     {item.title}
                   </h3>

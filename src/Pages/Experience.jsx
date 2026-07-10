@@ -49,16 +49,16 @@ const Experience = () => {
         </div>
 
         {/* Timeline container */}
-        <div className="relative pl-8 ml-4 space-y-12 border-l border-gray-800 md:ml-8 md:pl-12">
+        <div className="relative pl-6 ml-2 space-y-12 border-l border-gray-800 md:ml-8 md:pl-12">
           {experiences.map((exp, index) => (
             <div key={index} className="relative group">
               {/* Timeline marker */}
-              <span className="absolute -left-[41px] md:-left-[57px] top-1.5 bg-[#070708] border-2 border-gray-800 rounded-full p-2.5 text-gray-500 group-hover:border-amber-500 group-hover:text-amber-500 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-300">
+              <span className="absolute -left-[33px] md:-left-[57px] top-1.5 bg-[#070708] border-2 border-gray-800 rounded-full p-2.5 text-gray-500 group-hover:border-amber-500 group-hover:text-amber-500 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-300">
                 <Briefcase size={16} />
               </span>
 
               {/* Card content */}
-              <div className="p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm hover:border-amber-500/20">
+              <div className="p-6 sm:p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm hover:border-amber-500/20">
                 <div className="flex flex-col gap-2 mb-4 md:flex-row md:items-center md:justify-between">
                   <div>
                     <h3 className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-amber-500">

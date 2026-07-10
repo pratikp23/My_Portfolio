@@ -185,7 +185,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Side Controls & CTA */}
-          <div className="items-center hidden space-x-4 md:flex">
+          <div className="items-center hidden space-x-4 lg:flex">
             {/* Ambient Audio Button */}
             <button 
               onClick={togglePlay}
@@ -259,7 +259,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Dropdown */}
         {isOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-[#0a0a0c] border-b border-gray-800 px-6 py-6 space-y-4 shadow-xl">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-[#0a0a0c] border-b border-gray-800 px-6 py-6 space-y-4 shadow-xl max-h-[calc(100vh-80px)] overflow-y-auto no-scrollbar">
             {navLinks.map((link) => {
               const isHomeLink = link.path === "/";
               const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
@@ -297,7 +297,7 @@ const Navbar = () => {
               <Link
                 to="/#contact"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center space-x-2 px-4 py-2 bg-linear-to-r from-[#d97706] to-[#b45309] text-white text-sm rounded-xl"
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white text-sm rounded-xl"
               >
                 <span className="text-[#d6a15d]">Let's Talk</span>
                 <ArrowRight size={14} />

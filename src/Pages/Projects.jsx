@@ -25,10 +25,7 @@ const Projects = () => {
 
   const [activeDetailProject, setActiveDetailProject] = useState(null);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [isManualMode, setIsManualMode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  const manualTimeoutRef = useRef(null);
 
   // Admin Mode detection
   const [isAdminMode, setIsAdminMode] = useState(() => {
@@ -138,46 +135,26 @@ const Projects = () => {
     setIsAdminMode(false);
   };
 
-  // Switch slider to manual mode and handle autoplay resumption timeout
-  const switchToManual = (index) => {
-    setIsManualMode(true);
-    setActiveCardIndex(index);
-
-    if (manualTimeoutRef.current) {
-      clearTimeout(manualTimeoutRef.current);
-    }
-
-    // Resume the seamless CSS marquee after 8 seconds of inactivity
-    manualTimeoutRef.current = setTimeout(() => {
-      setIsManualMode(false);
-    }, 8000);
-  };
-
   const handlePrev = (e) => {
     e.stopPropagation();
     const prevIndex = (activeCardIndex - 1 + projectsList.length) % projectsList.length;
-    switchToManual(prevIndex);
+    setActiveCardIndex(prevIndex);
   };
 
   const handleNext = (e) => {
     e.stopPropagation();
     const nextIndex = (activeCardIndex + 1) % projectsList.length;
-    switchToManual(nextIndex);
+    setActiveCardIndex(nextIndex);
   };
 
+  // Autoplay: automatically advances index every 6 seconds unless hovered
   useEffect(() => {
-    return () => {
-      if (manualTimeoutRef.current) {
-        clearTimeout(manualTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Duplicate list once to ensure a seamless CSS keyframe loop
-  const projectShowcaseList = [...projectsList, ...projectsList];
-
-  // Percentage translation for manual mode
-  const manualTranslatePercent = - (activeCardIndex / (projectsList.length * 2)) * 100;
+    if (isHovered || projectsList.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveCardIndex((prevIndex) => (prevIndex + 1) % projectsList.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isHovered, projectsList.length]);
 
   return (
     <div className="relative w-full bg-[#070708] py-16 md:py-24 overflow-hidden">
@@ -202,7 +179,7 @@ const Projects = () => {
         
         <div className="flex flex-col md:items-end gap-2">
           <p className="text-xs font-light text-slate-400 max-w-xs md:text-right">
-            CSS Marquee Slider. Hover to pause, or use the navigation chevrons below to browse.
+            Interactive Slider. Click on the indicators or card to browse projects.
           </p>
           {isAdminMode && (
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[9px] uppercase tracking-wider w-max">
@@ -219,138 +196,138 @@ const Projects = () => {
       </div>
 
       {/* Slider Viewport Layout */}
-      <div className="relative w-full z-10 px-1">
+      <div className="relative w-full z-10">
         
-        {/* Marquee Track Container */}
+        {/* Slider Viewport Container */}
         <div 
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="relative flex w-full overflow-hidden mask-linear py-6"
+          className="relative w-[90vw] sm:w-[440px] md:w-[720px] lg:w-[800px] mx-auto overflow-hidden py-6"
         >
-          {/* Sliding Cards Track: toggles between Hero CSS marquee keyframe and React manual offset transform */}
+          {/* Sliding Cards Track */}
           <div 
-            className={`flex gap-8 md:gap-12 min-w-full select-none ${
-              isManualMode ? "" : "animate-[projectMarquee_35s_linear_infinite]"
-            } ${isHovered ? "paused-marquee" : ""}`}
+            className="flex select-none w-full transition-transform duration-500 ease-in-out"
             style={{
-              transform: isManualMode ? `translateX(${manualTranslatePercent}%)` : undefined,
-              transition: isManualMode ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none"
+              transform: `translateX(-${activeCardIndex * 100}%)`
             }}
           >
-            {projectShowcaseList.map((project, idx) => {
-              const trueIdx = idx % projectsList.length;
-
+            {projectsList.map((project, idx) => {
               return (
-                <div
-                  key={idx}
-                  className="w-[80vw] sm:w-[440px] md:w-[720px] lg:w-[800px] h-auto rounded-[24px] p-5 pt-14 pb-6 md:pb-5 md:pt-10 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-visible project-card group flex-shrink-0 whitespace-normal"
-                >
-                  {/* Card border decor */}
-                  <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
+                <div key={idx} className="w-full flex-shrink-0 px-2 sm:px-4">
+                  <div
+                    className="h-auto rounded-[24px] p-5 pt-14 pb-6 md:pb-5 md:pt-10 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-visible project-card group whitespace-normal cursor-pointer"
+                    onClick={(e) => {
+                      if (e.target.closest("a, button, input, textarea, select")) return;
+                      handleNext(e);
+                    }}
+                  >
+                    {/* Card border decor */}
+                    <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
 
-                  {/* Left Side: Browser Mockup Frame */}
-                  <div className="relative w-full md:w-[48%] h-[150px] md:h-[220px] -mt-[40px] md:-mt-0 md:-ml-[35px] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-3 md:group-hover:-translate-y-1.5 md:group-hover:-translate-x-2 group-hover:scale-[1.02] group-hover:rotate-1 group-hover:shadow-[0_15px_30px_rgba(245,158,11,0.2)] border border-white/[0.05] flex flex-col bg-slate-950">
-                    
-                    {/* Browser header */}
-                    <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
-                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
-                      <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
-                        <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
-                      </div>
-                    </div>
-
-                    {/* Sliding Screenshot */}
-                    <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
-                      />
+                    {/* Left Side: Browser Mockup Frame */}
+                    <div className="relative w-full md:w-[48%] h-[150px] md:h-[220px] -mt-[40px] md:-mt-0 md:-ml-[35px] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-3 md:group-hover:-translate-y-1.5 md:group-hover:-translate-x-2 group-hover:scale-[1.02] group-hover:rotate-1 group-hover:shadow-[0_15px_30px_rgba(245,158,11,0.2)] border border-white/[0.05] flex flex-col bg-slate-950">
                       
-                      {/* Floating label badges */}
-                      <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
-                        {project.category}
-                      </span>
-                      <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
-                        project.complexity === "Expert"
-                          ? "bg-red-950/80 border-red-500/30 text-red-400"
-                          : project.complexity === "High"
-                          ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
-                          : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
-                        } animate-pulse`} />
-                        {project.complexity}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Right Side: Details */}
-                  <div className="w-full md:w-[48%] flex flex-col justify-between text-left md:pr-2 py-1">
-                    <div>
-                      <h3 className="mb-1 text-lg font-bold tracking-tight sm:text-xl text-slate-100 group-hover:text-amber-400 transition-colors duration-300">
-                        {project.title}
-                      </h3>
-                      <p className="font-light text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
-                        {project.description}
-                      </p>
-                      
-                      {/* Tech Tags */}
-                      <div className="flex flex-wrap gap-1 mt-3">
-                        {project.tags.map((tag, i) => (
-                          <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
-                            {tag}
-                          </span>
-                        ))}
+                      {/* Browser header */}
+                      <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
+                        <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
+                          <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Buttons row */}
-                    <div className="flex items-center justify-between pt-3 mt-4 border-t border-white/[0.04] z-20">
-                      <span className="text-[9px] font-mono text-slate-500">
-                        {trueIdx + 1} / {projectsList.length}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => setActiveDetailProject(project)}
-                          className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
-                        >
-                          <span>Specs</span>
-                        </button>
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
-                        >
-                          <GithubIcon size={10} />
-                          <span>Code</span>
-                        </a>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
-                        >
-                          <ExternalLink size={10} className="text-slate-400" />
-                          <span>Demo</span>
-                        </a>
+                      {/* Sliding Screenshot */}
+                      <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
+                        />
                         
-                        {isAdminMode && (
-                          <button
-                            onClick={() => startEditingProject(trueIdx)}
-                            className="flex items-center gap-1 px-2 py-1 border rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
-                          >
-                            <span>Edit</span>
-                          </button>
-                        )}
+                        {/* Floating label badges */}
+                        <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
+                          {project.category}
+                        </span>
+                        <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
+                          project.complexity === "Expert"
+                            ? "bg-red-950/80 border-red-500/30 text-red-400"
+                            : project.complexity === "High"
+                            ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
+                            : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
+                          } animate-pulse`} />
+                          {project.complexity}
+                        </span>
                       </div>
                     </div>
-                  </div>
 
+                    {/* Right Side: Details */}
+                    <div className="w-full md:w-[48%] flex flex-col justify-between text-left md:pr-2 py-1">
+                      <div>
+                        <h3 className="mb-1 text-lg font-bold tracking-tight sm:text-xl text-slate-100 group-hover:text-amber-400 transition-colors duration-300">
+                          {project.title}
+                        </h3>
+                        <p className="font-light text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
+                          {project.description}
+                        </p>
+                        
+                        {/* Tech Tags */}
+                        <div className="flex flex-wrap gap-1 mt-3">
+                          {project.tags.map((tag, i) => (
+                            <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Buttons row */}
+                      <div className="flex items-center justify-between pt-3 mt-4 border-t border-white/[0.04] z-20">
+                        <span className="text-[9px] font-mono text-slate-500">
+                          {idx + 1} / {projectsList.length}
+                        </span>
+                        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
+                          <button
+                            onClick={() => setActiveDetailProject(project)}
+                            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
+                          >
+                            <span>Specs</span>
+                          </button>
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
+                          >
+                            <GithubIcon size={10} />
+                            <span>Code</span>
+                          </a>
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
+                          >
+                            <ExternalLink size={10} className="text-slate-400" />
+                            <span>Demo</span>
+                          </a>
+                          
+                          {isAdminMode && (
+                            <button
+                              onClick={() => startEditingProject(idx)}
+                              className="flex items-center gap-1 px-2 py-1 border rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
+                            >
+                              <span>Edit</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               );
             })}
@@ -373,7 +350,7 @@ const Projects = () => {
             {projectsList.map((_, index) => (
               <button 
                 key={index} 
-                onClick={() => switchToManual(index)}
+                onClick={() => setActiveCardIndex(index)}
                 className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                   activeCardIndex === index ? "w-6 bg-amber-500" : "w-1.5 bg-slate-800 hover:bg-slate-600"
                 }`}
@@ -474,7 +451,7 @@ const Projects = () => {
               </div>
 
               {/* Category & Complexity Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Category</label>
                   <input
@@ -533,7 +510,7 @@ const Projects = () => {
               </div>
 
               {/* Code & Live Demo links */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">GitHub Repo URL</label>
                   <input
@@ -667,14 +644,9 @@ const Projects = () => {
           color: var(--card-subtle) !important;
         }
 
-        /* Tech-Stack styled CSS Keyframe Marquee Loop */
-        @keyframes projectMarquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-
-        .paused-marquee {
-          animation-play-state: paused !important;
+        /* Slider styling overrides */
+        .project-card {
+          cursor: pointer;
         }
 
         .mask-linear {
