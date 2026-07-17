@@ -1,6 +1,6 @@
-import { SOCIAL_LINKS, PROFILE } from '../config';
-import { Mail, ArrowRight, Download, MousePointerClick, Globe, Server } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
+import { useState } from 'react';
+import { Mail, ArrowRight, Download, MousePointerClick, Globe } from 'lucide-react';
 import About from './About';
 import Skills from './Skills';
 import Projects from './Projects';
@@ -8,88 +8,6 @@ import FutureProjects from './FutureProjects';
 import Experience from './Experience';
 import Achievements from './Achievements';
 import Contact from './Contact';
-
-// CUSTOM HIGH-QUALITY DEVELOPER SVG ICONS
-const ReactIcon = ({ size = 16, className }) => (
-  <svg viewBox="-11.5 -10.23174 23 20.46348" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
-    <g stroke="#61dafb" strokeWidth="1" fill="none">
-      <ellipse rx="11" ry="4.2"/>
-      <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
-      <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
-    </g>
-  </svg>
-);
-
-const JsIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 0h24v24H0V0zm22.034 18.268c-.156-.843-.728-1.502-1.745-1.905-.626-.26-1.12-.416-1.716-.626-.507-.183-.755-.377-.755-.729 0-.365.313-.61.886-.61.547 0 .926.222(1.25).612l1.628-1.041c-.586-.926-1.42-1.394-2.825-1.394-1.928 0-3.218 1.12-3.218 2.76 0 1.704 1.094 2.37 2.657 2.92.703.247 1.34.48 1.758.74.455.285.663.585.663.974 0 .495-.417.82-1.133.82-.924 0-1.407-.468-1.81-1.107l-1.693 1.053c.69 1.182 1.732 1.833 3.49 1.833 2.188 0 3.518-1.105 3.518-2.928zm-11.666-.35c-.17-.585-.625-.975-1.314-.975-.715 0-1.157.442-1.157 1.365 0 1.027.403 1.43 1.144 1.43.61 0 1.04-.286 1.274-.832l1.742 1.014c-.663 1.196-1.833 1.638-3.094 1.638-2.82 0-4.043-1.69-4.043-3.835 0-2.457 1.456-3.86 4.108-3.86 1.547 0 2.665.65 3.146 1.86l-1.807 1.19z" fill="#f7df1e"/>
-  </svg>
-);
-
-const TsIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 0h24v24H0V0zm22.034 18.268c-.156-.843-.728-1.502-1.745-1.905-.626-.26-1.12-.416-1.716-.626-.507-.183-.755-.377-.755-.729 0-.365.313-.61.886-.61.547 0 .926.222(1.25).612l1.628-1.041c-.586-.926-1.42-1.394-2.825-1.394-1.928 0-3.218 1.12-3.218 2.76 0 1.704 1.094 2.37 2.657 2.92.703.247 1.34.48 1.758.74.455.285.663.585.663.974 0 .495-.417.82-1.133.82-.924 0-1.407-.468-1.81-1.107l-1.693 1.053c.69 1.182 1.732 1.833 3.49 1.833 2.188 0 3.518-1.105 3.518-2.928zM10.96 11.23h1.86v7.71h-1.86v-7.71zm-2.88 0h7.62v1.54H9.94v6.17H8.08v-7.71z" fill="#3178c6"/>
-  </svg>
-);
-
-const NextIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 180 180" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <mask id="nextMaskHome" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
-      <circle cx="90" cy="90" r="90" fill="black" />
-    </mask>
-    <g mask="url(#nextMaskHome)">
-      <circle cx="90" cy="90" r="90" fill="black" />
-      <path d="M149.508 157.52L69.142 54H54V126H67.97V72.281L138.837 163.662C142.593 161.802 146.166 159.743 149.508 157.52Z" fill="url(#nextGradHome)" />
-      <rect x="115" y="54" width="14" height="72" fill="url(#nextGradHome2)" />
-    </g>
-    <defs>
-      <linearGradient id="nextGradHome" x1="109" y1="116.5" x2="144.5" y2="160.5" gradientUnits="userSpaceOnUse">
-        <stop stopColor="white" />
-        <stop offset="1" stopColor="white" stopOpacity="0" />
-      </linearGradient>
-      <linearGradient id="nextGradHome2" x1="122" y1="54" x2="122" y2="122" gradientUnits="userSpaceOnUse">
-        <stop stopColor="white" />
-        <stop offset="1" stopColor="white" stopOpacity="0" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
-const TailwindIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C7.666 17.818 9.027 19 12.001 19c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z" fill="#38bdf8"/>
-  </svg>
-);
-
-const NodeIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2L4.5 6.3v8.7L12 19.3l7.5-4.3V6.3L12 2zm6 12.1l-6 3.4-6-3.4V7.2l6-3.4 6 3.4v6.9z" fill="#6cc24a" stroke="#6cc24a" strokeWidth="1" />
-    <path d="M12 5.5l5 2.9v5.8l-5 2.9-5-2.9v-5.8l5-2.9z" fill="#6cc24a" opacity="0.35" />
-  </svg>
-);
-
-const MongoIcon = ({ size = 16, className }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C11.5 2 7 6.5 7 11.5c0 4 2.5 6.5 5 8.5 2.5-2 5-4.5 5-8.5C17 6.5 12.5 2 12 2zm0 17c-1.5-1.2-3.5-3.2-3.5-6.5C8.5 9 11.2 5.2 12 4.2c.8 1 3.5 4.8 3.5 8.3 0 3.3-2 5.3-3.5 6.5z" fill="#47a248" />
-    <path d="M12 22v-3.5M12 2v2.2" stroke="#47a248" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-);
-
-const ExpressIcon = ({ size = 16, className }) => (
-  <Server size={size} className={`${className} text-emerald-500`} />
-);
-
-const TechIcons = {
-  React: <ReactIcon size={16} />,
-  "Next.js": <NextIcon size={16} className="bg-black rounded-full" />,
-  "Node.js": <NodeIcon size={16} />,
-  "Express.js": <ExpressIcon size={16} />,
-  MongoDB: <MongoIcon size={16} />,
-  TypeScript: <TsIcon size={16} />,
-  JavaScript: <JsIcon size={16} />,
-  "Tailwind CSS": <TailwindIcon size={16} />,
-};
 
 const GithubIcon = ({ size = 20 }) => (
   <svg
@@ -161,22 +79,33 @@ const InstagramIcon = ({ size = 20 }) => (
 );
 
 const Home = () => {
-
+  const [activeTab, setActiveTab] = useState("neofetch");
+     
   const socials = [
-    { icon: <GithubIcon size={20} />, href: SOCIAL_LINKS.github },
-    { icon: <Linkedin size={20} />, href: SOCIAL_LINKS.linkedin },
-    { icon: <Globe size={20} />, href: SOCIAL_LINKS.globe },
-    { icon: <TwitterIcon size={20} />, href: SOCIAL_LINKS.twitter },
-    { icon: <InstagramIcon size={20} />, href: SOCIAL_LINKS.instagram },
-    { icon: <Mail size={20} />, href: `mailto:${SOCIAL_LINKS.email}` },
+    { icon: <GithubIcon size={20} />, href: "https://github.com" },
+    { icon: <Linkedin size={20} />, href: "https://linkedin.com" },
+    { icon: <Globe size={20} />, href: "https://pratikpathak.dev" },
+    { icon: <TwitterIcon size={20} />, href: "https://x.com" },
+    { icon: <InstagramIcon size={20} />, href: "https://instagram.com" },
+    { icon: <Mail size={20} />, href: "mailto:pratikpathak.dev@gmail.com" },
   ];
 
-
+  const techStack = [
+    { name: "React", icon: "⚛️" },
+    { name: "Next.js", icon: "▲" },
+    { name: "Node.js", icon: "🟢" },
+    { name: "Express.js", icon: "🚂" },
+    { name: "MongoDB", icon: "🍃" },
+    { name: "TypeScript", icon: "🔷" },
+    { name: "JavaScript", icon: "🟨" },
+    { name: "Tailwind CSS", icon: "🌊" },
+  ];
 
 
 
   return (
     <div>
+      <h1>Home</h1>
       <section className="relative flex flex-col items-center justify-center w-full min-h-screen pt-32 pb-16 overflow-hidden hero-bg-image">
       {/* Dark Overlay for Text Readability */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/85 via-black/55 to-black/30 md:from-black/75 md:via-black/45 md:to-transparent hero-overlay" />
@@ -186,35 +115,32 @@ const Home = () => {
         
         {/* Left Column (HeroContent) */}
         {/* Left Column (HeroContent) */}
-        <div className="flex flex-col space-y-6 text-left lg:col-span-8">
+        <div className="flex flex-col space-y-6 text-left lg:col-span-7">
           <h3 className="text-xl font-medium text-gray-400 md:text-2xl">Hi, I'm</h3>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">{PROFILE.name}</span> {PROFILE.lastName}
+          <h1 className="text-5xl font-extrabold text-white md:text-7xl">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">Pratik</span> Pathak
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-300">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
               <span className="w-2 h-2 mr-2 rounded-full bg-emerald-400 animate-pulse" />
-              {PROFILE.mainRole}
+              Full Stack Developer
             </span>
-            {PROFILE.subRoles.map((role, idx) => (
-              <span key={idx} className="flex items-center gap-3">
-                <span className="text-gray-500">|</span>
-                <span>{role}</span>
-              </span>
-            ))}
+            <span className="text-gray-500">|</span><span>CSE Student</span><span className="text-gray-500">|</span><span>Problem Solver</span>
           </div>
           <p className="max-w-xl text-base font-light leading-relaxed text-gray-400 md:text-lg">
-            {PROFILE.aboutDescription}
+            I build scalable web apps and AI-powered systems that solve real-world problems.
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-4">
-            <Link
-              to="/#projects"
+            <button
+              onClick={() => {
+                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white font-medium rounded-xl border border-[#f59e0b]/30 shadow-[0_0_20px_rgba(217,119,6,0.2)] hover:from-[#f59e0b] hover:to-[#d97706] transition-all duration-300 cursor-pointer"
             >
               <span>View My Work</span><ArrowRight size={16} />
-            </Link>
+            </button>
             <a
-              href="/My_resume_cse_portfolio.pdf"
+              href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center px-6 py-3 space-x-2 font-medium text-gray-300 transition-all duration-300 border border-gray-800 shadow-inner cursor-pointer bg-gray-900/60 rounded-xl hover:bg-gray-800 hover:text-white"
@@ -240,6 +166,134 @@ const Home = () => {
           </div>
         </div>
 
+        {/* Right Column (Interactive Developer Console Mockup) */}
+        <div className="flex justify-center w-full lg:col-span-5 lg:justify-end">
+          <div className="w-full max-w-[420px] rounded-2xl border transition-all duration-500 shadow-2xl overflow-hidden terminal-card">
+            
+            {/* Header bar / Tab bars */}
+            <div className="flex items-center justify-between px-4 py-2 border-b terminal-header">
+              <div className="flex items-center flex-shrink-0 mr-3 space-x-2">
+                <span className="w-3 h-3 rounded-full bg-[#ef4444]" />
+                <span className="w-3 h-3 rounded-full bg-[#eab308]" />
+                <span className="w-3 h-3 rounded-full bg-[#22c55e]" />
+              </div>
+              
+              {/* Dynamic Tabs */}
+              <div className="flex items-center space-x-1 font-mono text-[10px] overflow-x-auto select-none no-scrollbar py-1">
+                <button
+                  onClick={() => setActiveTab("neofetch")}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    activeTab === "neofetch" 
+                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
+                      : "text-gray-400 hover:text-gray-200"
+                  }`}
+                >
+                  profile.sh
+                </button>
+                <button
+                  onClick={() => setActiveTab("skills")}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    activeTab === "skills" 
+                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
+                      : "text-gray-400 hover:text-gray-200"
+                  }`}
+                >
+                  skills.sh
+                </button>
+                <button
+                  onClick={() => setActiveTab("contact")}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    activeTab === "contact" 
+                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
+                      : "text-gray-400 hover:text-gray-200"
+                  }`}
+                >
+                  contact.js
+                </button>
+              </div>
+
+              <div className="w-2" />
+            </div>
+
+            {/* Editor Content */}
+            <div className="p-5 font-mono text-[11px] leading-relaxed text-left terminal-body min-h-[280px] flex flex-col justify-between">
+              <div className="space-y-3">
+                {/* Active Command Prompt */}
+                <div>
+                  <span className="font-bold text-amber-500">visitor@pratik.os</span>
+                  <span className="text-gray-400">:</span>
+                  <span className="font-bold text-blue-400">~</span>
+                  <span className="text-gray-400">$</span>{" "}
+                  <span className="text-gray-200">
+                    {activeTab === "neofetch" ? "neofetch" : activeTab === "skills" ? "./skills.sh" : "cat contact.js"}
+                  </span>
+                </div>
+                
+                <div className="my-2 border-t border-gray-800/40" />
+                
+                {/* Tab content 1: Profile (neofetch) */}
+                {activeTab === "neofetch" && (
+                  <div className="space-y-1">
+                    <p><span className="font-semibold text-amber-500">PRATIK PATHAK</span></p>
+                    <p><span className="text-gray-500">---------</span></p>
+                    <p><span className="font-semibold text-blue-400">OS:</span> Pratik.OS v1.0.0</p>
+                    <p><span className="font-semibold text-blue-400">Role:</span> Full Stack Developer</p>
+                    <p><span className="font-semibold text-blue-400">Focus:</span> Web Apps & AI Integration</p>
+                    <p><span className="font-semibold text-blue-400">Shell:</span> bash 5.2.15</p>
+                    <p><span className="font-semibold text-blue-400">Languages:</span> JS, TS, Python, C++</p>
+                    <p><span className="font-semibold text-blue-400">Status:</span> Open to Opportunities 🟢</p>
+                  </div>
+                )}
+
+                {/* Tab content 2: Skills loading indicators */}
+                {activeTab === "skills" && (
+                  <div className="space-y-2">
+                    <p className="font-bold text-emerald-400 animate-pulse">// Executing skills diagnostics...</p>
+                    <div className="mt-2 space-y-1">
+                      <div>
+                        <p className="font-semibold text-blue-400">Frontend: [██████████████░] 94%</p>
+                        <p className="text-gray-400 text-[10px] pl-4">React, Next.js, Tailwind CSS</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-400">Backend:  [████████████░░░] 88%</p>
+                        <p className="text-gray-400 text-[10px] pl-4">Node.js, Express, WebSockets</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-400">Databases: [█████████████░░] 90%</p>
+                        <p className="text-gray-400 text-[10px] pl-4">MongoDB, PostgreSQL, Redis</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-400">DevOps:   [██████████░░░░░] 75%</p>
+                        <p className="text-gray-400 text-[10px] pl-4">Docker, AWS Services, CI/CD</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab content 3: Contact code editor */}
+                {activeTab === "contact" && (
+                  <div className="space-y-1">
+                    <p className="text-gray-500">// Contact configuration schema</p>
+                    <p><span className="font-semibold text-purple-400">const</span> <span className="text-blue-400">contactInfo</span> = &#123;</p>
+                    <p className="pl-4"><span className="text-blue-300">email</span>: <span className="text-emerald-400">"pratikpathak343@gmail.com"</span>,</p>
+                    <p className="pl-4"><span className="text-blue-300">github</span>: <span className="text-emerald-400">"github.com/pratikp23"</span>,</p>
+                    <p className="pl-4"><span className="text-blue-300">location</span>: <span className="text-emerald-400">"India"</span>,</p>
+                    <p className="pl-4"><span className="text-blue-300">availability</span>: <span className="text-amber-400">true</span></p>
+                    <p>&#125;;</p>
+                    <p className="mt-2 font-semibold text-purple-400">export default <span className="text-blue-400">contactInfo</span>;</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-800/40">
+                <span className=" text-gray-500 text-[10px] animate-pulse">● System Online</span>
+                <span className=" text-gray-500 text-[10px]">utf-8</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
       {/* Bottom Scroll Indicator */}
@@ -254,16 +308,15 @@ const Home = () => {
       </div>
 
       {/* Marquee Ticker */}
-      <div className="flex flex-col w-full px-6 pt-16 mx-auto space-y-6 border-t max-w-7xl border-gray-800/40 md:px-12">
-        <div className="flex items-center space-x-2 text-sm font-semibold tracking-wider text-gray-300 uppercase">
+      <div className="flex flex-col w-full px-6 pt-16 mx-auto space-y-6 border-t max-w-7xl border-gray-900/60 md:px-12">
+        <div className="flex items-center space-x-2 text-sm font-semibold tracking-wider text-gray-400 uppercase">
           <span className="text-amber-500">&lt;/&gt;</span><span>Tech Stack I Work With</span>
         </div>
         <div className="relative flex w-full py-2 overflow-hidden mask-linear">
           <div className="flex space-x-6 animate-[marquee_35s_linear_infinite] whitespace-nowrap min-w-full">
-            {[...PROFILE.techStack, ...PROFILE.techStack].map((tech, index) => (
-              <div key={index} className="inline-flex items-center space-x-2.5 px-4 py-2.5 bg-[#0b0b0d] border border-gray-800/80 rounded-xl text-sm text-gray-300 hover:border-amber-500/40 shadow-md hover:scale-105 transition-all duration-300 cursor-default marquee-item">
-                <span className="w-5 h-5 flex items-center justify-center flex-shrink-0">{TechIcons[tech.name] || <span className="text-lg">{tech.icon}</span>}</span>
-                <span className="font-medium">{tech.name}</span>
+            {[...techStack, ...techStack].map((tech, index) => (
+              <div key={index} className="inline-flex items-center space-x-2 px-4 py-2 bg-[#0b0b0d] border border-gray-800/80 rounded-xl text-sm text-gray-300 hover:border-amber-500/40 shadow-md">
+                <span className="text-lg">{tech.icon}</span><span className="font-medium">{tech.name}</span>
               </div>
             ))}
           </div>
@@ -287,12 +340,6 @@ const Home = () => {
 
         html.light .hero-overlay {
           background: linear-gradient(to right, rgba(248, 250, 252, 0.98) 0%, rgba(248, 250, 252, 0.93) 55%, rgba(248, 250, 252, 0.78) 100%) !important;
-        }
-
-        html.light .marquee-item {
-          background-color: #f1f5f9 !important;
-          border-color: #cbd5e1 !important;
-          color: #0f172a !important;
         }
 
         /* Terminal card theme rules */

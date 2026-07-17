@@ -54,10 +54,10 @@ const Projects = () => {
         fullDetails: "Developed a full-stack AI Learning Management System using React, Tailwind CSS, Node.js, and MongoDB. Integrated AI recommendation algorithms to personalize learning paths for users. Implemented real-time resume checker and doubt resolution features using AI models. Designed a responsive UI with Tailwind CSS and ensured secure authentication and data management with MongoDB.",
         tags: ["React", "Tailwind CSS", "MongoDB", "Node.js"],
         github: "https://github.com/pratikp23/Learning-Management-System",
-        demo: "https://learning-management-system-nine-bay.vercel.app",
+        demo: "https://learning-management-system-five-azure.vercel.app/",
         complexity: "High",
         category: "Fullstack",
-        image: "/project1.png",
+        image: "/lms.png",
       },
       {
         title: "HealthAI Guardian",
@@ -164,7 +164,7 @@ const Projects = () => {
       <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Header Block */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div className="relative z-10 flex flex-col w-full gap-4 px-6 mx-auto mb-12 max-w-7xl md:flex-row md:items-end md:justify-between">
         <div>
           <span className="text-[10px] font-bold tracking-[0.35em] text-amber-500 uppercase block mb-2">Portfolio</span>
           <h1 className="text-4xl font-extrabold text-white md:text-5xl">
@@ -177,8 +177,8 @@ const Projects = () => {
           </h1>
         </div>
         
-        <div className="flex flex-col md:items-end gap-2">
-          <p className="text-xs font-light text-slate-400 max-w-xs md:text-right">
+        <div className="flex flex-col gap-2 md:items-end">
+          <p className="max-w-xs text-xs font-light text-slate-400 md:text-right">
             Interactive Slider. Click on the indicators or card to browse projects.
           </p>
           {isAdminMode && (
@@ -196,7 +196,7 @@ const Projects = () => {
       </div>
 
       {/* Slider Viewport Layout */}
-      <div className="relative w-full z-10">
+      <div className="relative z-10 w-full">
         
         {/* Slider Viewport Container */}
         <div 
@@ -206,14 +206,14 @@ const Projects = () => {
         >
           {/* Sliding Cards Track */}
           <div 
-            className="flex select-none w-full transition-transform duration-500 ease-in-out"
+            className="flex w-full transition-transform duration-500 ease-in-out select-none"
             style={{
               transform: `translateX(-${activeCardIndex * 100}%)`
             }}
           >
             {projectsList.map((project, idx) => {
               return (
-                <div key={idx} className="w-full flex-shrink-0 px-2 sm:px-4">
+                <div key={idx} className="flex-shrink-0 w-full px-2 sm:px-4">
                   <div
                     className="h-auto rounded-[24px] p-5 pt-14 pb-6 md:pb-5 md:pt-10 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-visible project-card group whitespace-normal cursor-pointer"
                     onClick={(e) => {
@@ -267,7 +267,7 @@ const Projects = () => {
                     {/* Right Side: Details */}
                     <div className="w-full md:w-[48%] flex flex-col justify-between text-left md:pr-2 py-1">
                       <div>
-                        <h3 className="mb-1 text-lg font-bold tracking-tight sm:text-xl text-slate-100 group-hover:text-amber-400 transition-colors duration-300">
+                        <h3 className="mb-1 text-lg font-bold tracking-tight transition-colors duration-300 sm:text-xl text-slate-100 group-hover:text-amber-400">
                           {project.title}
                         </h3>
                         <p className="font-light text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
@@ -335,7 +335,7 @@ const Projects = () => {
         </div>
 
         {/* Combined Manual Control Bars Row - Placed directly below the cards */}
-        <div className="relative z-20 flex justify-center items-center gap-6 mt-6">
+        <div className="relative z-20 flex items-center justify-center gap-6 mt-6">
           {/* Left Manual Control Bar */}
           <button
             onClick={handlePrev}
@@ -374,7 +374,7 @@ const Projects = () => {
       {/* DETAILED SPECS MODAL OVERLAY */}
       {activeDetailProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-lg p-6 sm:p-8 border shadow-2xl modal-bg rounded-3xl border-amber-500/15">
+          <div className="relative w-full max-w-lg p-6 border shadow-2xl sm:p-8 modal-bg rounded-3xl border-amber-500/15">
             <button
               onClick={() => setActiveDetailProject(null)}
               className="absolute text-lg font-bold text-gray-400 transition-colors cursor-pointer top-4 right-4 hover:text-amber-500"
@@ -451,7 +451,7 @@ const Projects = () => {
               </div>
 
               {/* Category & Complexity Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Category</label>
                   <input
@@ -510,7 +510,7 @@ const Projects = () => {
               </div>
 
               {/* Code & Live Demo links */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">GitHub Repo URL</label>
                   <input
