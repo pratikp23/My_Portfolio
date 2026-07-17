@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import { Mail, ArrowRight, Download, MousePointerClick, Globe } from 'lucide-react';
 import About from './About';
 import Skills from './Skills';
@@ -79,8 +78,6 @@ const InstagramIcon = ({ size = 20 }) => (
 );
 
 const Home = () => {
-  const [activeTab, setActiveTab] = useState("neofetch");
-     
   const socials = [
     { icon: <GithubIcon size={20} />, href: "https://github.com" },
     { icon: <Linkedin size={20} />, href: "https://linkedin.com" },
@@ -115,7 +112,7 @@ const Home = () => {
         
         {/* Left Column (HeroContent) */}
         {/* Left Column (HeroContent) */}
-        <div className="flex flex-col space-y-6 text-left lg:col-span-7">
+        <div className="flex flex-col space-y-6 text-left lg:col-span-9">
           <h3 className="text-xl font-medium text-gray-400 md:text-2xl">Hi, I'm</h3>
           <h1 className="text-5xl font-extrabold text-white md:text-7xl">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">Pratik</span> Pathak
@@ -163,134 +160,6 @@ const Home = () => {
                 </a>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Right Column (Interactive Developer Console Mockup) */}
-        <div className="flex justify-center w-full lg:col-span-5 lg:justify-end">
-          <div className="w-full max-w-[420px] rounded-2xl border transition-all duration-500 shadow-2xl overflow-hidden terminal-card">
-            
-            {/* Header bar / Tab bars */}
-            <div className="flex items-center justify-between px-4 py-2 border-b terminal-header">
-              <div className="flex items-center flex-shrink-0 mr-3 space-x-2">
-                <span className="w-3 h-3 rounded-full bg-[#ef4444]" />
-                <span className="w-3 h-3 rounded-full bg-[#eab308]" />
-                <span className="w-3 h-3 rounded-full bg-[#22c55e]" />
-              </div>
-              
-              {/* Dynamic Tabs */}
-              <div className="flex items-center space-x-1 font-mono text-[10px] overflow-x-auto select-none no-scrollbar py-1">
-                <button
-                  onClick={() => setActiveTab("neofetch")}
-                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                    activeTab === "neofetch" 
-                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
-                      : "text-gray-400 hover:text-gray-200"
-                  }`}
-                >
-                  profile.sh
-                </button>
-                <button
-                  onClick={() => setActiveTab("skills")}
-                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                    activeTab === "skills" 
-                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
-                      : "text-gray-400 hover:text-gray-200"
-                  }`}
-                >
-                  skills.sh
-                </button>
-                <button
-                  onClick={() => setActiveTab("contact")}
-                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                    activeTab === "contact" 
-                      ? "text-amber-500 font-bold bg-amber-500/10 border border-amber-500/20" 
-                      : "text-gray-400 hover:text-gray-200"
-                  }`}
-                >
-                  contact.js
-                </button>
-              </div>
-
-              <div className="w-2" />
-            </div>
-
-            {/* Editor Content */}
-            <div className="p-5 font-mono text-[11px] leading-relaxed text-left terminal-body min-h-[280px] flex flex-col justify-between">
-              <div className="space-y-3">
-                {/* Active Command Prompt */}
-                <div>
-                  <span className="font-bold text-amber-500">visitor@pratik.os</span>
-                  <span className="text-gray-400">:</span>
-                  <span className="font-bold text-blue-400">~</span>
-                  <span className="text-gray-400">$</span>{" "}
-                  <span className="text-gray-200">
-                    {activeTab === "neofetch" ? "neofetch" : activeTab === "skills" ? "./skills.sh" : "cat contact.js"}
-                  </span>
-                </div>
-                
-                <div className="my-2 border-t border-gray-800/40" />
-                
-                {/* Tab content 1: Profile (neofetch) */}
-                {activeTab === "neofetch" && (
-                  <div className="space-y-1">
-                    <p><span className="font-semibold text-amber-500">PRATIK PATHAK</span></p>
-                    <p><span className="text-gray-500">---------</span></p>
-                    <p><span className="font-semibold text-blue-400">OS:</span> Pratik.OS v1.0.0</p>
-                    <p><span className="font-semibold text-blue-400">Role:</span> Full Stack Developer</p>
-                    <p><span className="font-semibold text-blue-400">Focus:</span> Web Apps & AI Integration</p>
-                    <p><span className="font-semibold text-blue-400">Shell:</span> bash 5.2.15</p>
-                    <p><span className="font-semibold text-blue-400">Languages:</span> JS, TS, Python, C++</p>
-                    <p><span className="font-semibold text-blue-400">Status:</span> Open to Opportunities 🟢</p>
-                  </div>
-                )}
-
-                {/* Tab content 2: Skills loading indicators */}
-                {activeTab === "skills" && (
-                  <div className="space-y-2">
-                    <p className="font-bold text-emerald-400 animate-pulse">// Executing skills diagnostics...</p>
-                    <div className="mt-2 space-y-1">
-                      <div>
-                        <p className="font-semibold text-blue-400">Frontend: [██████████████░] 94%</p>
-                        <p className="text-gray-400 text-[10px] pl-4">React, Next.js, Tailwind CSS</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-blue-400">Backend:  [████████████░░░] 88%</p>
-                        <p className="text-gray-400 text-[10px] pl-4">Node.js, Express, WebSockets</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-blue-400">Databases: [█████████████░░] 90%</p>
-                        <p className="text-gray-400 text-[10px] pl-4">MongoDB, PostgreSQL, Redis</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-blue-400">DevOps:   [██████████░░░░░] 75%</p>
-                        <p className="text-gray-400 text-[10px] pl-4">Docker, AWS Services, CI/CD</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Tab content 3: Contact code editor */}
-                {activeTab === "contact" && (
-                  <div className="space-y-1">
-                    <p className="text-gray-500">// Contact configuration schema</p>
-                    <p><span className="font-semibold text-purple-400">const</span> <span className="text-blue-400">contactInfo</span> = &#123;</p>
-                    <p className="pl-4"><span className="text-blue-300">email</span>: <span className="text-emerald-400">"pratikpathak343@gmail.com"</span>,</p>
-                    <p className="pl-4"><span className="text-blue-300">github</span>: <span className="text-emerald-400">"github.com/pratikp23"</span>,</p>
-                    <p className="pl-4"><span className="text-blue-300">location</span>: <span className="text-emerald-400">"India"</span>,</p>
-                    <p className="pl-4"><span className="text-blue-300">availability</span>: <span className="text-amber-400">true</span></p>
-                    <p>&#125;;</p>
-                    <p className="mt-2 font-semibold text-purple-400">export default <span className="text-blue-400">contactInfo</span>;</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-800/40">
-                <span className=" text-gray-500 text-[10px] animate-pulse">● System Online</span>
-                <span className=" text-gray-500 text-[10px]">utf-8</span>
-              </div>
-            </div>
-
           </div>
         </div>
 
