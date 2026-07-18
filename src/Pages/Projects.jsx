@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ExternalLink, Layers, Terminal, ChevronLeft, ChevronRight, Upload } from "lucide-react";
+import Magnetic from "../Components/Magnetic";
 
 const GithubIcon = ({ size = 16 }) => (
   <svg
@@ -290,30 +291,36 @@ const Projects = () => {
                           {idx + 1} / {projectsList.length}
                         </span>
                         <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
-                          <button
-                            onClick={() => setActiveDetailProject(project)}
-                            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
-                          >
-                            <span>Specs</span>
-                          </button>
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
-                          >
-                            <GithubIcon size={10} />
-                            <span>Code</span>
-                          </a>
-                          <a
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono hover:-translate-y-0.5"
-                          >
-                            <ExternalLink size={10} className="text-slate-400" />
-                            <span>Demo</span>
-                          </a>
+                          <Magnetic>
+                            <button
+                              onClick={() => setActiveDetailProject(project)}
+                              className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10"
+                            >
+                              <span>Specs</span>
+                            </button>
+                          </Magnetic>
+                          <Magnetic>
+                            <a
+                              href={project.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
+                            >
+                              <GithubIcon size={10} />
+                              <span>Code</span>
+                            </a>
+                          </Magnetic>
+                          <Magnetic>
+                            <a
+                              href={project.demo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
+                            >
+                              <ExternalLink size={10} className="text-slate-400" />
+                              <span>Demo</span>
+                            </a>
+                          </Magnetic>
                           
                           {isAdminMode && (
                             <button
@@ -337,36 +344,41 @@ const Projects = () => {
         {/* Combined Manual Control Bars Row - Placed directly below the cards */}
         <div className="relative z-20 flex items-center justify-center gap-6 mt-6">
           {/* Left Manual Control Bar */}
-          <button
-            onClick={handlePrev}
-            className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
-            aria-label="Scroll Left"
-          >
-            <ChevronLeft size={18} />
-          </button>
+          <Magnetic>
+            <button
+              onClick={handlePrev}
+              className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          </Magnetic>
 
           {/* Pagination Indicators */}
           <div className="flex gap-2">
             {projectsList.map((_, index) => (
-              <button 
-                key={index} 
-                onClick={() => setActiveCardIndex(index)}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  activeCardIndex === index ? "w-6 bg-amber-500" : "w-1.5 bg-slate-800 hover:bg-slate-600"
-                }`}
-                aria-label={`Scroll to project ${index + 1}`}
-              />
+              <Magnetic key={index}>
+                <button 
+                  onClick={() => setActiveCardIndex(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    activeCardIndex === index ? "w-6 bg-amber-500" : "w-1.5 bg-slate-800 hover:bg-slate-600"
+                  }`}
+                  aria-label={`Scroll to project ${index + 1}`}
+                />
+              </Magnetic>
             ))}
           </div>
 
           {/* Right Manual Control Bar */}
-          <button
-            onClick={handleNext}
-            className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
-            aria-label="Scroll Right"
-          >
-            <ChevronRight size={18} />
-          </button>
+          <Magnetic>
+            <button
+              onClick={handleNext}
+              className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </Magnetic>
         </div>
 
       </div>

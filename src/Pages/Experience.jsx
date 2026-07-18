@@ -48,10 +48,13 @@ const Experience = () => {
           </p>
         </div>
 
-        {/* Timeline container */}
-        <div className="relative pl-6 ml-2 space-y-12 border-l border-gray-800 md:ml-8 md:pl-12">
+        <div className="relative pl-6 ml-2 space-y-12 md:ml-8 md:pl-12">
           {experiences.map((exp, index) => (
             <div key={index} className="relative group">
+              {/* Vertical timeline connector line segments */}
+              {index !== experiences.length - 1 && (
+                <span className="absolute -left-[24px] md:-left-[48px] top-1.5 bottom-[-48px] border-l border-gray-800 pointer-events-none" />
+              )}
               {/* Timeline marker */}
               <span className="absolute -left-[33px] md:-left-[57px] top-1.5 bg-[#070708] border-2 border-gray-800 rounded-full p-2.5 text-gray-500 group-hover:border-amber-500 group-hover:text-amber-500 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-300">
                 <Briefcase size={16} />

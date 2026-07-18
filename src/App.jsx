@@ -8,9 +8,11 @@ import Skills from './Pages/Skills'
 import Projects from './Pages/Projects'
 import FutureProjects from './Pages/FutureProjects'
 import Experience from './Pages/Experience'
+import Certifications from './Pages/Certifications'
 import Achievements from './Pages/Achievements'
 import Contact from './Pages/Contact'
 import Signature from './Pages/Signature'
+import SpotlightBackground from './Components/SpotlightBackground'
 
 const App = () => {
   const location = useLocation()
@@ -31,6 +33,7 @@ const App = () => {
 
   return (
     <div className="bg-[#070708] min-h-screen text-white">
+      <SpotlightBackground />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -39,6 +42,7 @@ const App = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/future-projects" element={<FutureProjects />} />
         <Route path="/experience" element={<Experience />} />
+        <Route path="/certifications" element={<Certifications />} />
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

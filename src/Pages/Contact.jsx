@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Mail, MapPin, Send, MessageSquare } from "lucide-react";
+import { Mail, MapPin, Send, MessageSquare, Phone } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { SOCIAL_LINKS } from "../config";
+import Magnetic from "../Components/Magnetic";
 
 const Contact = () => {
   const location = useLocation();
@@ -85,18 +86,37 @@ const Contact = () => {
           <div className="p-6 sm:p-8 space-y-8 border shadow-2xl lg:col-span-5 bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm">
             <h3 className="mb-6 text-2xl font-bold text-white">Contact Info</h3>
             
-            <a
-              href={`mailto:${SOCIAL_LINKS.email}`}
-              className="flex items-center gap-4 cursor-pointer group"
-            >
-              <div className="p-3 transition-colors border border-gray-800 bg-gray-950 rounded-xl text-amber-500 group-hover:border-amber-500">
-                <Mail size={20} />
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">Email Me</h4>
-                <p className="text-sm font-medium text-white transition-colors group-hover:text-amber-500">{SOCIAL_LINKS.email}</p>
-              </div>
-            </a>
+            <Magnetic className="w-full">
+              <a
+                href={`mailto:${SOCIAL_LINKS.email}`}
+                className="flex items-center gap-4 cursor-pointer group w-full"
+              >
+                <div className="p-3 transition-colors border border-gray-800 bg-gray-950 rounded-xl text-amber-500 group-hover:border-amber-500">
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">Email Me</h4>
+                  <p className="text-sm font-medium text-white transition-colors group-hover:text-amber-500">{SOCIAL_LINKS.email}</p>
+                </div>
+              </a>
+            </Magnetic>
+
+            {SOCIAL_LINKS.phone && (
+              <Magnetic className="w-full">
+                <a
+                  href={`tel:${SOCIAL_LINKS.phone}`}
+                  className="flex items-center gap-4 cursor-pointer group w-full"
+                >
+                  <div className="p-3 transition-colors border border-gray-800 bg-gray-950 rounded-xl text-amber-500 group-hover:border-amber-500">
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">Call Me</h4>
+                    <p className="text-sm font-medium text-white transition-colors group-hover:text-amber-500">{SOCIAL_LINKS.phone}</p>
+                  </div>
+                </a>
+              </Magnetic>
+            )}
 
             <div className="flex items-center gap-4">
               <div className="p-3 border border-gray-800 bg-gray-950 rounded-xl text-amber-500">
@@ -175,14 +195,16 @@ const Contact = () => {
                   <p className="text-xs text-red-500 font-medium font-mono pb-2">{submitError}</p>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white font-medium rounded-xl border border-[#f59e0b]/30 shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:from-[#f59e0b] hover:to-[#d97706] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  <span>{isSubmitting ? "Sending Message..." : "Send Message"}</span>
-                  <Send size={16} />
-                </button>
+                <Magnetic className="w-full">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white font-medium rounded-xl border border-[#f59e0b]/30 shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:from-[#f59e0b] hover:to-[#d97706] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <span>{isSubmitting ? "Sending Message..." : "Send Message"}</span>
+                    <Send size={16} />
+                  </button>
+                </Magnetic>
               </form>
             )}
           </div>

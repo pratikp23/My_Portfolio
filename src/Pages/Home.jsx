@@ -5,6 +5,7 @@ import Skills from './Skills';
 import Projects from './Projects';
 import FutureProjects from './FutureProjects';
 import Experience from './Experience';
+import Certifications from './Certifications';
 import Achievements from './Achievements';
 import Contact from './Contact';
 
@@ -177,7 +178,7 @@ const Home = () => {
       </div>
 
       {/* Marquee Ticker */}
-      <div className="flex flex-col w-full px-6 pt-16 mx-auto space-y-6 border-t max-w-7xl border-gray-900/60 md:px-12">
+      <div className="flex flex-col w-full px-6 pt-16 mx-auto space-y-6 max-w-7xl md:px-12">
         <div className="flex items-center space-x-2 text-sm font-semibold tracking-wider text-gray-400 uppercase">
           <span className="text-amber-500">&lt;/&gt;</span><span>Tech Stack I Work With</span>
         </div>
@@ -287,6 +288,9 @@ const Home = () => {
     </div>
     <div id="experience">
       <Experience />
+    </div>
+    <div id="certifications">
+      <Certifications />
     </div>
     <div id="achievements">
       <Achievements />

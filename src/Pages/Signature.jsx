@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 const Signature = () => {
   return (
@@ -6,7 +6,7 @@ const Signature = () => {
       {/* Background Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(226,232,240,0.03)_0%,transparent_70%)] pointer-events-none z-0 signature-glow" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex justify-center items-center">
+      <div className="relative z-10 flex items-center justify-center w-full px-6 mx-auto max-w-7xl">
         <span className="inline-block text-[20vw] leading-none font-bold whitespace-nowrap tracking-tighter bg-clip-text text-transparent bg-[linear-gradient(120deg,#cbd5e1_0%,#cbd5e1_35%,#000000_50%,#cbd5e1_65%,#cbd5e1_100%)] bg-[length:200%_auto] animate-[shine_5s_linear_infinite] select-none signature-text">
           PRATIK
         </span>

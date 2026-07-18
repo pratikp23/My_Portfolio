@@ -6,7 +6,8 @@ export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/pratik_sreyash",
   email: "pratikpathak343@gmail.com",
   location: "India",
-  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY", // Get a free key from https://web3forms.com to make contact form work
+  phone: "+91 7492978858", // Edit your phone number here
+  web3formsKey: "2a0e3f3b-b0b5-4b17-a420-1ada32b93a7c", // Get a free key from https://web3forms.com to make contact form work
 };
 
 // PROFILE DETAILS - Customize your hero section info here
