@@ -10,6 +10,7 @@ import FutureProjects from './Pages/FutureProjects'
 import Experience from './Pages/Experience'
 import Achievements from './Pages/Achievements'
 import Contact from './Pages/Contact'
+import Signature from './Pages/Signature'
 
 const App = () => {
   const location = useLocation()
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Signature />
     </div>
   )
 }
