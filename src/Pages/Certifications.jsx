@@ -9,13 +9,20 @@ const Certifications = () => {
   const isStandalone = location.pathname === "/certifications";
 
   const [activePageIndex, setActivePageIndex] = useState(0);
-  const [chunkSize, setChunkSize] = useState(
-    typeof window !== "undefined" && window.innerWidth >= 768 ? 3 : 1
-  );
+
+  const getChunkSize = (width) => {
+    if (width >= 1024) return 3;
+    if (width >= 640) return 2;
+    return 1;
+  };
+
+  const [chunkSize, setChunkSize] = useState(() => {
+    return typeof window !== "undefined" ? getChunkSize(window.innerWidth) : 3;
+  });
 
   useEffect(() => {
     const handleResize = () => {
-      setChunkSize(window.innerWidth >= 768 ? 3 : 1);
+      setChunkSize(getChunkSize(window.innerWidth));
       setActivePageIndex(0);
     };
     window.addEventListener("resize", handleResize);
@@ -125,7 +132,7 @@ const Certifications = () => {
         <div className="relative w-full">
           
           {/* Slider Viewport Container (Dynamic responsive height bounds) */}
-          <div className="relative w-[90vw] sm:w-[380px] md:w-full mx-auto overflow-hidden pt-24 pb-6 h-[500px]">
+          <div className="relative w-[90vw] sm:w-[500px] md:w-[720px] lg:w-full mx-auto overflow-hidden pt-24 pb-6 h-[500px]">
             
             {/* Sliding Cards Track */}
             <div 
@@ -135,9 +142,9 @@ const Certifications = () => {
               }}
             >
               {pages.map((page, pageIdx) => (
-                <div key={pageIdx} className="flex-shrink-0 w-full grid grid-cols-1 md:grid-cols-3 gap-8 px-4 h-full">
+                <div key={pageIdx} className="flex-shrink-0 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 h-full">
                   {page.map((cert, index) => {
-                    const overallIndex = pageIdx * 3 + index;
+                    const overallIndex = pageIdx * chunkSize + index;
                     return (
                       <div
                         key={overallIndex}
