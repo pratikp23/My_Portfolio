@@ -9,8 +9,9 @@ const About = () => {
 
   const fileInputRef = useRef(null);
   const [profilePic, setProfilePic] = useState(() => {
-    return localStorage.getItem("prtx_profile_pic") || "";
+    return localStorage.getItem("prtx_profile_pic") || "/profile_pic.png";
   });
+  const [imageError, setImageError] = useState(false);
 
   const isAdminMode = localStorage.getItem("prtx_admin_mode") === "true";
 
@@ -24,11 +25,25 @@ const About = () => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (uploadEvent) => {
+      reader.onload = async (uploadEvent) => {
         const base64Data = uploadEvent.target?.result;
         if (typeof base64Data === "string") {
           setProfilePic(base64Data);
+          setImageError(false);
           localStorage.setItem("prtx_profile_pic", base64Data);
+
+          try {
+            const response = await fetch("/api/upload-profile", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ image: base64Data }),
+            });
+            if (response.ok) {
+              console.log("Profile picture saved locally to repository!");
+            }
+          } catch (err) {
+            console.error("Local file write not available in production builds:", err);
+          }
         }
       };
       reader.readAsDataURL(file);
@@ -81,24 +96,25 @@ const About = () => {
               />
               <div 
                 onClick={handlePhotoClick}
-                className={`w-24 h-24 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 p-0.5 shadow-[0_0_20px_rgba(245,158,11,0.2)] mb-4 transition-transform duration-300 relative overflow-hidden group/photo ${isAdminMode ? "cursor-pointer group-hover:scale-105" : "cursor-default"}`}
+                className={`w-48 h-48 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-tr from-amber-400 to-amber-600 p-0.5 shadow-[0_0_25px_rgba(245,158,11,0.25)] mb-6 relative overflow-hidden group/photo ${isAdminMode ? "cursor-pointer" : "cursor-default"}`}
               >
-                <div className="w-full h-full bg-[#070708] rounded-[14px] flex items-center justify-center overflow-hidden relative">
-                  {profilePic ? (
+                <div className="w-full h-full bg-[#070708] rounded-[22px] flex items-center justify-center overflow-hidden relative">
+                  {!imageError && profilePic ? (
                     <img 
                       src={profilePic} 
-                      className="w-full h-full object-cover rounded-[14px]" 
+                      onError={() => setImageError(true)}
+                      className="w-full h-full object-cover rounded-[22px]" 
                       alt="Pratik Pathak" 
                     />
                   ) : (
-                    <span className="font-mono text-3xl font-bold text-amber-500">PP</span>
+                    <span className="font-mono text-5xl font-bold text-amber-500">PP</span>
                   )}
                   
                   {/* Upload Overlay */}
                   {isAdminMode && (
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300 rounded-[14px]">
-                      <span className="text-[10px] font-mono font-semibold text-amber-400 uppercase tracking-wider text-center px-1">
-                        {profilePic ? "Change 📷" : "Upload 📷"}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300 rounded-[22px]">
+                      <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider text-center px-2">
+                        {profilePic && !imageError ? "Change 📷" : "Upload 📷"}
                       </span>
                     </div>
                   )}
