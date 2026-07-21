@@ -88,7 +88,7 @@ const Certifications = () => {
     return chunked;
   };
 
-  const pages = chunkArray(certificationsList, 3);
+  const pages = chunkArray(certificationsList, chunkSize);
 
   const handleNext = (e) => {
     if (e) e.stopPropagation();
