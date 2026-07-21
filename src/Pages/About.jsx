@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { User, GraduationCap, Heart, Terminal, Sparkles, Code2 } from "lucide-react";
 
@@ -78,7 +78,7 @@ const About = () => {
         <div className="grid items-stretch grid-cols-1 gap-12 lg:grid-cols-12">
           
           {/* Left Column - Tech Profile Card */}
-          <div className="relative flex flex-col justify-between p-6 sm:p-8 transition-all duration-300 border shadow-2xl lg:col-span-5 bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm group hover:border-amber-500/20">
+          <div className="relative flex flex-col justify-between p-6 transition-all duration-300 border shadow-2xl sm:p-8 lg:col-span-5 bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm group hover:border-amber-500/20">
             {/* Status Pulse */}
             <div className="absolute flex items-center px-3 py-1 space-x-2 border rounded-full top-6 right-6 bg-emerald-500/10 border-emerald-500/30">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -113,7 +113,7 @@ const About = () => {
                   {/* Upload Overlay */}
                   {isAdminMode && (
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300 rounded-[22px]">
-                      <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider text-center px-2">
+                      <span className="px-2 font-mono text-xs font-semibold tracking-wider text-center uppercase text-amber-400">
                         {profilePic && !imageError ? "Change 📷" : "Upload 📷"}
                       </span>
                     </div>
@@ -144,7 +144,7 @@ const About = () => {
           {/* Right Column - Tabs & Bio Panel */}
           <div className="lg:col-span-7 flex flex-col bg-[#0b0b0d] border border-gray-800/80 rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
             {/* Interactive Tab Headers */}
-            <div className="flex pb-3 mb-6 space-x-4 sm:space-x-6 text-sm font-medium border-b border-gray-800/80 overflow-x-auto no-scrollbar whitespace-nowrap">
+            <div className="flex pb-3 mb-6 space-x-4 overflow-x-auto text-sm font-medium border-b sm:space-x-6 border-gray-800/80 no-scrollbar whitespace-nowrap">
               <button
                 onClick={() => setActiveTab("profile")}
                 className={`pb-3 relative transition-colors duration-300 font-medium flex-shrink-0 ${
