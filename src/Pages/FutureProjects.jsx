@@ -8,25 +8,25 @@ const FutureProjects = () => {
 
   const upcomingProjects = [
     {
-      title: "AI Code Reviewer CLI",
-      description: "A local-first terminal tool that automatically audits your codebase using LLMs, highlighting performance bottlenecks, security concerns, and style improvements before you commit.",
+      title: "PathFinder AI - Career Discovery & Deterministic Matcher",
+      description: "An AI-powered career-navigation system featuring explainable profile matching based on weighted skills (35%), interests (20%), projects (15%), education, experience, and preferences.",
       status: "In Development",
-      phase: "60%",
-      tech: ["Node.js", "Gemini API", "TypeScript", "Commander.js"],
+      phase: "65%",
+      tech: ["React", "Tailwind CSS", "Node.js", "MongoDB"],
     },
     {
-      title: "Decentralized File Share",
-      description: "A peer-to-peer secure file sharing system utilizing Web3 technologies for encrypted storage and metadata-free transfers directly between browsers.",
+      title: "PathFinder AI - RAG-Based AI Mentor",
+      description: "A contextual chatbot assistant utilizing MongoDB Atlas Vector Search and LLM integration to mentor students on skills, career timelines, and curated learning roadmaps.",
       status: "Design Phase",
-      phase: "25%",
-      tech: ["React", "WebRTC", "IPFS", "Solidity"],
+      phase: "30%",
+      tech: ["Express", "MongoDB Atlas", "Vector Search", "Gemini API"],
     },
     {
-      title: "Smart Home Automation Hub",
-      description: "A local-first, privacy-focused dashboard to monitor and automate IoT devices across your network, operating fully offline without cloud dependencies.",
+      title: "PathFinder AI - AI Mock Interview & Test Engine",
+      description: "A text-based simulation hub featuring MCQ, conceptual, and scenario-based tests with real-time AI evaluation of communication and technical accuracy to score job readiness.",
       status: "Planning",
-      phase: "10%",
-      tech: ["Next.js", "Express", "MQTT", "SQLite"],
+      phase: "15%",
+      tech: ["React", "Express", "AI Evaluation", "Mongoose"],
     },
   ];
 
@@ -38,7 +38,16 @@ const FutureProjects = () => {
 
       <div className="relative z-10 w-full max-w-5xl px-6 mx-auto">
         <div className="mb-16 text-center">
-          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl">
+          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl relative inline-block">
+            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="arrow-grad-future" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4e2a14" />
+                  <stop offset="100%" stopColor="#fb923c" />
+                </linearGradient>
+              </defs>
+              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-future)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             Future <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Projects</span>
             {!isStandalone && (
               <Link to="/future-projects" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
@@ -46,6 +55,17 @@ const FutureProjects = () => {
               </Link>
             )}
           </h1>
+          <svg className="w-56 h-4 mt-3 mx-auto" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brush-grad-future" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="60%" stopColor="#d97706" />
+                <stop offset="100%" stopColor="#4e2a14" />
+              </linearGradient>
+            </defs>
+            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-future)" />
+            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-future)" opacity="0.8" />
+          </svg>
           <p className="max-w-xl mx-auto font-light text-gray-400">
             A sneak peek at the applications and tools I am currently designing, prototyping, or actively building.
           </p>

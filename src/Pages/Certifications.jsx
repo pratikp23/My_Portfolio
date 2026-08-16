@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Award, ShieldCheck, ExternalLink, GraduationCap, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { SOCIAL_LINKS } from "../config";
@@ -31,58 +31,116 @@ const Certifications = () => {
 
   const certificationsList = [
     {
-      title: "Google Cloud Digital Leader",
-      issuer: "Google Cloud",
-      date: "Jun 2025",
-      credentialId: "GCP-CDL-1029",
-      link: "https://credential.google.com/verify",
-      image: "/cert_gcp.png",
+      title: "Software Development Engineer (SDE) Internship",
+      issuer: "Bluestock Fintech",
+      date: "Sep 2025",
+      credentialId: "BFSD102899",
+      image: "/cert_sde_internship_bluestock.png",
       icon: <Award className="text-amber-500" size={32} />,
     },
     {
-      title: "Meta Front-End Developer Professional Certificate",
-      issuer: "Meta / Coursera",
-      date: "Mar 2025",
-      credentialId: "META-FED-5829",
-      link: "https://coursera.org/verify",
-      image: "/cert_meta.png",
+      title: "CCNA: Enterprise Networking, Security, and Automation",
+      issuer: "Cisco Networking Academy",
+      date: "Jun 10, 2026",
+      credentialId: "a799a0e7-437f-4acc-9ef4-97a73c33cd96",
+      image: "/cert_ccna_enterprise_networking.png",
       icon: <ShieldCheck className="text-amber-500" size={32} />,
     },
     {
-      title: "PostgreSQL Database Administration",
-      issuer: "Udemy",
-      date: "Nov 2024",
-      credentialId: "UC-8f3a9e",
-      link: "https://udemy.com/certificate",
-      image: "/cert_db.png",
+      title: "CCNA: Switching, Routing, and Wireless Essentials",
+      issuer: "Cisco Networking Academy",
+      date: "Jun 09, 2026",
+      credentialId: "b966f0bd-3d7e-4fc0-bd1a-b41fdc19088a",
+      image: "/cert_ccna_switching_routing.png",
+      icon: <ShieldCheck className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Basics of Data Analytics",
+      issuer: "Physics Wallah / Microsoft",
+      date: "Apr 27, 2026",
+      credentialId: "980892f9-4865-4502-9583-fc3e6aec5514",
+      image: "/cert_basics_of_data_analytics.png",
       icon: <GraduationCap className="text-amber-500" size={32} />,
     },
     {
-      title: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services (AWS)",
-      date: "Aug 2025",
-      credentialId: "AWS-ASA-9982",
-      link: "https://aws.amazon.com/verification",
-      image: "/cert_aws.png",
+      title: "Software Testing with AI Bootcamp",
+      issuer: "Physics Wallah",
+      date: "Jun 29, 2026",
+      credentialId: "e6c4f735-03c0-4ab8-842b-407fdacf0c4a",
+      image: "/cert_software_testing_with_ai.png",
+      icon: <GraduationCap className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Apply AI: Analyze Customer Reviews",
+      issuer: "Cisco Networking Academy",
+      date: "May 19, 2026",
+      image: "/cert_apply_ai_analyze_customer_reviews.png",
       icon: <Award className="text-amber-500" size={32} />,
     },
     {
-      title: "Java SE 11 Developer",
-      issuer: "Oracle University",
-      date: "Jan 2025",
-      credentialId: "ORCL-JD-4001",
-      link: "https://oracle.com/verify",
-      image: "/cert_java.png",
+      title: "GenAI Course",
+      issuer: "Coder Army",
+      date: "Jul 10, 2026",
+      image: "/cert_genai_course_coder_army.png",
+      icon: <GraduationCap className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Flipkart GRiD 6.0 Certificate",
+      issuer: "Flipkart",
+      date: "2024",
+      image: "/cert_flipkart_grid_6_0_certificate.png",
+      icon: <Award className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Introduction to Packet Tracer",
+      issuer: "Cisco Networking Academy",
+      date: "Jul 02, 2024",
+      credentialId: "0fd9e594-7a01-438d-98d9-ca8398ff8300",
+      image: "/cert_introduction_to_packet_tracer.png",
       icon: <ShieldCheck className="text-amber-500" size={32} />,
     },
     {
-      title: "Responsive Web Design",
-      issuer: "freeCodeCamp",
-      date: "Dec 2024",
-      credentialId: "FCC-RWD-7301",
-      link: "https://freecodecamp.org/certification",
-      image: "/cert_fcc.png",
+      title: "Data Analytics Essentials",
+      issuer: "Cisco Networking Academy",
+      date: "Jun 03, 2026",
+      image: "/cert_data_analytics_essentials.png",
       icon: <GraduationCap className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Introduction to Data Science",
+      issuer: "Cisco Networking Academy",
+      date: "Jun 03, 2026",
+      image: "/cert_introduction_to_data_science.png",
+      icon: <GraduationCap className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Introduction to Modern AI",
+      issuer: "Cisco Networking Academy",
+      date: "Apr 05, 2026",
+      image: "/cert_introduction_to_modern_ai.png",
+      icon: <Award className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Python Essentials 1",
+      issuer: "Cisco Networking Academy / OpenEDG",
+      date: "May 19, 2026",
+      image: "/cert_python_essentials_1.png",
+      icon: <ShieldCheck className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Python Essentials 2",
+      issuer: "Cisco Networking Academy / OpenEDG",
+      date: "Jun 03, 2026",
+      image: "/cert_python_essentials_2.png",
+      icon: <ShieldCheck className="text-amber-500" size={32} />,
+    },
+    {
+      title: "Cisco AICTE Virtual Internship",
+      issuer: "Cisco / AICTE",
+      date: "2024",
+      credentialId: "STU663b11a0b09be1715147168",
+      image: "/cert_cisco_aicte_virtual_internship.png",
+      icon: <Award className="text-amber-500" size={32} />,
     },
   ];
 
@@ -107,6 +165,54 @@ const Certifications = () => {
     setActivePageIndex((prev) => (prev - 1 + pages.length) % pages.length);
   };
 
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+  const isDragging = useRef(false);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50;
+    if (diff > threshold) {
+      setActivePageIndex((prev) => (prev + 1) % pages.length);
+    } else if (diff < -threshold) {
+      setActivePageIndex((prev) => (prev - 1 + pages.length) % pages.length);
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const handleMouseDown = (e) => {
+    isDragging.current = true;
+    touchStartX.current = e.clientX;
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging.current) return;
+    touchEndX.current = e.clientX;
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    handleTouchEnd();
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
     <div className="relative w-full min-h-screen bg-[#070708] text-white flex flex-col justify-center items-center overflow-hidden pt-32 pb-16">
       {/* Background Glow */}
@@ -115,7 +221,16 @@ const Certifications = () => {
 
       <div className="relative z-10 w-full max-w-6xl px-6 mx-auto">
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl">
+          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl relative inline-block">
+            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="arrow-grad-certs" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4e2a14" />
+                  <stop offset="100%" stopColor="#fb923c" />
+                </linearGradient>
+              </defs>
+              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-certs)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Certifications</span>
             {!isStandalone && (
               <Link to="/certifications" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
@@ -123,6 +238,17 @@ const Certifications = () => {
               </Link>
             )}
           </h1>
+          <svg className="w-56 h-4 mt-3 mx-auto" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brush-grad-certs" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="60%" stopColor="#d97706" />
+                <stop offset="100%" stopColor="#4e2a14" />
+              </linearGradient>
+            </defs>
+            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-certs)" />
+            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-certs)" opacity="0.8" />
+          </svg>
           <p className="max-w-xl mx-auto font-light text-gray-400">
             Professional credentials, specialization paths, and technical milestones. Hover to flip and inspect.
           </p>
@@ -132,7 +258,16 @@ const Certifications = () => {
         <div className="relative w-full">
           
           {/* Slider Viewport Container (Dynamic responsive height bounds) */}
-          <div className="relative w-[90vw] sm:w-[500px] md:w-[720px] lg:w-full mx-auto overflow-hidden pt-24 pb-6 h-[500px]">
+          <div 
+            className="relative w-[90vw] sm:w-[500px] md:w-[720px] lg:w-full mx-auto overflow-hidden pt-24 pb-6 h-[500px] cursor-grab active:cursor-grabbing select-none"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+          >
             
             {/* Sliding Cards Track */}
             <div 
@@ -194,6 +329,7 @@ const Certifications = () => {
                                 <img
                                   src={cert.image}
                                   alt={cert.title}
+                                  loading="lazy"
                                   className="w-full h-full object-cover object-center"
                                 />
                               </div>

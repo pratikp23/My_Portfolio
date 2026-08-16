@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ExternalLink, Layers, Terminal, ChevronLeft, ChevronRight, Upload } from "lucide-react";
+import { ExternalLink, Layers, Terminal, Upload } from "lucide-react";
 import Magnetic from "../Components/Magnetic";
 
 const GithubIcon = ({ size = 16 }) => (
@@ -25,8 +25,6 @@ const Projects = () => {
   const isStandalone = location.pathname === "/projects";
 
   const [activeDetailProject, setActiveDetailProject] = useState(null);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Admin Mode detection
   const [isAdminMode, setIsAdminMode] = useState(() => {
@@ -136,27 +134,6 @@ const Projects = () => {
     setIsAdminMode(false);
   };
 
-  const handlePrev = (e) => {
-    e.stopPropagation();
-    const prevIndex = (activeCardIndex - 1 + projectsList.length) % projectsList.length;
-    setActiveCardIndex(prevIndex);
-  };
-
-  const handleNext = (e) => {
-    e.stopPropagation();
-    const nextIndex = (activeCardIndex + 1) % projectsList.length;
-    setActiveCardIndex(nextIndex);
-  };
-
-  // Autoplay: automatically advances index every 6 seconds unless hovered
-  useEffect(() => {
-    if (isHovered || projectsList.length <= 1) return;
-    const interval = setInterval(() => {
-      setActiveCardIndex((prevIndex) => (prevIndex + 1) % projectsList.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [isHovered, projectsList.length]);
-
   return (
     <div className="relative w-full bg-[#070708] py-16 md:py-24 overflow-hidden">
       
@@ -165,10 +142,19 @@ const Projects = () => {
       <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Header Block */}
-      <div className="relative z-10 flex flex-col w-full gap-4 px-6 mx-auto mb-12 max-w-7xl md:flex-row md:items-end md:justify-between">
+      <div className="relative z-10 flex flex-col w-full gap-4 px-6 mx-auto mb-16 max-w-7xl md:flex-row md:items-end md:justify-between">
         <div>
           <span className="text-[10px] font-bold tracking-[0.35em] text-amber-500 uppercase block mb-2">Portfolio</span>
-          <h1 className="text-4xl font-extrabold text-white md:text-5xl">
+          <h1 className="text-4xl font-extrabold text-white md:text-5xl relative inline-block">
+            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="arrow-grad-projects" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4e2a14" />
+                  <stop offset="100%" stopColor="#fb923c" />
+                </linearGradient>
+              </defs>
+              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-projects)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Projects</span>
             {!isStandalone && (
               <Link to="/projects" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
@@ -176,11 +162,22 @@ const Projects = () => {
               </Link>
             )}
           </h1>
+          <svg className="w-56 h-4 mt-3 mx-auto md:mx-0" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brush-grad-projects" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="60%" stopColor="#d97706" />
+                <stop offset="100%" stopColor="#4e2a14" />
+              </linearGradient>
+            </defs>
+            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-projects)" />
+            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-projects)" opacity="0.8" />
+          </svg>
         </div>
         
         <div className="flex flex-col gap-2 md:items-end">
           <p className="max-w-xs text-xs font-light text-slate-400 md:text-right">
-            Interactive Slider. Click on the indicators or card to browse projects.
+            Showcasing my works, applications, and full-stack implementations.
           </p>
           {isAdminMode && (
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[9px] uppercase tracking-wider w-max">
@@ -196,191 +193,135 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Slider Viewport Layout */}
-      <div className="relative z-10 w-full">
-        
-        {/* Slider Viewport Container */}
-        <div 
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="relative w-[90vw] sm:w-[440px] md:w-[720px] lg:w-[800px] mx-auto overflow-hidden py-6"
-        >
-          {/* Sliding Cards Track */}
-          <div 
-            className="flex w-full transition-transform duration-500 ease-in-out select-none"
-            style={{
-              transform: `translateX(-${activeCardIndex * 100}%)`
-            }}
-          >
-            {projectsList.map((project, idx) => {
-              return (
-                <div key={idx} className="flex-shrink-0 w-full px-2 sm:px-4">
-                  <div
-                    className="h-auto rounded-[24px] p-5 pt-14 pb-6 md:pb-5 md:pt-10 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-visible project-card group whitespace-normal cursor-pointer"
-                    onClick={(e) => {
-                      if (e.target.closest("a, button, input, textarea, select")) return;
-                      handleNext(e);
-                    }}
-                  >
-                    {/* Card border decor */}
-                    <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
+      {/* Projects Grid Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          {projectsList.map((project, idx) => {
+            return (
+              <div
+                key={idx}
+                className="flex flex-col rounded-[24px] p-6 border relative overflow-visible project-card group whitespace-normal cursor-pointer transition-all duration-300 hover:-translate-y-1"
+                onClick={(e) => {
+                  if (e.target.closest("a, button, input, textarea, select")) return;
+                  setActiveDetailProject(project);
+                }}
+              >
+                {/* Card border decor */}
+                <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
 
-                    {/* Left Side: Browser Mockup Frame */}
-                    <div className="relative w-full md:w-[48%] h-[150px] md:h-[220px] -mt-[40px] md:-mt-0 md:-ml-[35px] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-3 md:group-hover:-translate-y-1.5 md:group-hover:-translate-x-2 group-hover:scale-[1.02] group-hover:rotate-1 group-hover:shadow-[0_15px_30px_rgba(245,158,11,0.2)] border border-white/[0.05] flex flex-col bg-slate-950">
-                      
-                      {/* Browser header */}
-                      <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
-                        <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
-                          <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
-                        </div>
-                      </div>
-
-                      {/* Sliding Screenshot */}
-                      <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
-                        />
-                        
-                        {/* Floating label badges */}
-                        <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
-                          {project.category}
-                        </span>
-                        <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
-                          project.complexity === "Expert"
-                            ? "bg-red-950/80 border-red-500/30 text-red-400"
-                            : project.complexity === "High"
-                            ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
-                            : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
-                        }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${
-                            project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
-                          } animate-pulse`} />
-                          {project.complexity}
-                        </span>
-                      </div>
+                {/* Top Side: Browser Mockup Frame with Pop-Out Hover Animation */}
+                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9.5] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-6 group-hover:scale-[1.04] group-hover:rotate-[-1deg] group-hover:shadow-[0_25px_50px_rgba(245,158,11,0.3)] border border-white/[0.05] flex flex-col bg-slate-950 mb-6 z-20">
+                  {/* Browser header */}
+                  <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
+                    <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
+                      <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
                     </div>
+                  </div>
 
-                    {/* Right Side: Details */}
-                    <div className="w-full md:w-[48%] flex flex-col justify-between text-left md:pr-2 py-1">
-                      <div>
-                        <h3 className="mb-1 text-lg font-bold tracking-tight transition-colors duration-300 sm:text-xl text-slate-100 group-hover:text-amber-400">
-                          {project.title}
-                        </h3>
-                        <p className="font-light text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
-                          {project.description}
-                        </p>
-                        
-                        {/* Tech Tags */}
-                        <div className="flex flex-wrap gap-1 mt-3">
-                          {project.tags.map((tag, i) => (
-                            <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Buttons row */}
-                      <div className="flex items-center justify-between pt-3 mt-4 border-t border-white/[0.04] z-20">
-                        <span className="text-[9px] font-mono text-slate-500">
-                          {idx + 1} / {projectsList.length}
-                        </span>
-                        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
-                          <Magnetic>
-                            <button
-                              onClick={() => setActiveDetailProject(project)}
-                              className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10"
-                            >
-                              <span>Specs</span>
-                            </button>
-                          </Magnetic>
-                          <Magnetic>
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
-                            >
-                              <GithubIcon size={10} />
-                              <span>Code</span>
-                            </a>
-                          </Magnetic>
-                          <Magnetic>
-                            <a
-                              href={project.demo}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 px-2 py-1 border border-white/[0.08] bg-slate-950/40 rounded-lg text-[9px] sm:text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
-                            >
-                              <ExternalLink size={10} className="text-slate-400" />
-                              <span>Demo</span>
-                            </a>
-                          </Magnetic>
-                          
-                          {isAdminMode && (
-                            <button
-                              onClick={() => startEditingProject(idx)}
-                              className="flex items-center gap-1 px-2 py-1 border rounded-lg text-[9px] sm:text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
-                            >
-                              <span>Edit</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
+                  {/* Sliding Screenshot */}
+                  <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                      className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
+                    />
+                    
+                    {/* Floating label badges */}
+                    <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
+                      {project.category}
+                    </span>
+                    <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
+                      project.complexity === "Expert"
+                        ? "bg-red-950/80 border-red-500/30 text-red-400"
+                        : project.complexity === "High"
+                        ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
+                        : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
+                    }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${
+                        project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
+                      } animate-pulse`} />
+                      {project.complexity}
+                    </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Details */}
+                <div className="flex-grow flex flex-col justify-between text-left">
+                  <div>
+                    <h3 className="mb-2 text-xl font-bold tracking-tight transition-colors duration-300 text-slate-100 group-hover:text-amber-400">
+                      {project.title}
+                    </h3>
+                    <p className="font-light text-xs sm:text-sm text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
+                      {project.description}
+                    </p>
+                    
+                    {/* Tech Tags */}
+                    <div className="flex flex-wrap gap-1 mt-4">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Buttons row */}
+                  <div className="flex items-center justify-between pt-4 mt-6 border-t border-white/[0.04] z-20">
+                    <span className="text-[9px] font-mono text-slate-500">
+                      Project {idx + 1}
+                    </span>
+                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
+                      <Magnetic>
+                        <button
+                          onClick={() => setActiveDetailProject(project)}
+                          className="flex items-center gap-1 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10"
+                        >
+                          <span>Specs</span>
+                        </button>
+                      </Magnetic>
+                      <Magnetic>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 border border-white/[0.08] bg-slate-950/40 rounded-lg text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
+                        >
+                          <GithubIcon size={12} />
+                          <span>Code</span>
+                        </a>
+                      </Magnetic>
+                      <Magnetic>
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 border border-white/[0.08] bg-slate-950/40 rounded-lg text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
+                        >
+                          <ExternalLink size={12} className="text-slate-400" />
+                          <span>Demo</span>
+                        </a>
+                      </Magnetic>
+                      
+                      {isAdminMode && (
+                        <button
+                          onClick={() => startEditingProject(idx)}
+                          className="flex items-center gap-1 px-3 py-1.5 border rounded-lg text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
+                        >
+                          <span>Edit</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            );
+          })}
         </div>
-
-        {/* Combined Manual Control Bars Row - Placed directly below the cards */}
-        <div className="relative z-20 flex items-center justify-center gap-6 mt-6">
-          {/* Left Manual Control Bar */}
-          <Magnetic>
-            <button
-              onClick={handlePrev}
-              className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
-              aria-label="Scroll Left"
-            >
-              <ChevronLeft size={18} />
-            </button>
-          </Magnetic>
-
-          {/* Pagination Indicators */}
-          <div className="flex gap-2">
-            {projectsList.map((_, index) => (
-              <Magnetic key={index}>
-                <button 
-                  onClick={() => setActiveCardIndex(index)}
-                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    activeCardIndex === index ? "w-6 bg-amber-500" : "w-1.5 bg-slate-800 hover:bg-slate-600"
-                  }`}
-                  aria-label={`Scroll to project ${index + 1}`}
-                />
-              </Magnetic>
-            ))}
-          </div>
-
-          {/* Right Manual Control Bar */}
-          <Magnetic>
-            <button
-              onClick={handleNext}
-              className="p-3 rounded-full bg-gray-950/90 border border-gray-800 text-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] cursor-pointer hover:scale-105"
-              aria-label="Scroll Right"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </Magnetic>
-        </div>
-
       </div>
 
       {/* DETAILED SPECS MODAL OVERLAY */}

@@ -115,8 +115,13 @@ const Home = () => {
         {/* Left Column (HeroContent) */}
         <div className="flex flex-col space-y-6 text-left lg:col-span-9">
           <h3 className="text-xl font-medium text-gray-400 md:text-2xl">Hi, I'm</h3>
-          <h1 className="text-5xl font-extrabold text-white md:text-7xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">Pratik</span> Pathak
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white flex flex-wrap items-center gap-x-4 gap-y-2 select-none py-2">
+            <span className="cartoonish-logo-text px-4 py-2 text-5xl sm:text-6xl md:text-8xl">
+              PRATIK
+            </span>
+            <span className="text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] md:mt-2">
+              Pathak
+            </span>
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-300">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
@@ -270,6 +275,30 @@ const Home = () => {
         }
         html.light .scroll-indicator:hover, html.light .scroll-indicator:hover span {
           color: #d97706 !important;
+        }
+
+        .cartoonish-logo-text {
+          font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif;
+          color: #4e2a14 !important;
+          display: inline-block;
+          letter-spacing: -0.02em;
+          text-transform: uppercase;
+          transform: rotate(-3deg);
+          text-shadow:
+            -3px -3px 0 #facc15,  
+             3px -3px 0 #facc15,
+            -3px  3px 0 #facc15,
+             3px  3px 0 #facc15,
+            -3px  0px 0 #facc15,
+             3px  0px 0 #facc15,
+             0px -3px 0 #facc15,
+             0px  3px 0 #facc15,
+            -1.5px -1.5px 0 #facc15,
+             1.5px -1.5px 0 #facc15,
+            -1.5px  1.5px 0 #facc15,
+             1.5px  1.5px 0 #facc15,
+             5px  5px 0 #2a1205,
+             6px  6px 0 #2a1205;
         }
       `}</style>
     </section>

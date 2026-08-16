@@ -28,7 +28,7 @@ export default function SpotlightBackground() {
     };
   }, [opacity]);
 
-  const spotlightColor = theme === "light" ? "rgba(245, 158, 11, 0.12)" : "rgba(245, 158, 11, 0.055)";
+  const spotlightColor = theme === "light" ? "rgba(139, 92, 246, 0.15)" : "rgba(245, 158, 11, 0.055)";
   const gridLineColor = theme === "light" ? "rgba(15, 23, 42, 0.025)" : "rgba(255, 255, 255, 0.012)";
 
   return (

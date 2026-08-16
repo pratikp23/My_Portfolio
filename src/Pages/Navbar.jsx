@@ -9,23 +9,32 @@ const Navbar = () => {
   const location = useLocation();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+  
+  // Custom states and refs to ensure smooth route/capsule transition
+  const isClickScrollRef = useRef(false);
+  const clickTimeoutRef = useRef(null);
 
   useEffect(() => {
-    // Create audio object
-    const audio = new Audio("/ambient.mp3");
-    audio.loop = true;
-    audio.volume = 0.25; // Soft background music volume
-    audioRef.current = audio;
-
     return () => {
-      audio.pause();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
     };
   }, []);
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    // Lazy load audio element only when play is requested to optimize bandwidth/initial load
+    if (!audioRef.current) {
+      const audio = new Audio("/ambient.mp3");
+      audio.loop = true;
+      audio.volume = 0.25; // Soft background music volume
+      audioRef.current = audio;
+    }
 
+    const audio = audioRef.current;
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
@@ -47,6 +56,9 @@ const Navbar = () => {
       return "light";
     } else {
       document.documentElement.classList.remove("light");
+      if (!savedTheme) {
+        localStorage.setItem("theme", "dark");
+      }
       return "dark";
     }
   });
@@ -93,6 +105,9 @@ const Navbar = () => {
     const sections = ["about", "skills", "projects", "experience", "certifications", "achievements", "contact"];
     
     const handleScroll = () => {
+      // Ignore scroll updates during manual nav link clicking to keep pill transition smooth
+      if (isClickScrollRef.current) return;
+
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       // Check if we are near the top of the page (Hero section)
@@ -143,20 +158,31 @@ const Navbar = () => {
     { name: "Contact", path: "/#contact" },
   ];
 
+  const handleNavLinkClick = (sectionId) => {
+    isClickScrollRef.current = true;
+    setActiveSection(sectionId);
+    
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      isClickScrollRef.current = false;
+    }, 1000); // 1s buffer for the smooth scroll transition to complete
+  };
+
   return (
     <div>
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0c]/80 backdrop-blur-md border-b border-gray-800/40 px-6 py-4 md:px-12">
         <div className="flex items-center justify-between mx-auto max-w-7xl">
-          {/* Logo Style: Pratik.OS */}
+          {/* Logo Style: Playful cartoonish yellow & blue */}
           <Magnetic>
             <div
               onDoubleClick={handleLogoDoubleClick}
               title="Double-click to toggle admin mode"
-              className="flex items-center space-x-1 font-mono text-xl font-bold tracking-wide cursor-pointer select-none"
+              className="flex items-center cursor-pointer select-none py-1 relative group"
             >
-              <span className="text-[#f59e0b]">&lt;/&gt;</span>
-              <span className="text-white">Pratik</span>
-              <span className="font-normal text-gray-400">.OS</span>
+              <span className="cartoonish-nav-logo text-lg font-black tracking-tight uppercase mr-1">
+                PRATIK
+              </span>
+              <span className="text-xs font-mono font-normal text-gray-400 self-end mb-0.5">.OS</span>
             </div>
           </Magnetic>
 
@@ -165,6 +191,7 @@ const Navbar = () => {
             {navLinks.map((link) => {
               const isHomeLink = link.path === "/";
               const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
+              const sectionId = isHomeLink ? "home" : hash.replace("#", "");
               
               const isActive = activeSection 
                 ? (isHomeLink && activeSection === "home") || (hash && activeSection === hash.replace("#", ""))
@@ -175,6 +202,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.path}
+                  onClick={() => handleNavLinkClick(sectionId)}
                   className={`relative px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors duration-300 z-10 ${
                     isActive ? "text-slate-950 font-bold" : "text-gray-300 hover:text-white"
                   }`}
@@ -320,6 +348,24 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+      <style>{`
+        .cartoonish-nav-logo {
+          font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif;
+          color: #4e2a14 !important;
+          transform: rotate(-3deg);
+          display: inline-block;
+          text-shadow:
+            -1.5px -1.5px 0 #facc15,  
+             1.5px -1.5px 0 #facc15,
+            -1.5px  1.5px 0 #facc15,
+             1.5px  1.5px 0 #facc15,
+            -1.5px  0px 0 #facc15,
+             1.5px  0px 0 #facc15,
+             0px -1.5px 0 #facc15,
+             0px  1.5px 0 #facc15,
+             2.5px  2.5px 0 #2a1205;
+        }
+      `}</style>
     </div>
   );
 };

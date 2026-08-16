@@ -35,7 +35,16 @@ const Experience = () => {
 
       <div className="relative z-10 w-full max-w-4xl px-6 mx-auto">
         <div className="mb-16 text-center">
-          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl">
+          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl relative inline-block">
+            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="arrow-grad-exp" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4e2a14" />
+                  <stop offset="100%" stopColor="#fb923c" />
+                </linearGradient>
+              </defs>
+              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-exp)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Experience</span>
             {!isStandalone && (
               <Link to="/experience" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
@@ -43,6 +52,17 @@ const Experience = () => {
               </Link>
             )}
           </h1>
+          <svg className="w-56 h-4 mt-3 mx-auto" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brush-grad-exp" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="60%" stopColor="#d97706" />
+                <stop offset="100%" stopColor="#4e2a14" />
+              </linearGradient>
+            </defs>
+            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-exp)" />
+            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-exp)" opacity="0.8" />
+          </svg>
           <p className="max-w-xl mx-auto font-light text-gray-400">
             A chronological timeline of my professional journey and software development career.
           </p>

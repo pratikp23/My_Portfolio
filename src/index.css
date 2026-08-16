@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -108,15 +112,51 @@ html.light div.border-amber-500\/20:not(.pointer-events-none) {
   border-color: #fde68a !important; /* amber-200 */
 }
 
-/* Glow adjustments */
-html.light div.bg-amber-500\/10.pointer-events-none,
-html.light .bg-blue-500\/10,
-html.light .bg-orange-500\/10 {
-  opacity: 0.25 !important;
+/* Glow adjustments - Override all background ambient glows to soft purple in light mode */
+html.light .bg-amber-500\/10.pointer-events-none,
+html.light .bg-amber-500\/5.pointer-events-none,
+html.light .bg-orange-500\/10.pointer-events-none,
+html.light .bg-blue-500\/10.pointer-events-none,
+html.light .bg-blue-500\/5.pointer-events-none {
+  background-color: rgba(139, 92, 246, 0.15) !important;
+  opacity: 0.7 !important;
 }
+
 
 html.light .shadow-2xl {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.section-curly-arrow {
+  display: block !important;
+}
+
+/* Light Mode Hover overrides to Soft Purple */
+html.light [class*="hover:border-amber"]:hover,
+html.light [class*="hover:border-orange"]:hover,
+html.light .group:hover [class*="group-hover:border-amber"],
+html.light .group:hover [class*="group-hover:border-orange"],
+html.light .group:hover .group-hover\:border-amber-500\/30,
+html.light .group:hover .group-hover\:border-amber-500\/20 {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+}
+
+html.light [class*="hover:text-amber"]:hover,
+html.light [class*="hover:text-orange"]:hover,
+html.light .group:hover [class*="group-hover:text-amber"],
+html.light .group:hover [class*="group-hover:text-orange"] {
+  color: #8b5cf6 !important;
+}
+
+html.light [class*="hover:bg-amber"]:hover,
+html.light [class*="hover:bg-orange"]:hover {
+  background-color: #8b5cf6 !important;
+  color: #ffffff !important;
+}
+
+html.light .shadow-2xl:hover,
+html.light [class*="hover:shadow-"]:hover {
+  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.12) !important;
 }
 
 /* Utilities */
@@ -126,4 +166,12 @@ html.light .shadow-2xl {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Momentum touch scrolling for smooth hand swipe across overflow containers */
+.overflow-x-auto,
+.overflow-y-auto,
+.overflow-auto,
+[class*="overflow-"] {
+  -webkit-overflow-scrolling: touch !important;
 }
