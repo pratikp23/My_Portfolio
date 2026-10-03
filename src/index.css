@@ -4,162 +4,369 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 @layer base {
+  :root {
+    --bg-page: #08090c;
+    --card-surface: #0e1117;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(245, 158, 11, 0.35);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.15);
+  }
+
+  html.light {
+    --bg-page: #f8fafc;
+    --card-surface: #ffffff;
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-highlight: rgba(217, 119, 6, 0.35);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --accent: #d97706;
+    --accent-glow: rgba(217, 119, 6, 0.12);
+  }
+
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #070708;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    overflow-x: hidden;
   }
 
-  code, .font-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', Courier, monospace !important;
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace !important;
+  }
+
+  /* Accessibility: focus ring for keyboard navigation */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
   }
 }
 
-.bg-\[\#070708\] {
-  background-color: transparent !important;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Light Mode Overrides */
-html.light {
-  color-scheme: light;
+/* Glass & Card Utilities */
+.glass-panel {
+  background: rgba(14, 17, 23, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-html.light body,
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.glass-pill {
+  background: rgba(14, 17, 23, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.light .glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+/* =========================================================================
+   PREMIUM LIGHT MODE SYSTEM: Warm Alabaster (#fcfbf9) & Honey Amber (#d97706)
+   Clean, high-contrast, professional architectural palette for day mode
+   ========================================================================= */
+
+/* Base Page Backgrounds & Containers: Crisp White/80 Glass Aesthetic */
+html.light .bg-\[\#08090c\],
+html.light .bg-\[\#07080b\],
+html.light .bg-\[\#070708\],
 html.light .bg-\[\#0a0a0c\],
-html.light .bg-black {
-  background-color: #f9fafb !important;
-  background-image: none !important;
-}
-
-html.light .bg-\[\#0d0d10\],
-html.light .bg-\[\#0b0b0d\],
-html.light .bg-\[\#050507\],
-html.light .bg-gray-900\/60,
-html.light .bg-gray-950\/60,
-html.light .bg-gray-950,
-html.light .bg-gray-900 {
-  background-color: #ffffff !important;
-}
-
-html.light .bg-slate-950\/40 {
-  background-color: #f3f4f6 !important;
-}
-
-/* Override background gradients on cards */
-html.light .from-gray-900\/40 {
-  --tw-gradient-from: #ffffff !important;
-  --tw-gradient-to: #f3f4f6 !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-}
-
-/* Border overrides */
-html.light .border-gray-850,
-html.light .border-gray-800,
-html.light .border-gray-800\/40,
-html.light .border-gray-800\/60,
-html.light .border-gray-800\/80,
-html.light .border-gray-900\/60 {
-  border-color: #e5e7eb !important;
-}
-
-/* Override white border classes dynamically in light mode */
-html.light [class*="border-white"] {
-  border-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-/* Text overrides - keeping buttons and navigation anchors white on dark backgrounds */
-html.light .text-white:not(button):not(a):not(.btn):not(.keep-white) {
-  color: #111827 !important;
-}
-html.light .text-gray-200,
-html.light .text-slate-100,
-html.light .text-slate-200,
-html.light .text-slate-300 {
-  color: #111827 !important;
-}
-html.light .text-amber-400 {
-  color: #b45309 !important; /* amber-700 - high contrast */
-}
-html.light .text-gray-300 {
-  color: #272d37 !important;
-}
-html.light .text-gray-400,
-html.light .text-slate-400 {
-  color: #4b5563 !important;
-}
-html.light .text-gray-500,
-html.light .text-slate-500 {
-  color: #6b7280 !important;
-}
-
-/* Specific elements like the navbar */
-html.light nav.bg-\[\#0a0a0c\]\/80 {
+html.light .bg-\[\#07090e\] {
   background-color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* Status badge background and border corrections in light mode */
-html.light span.bg-amber-500\/10,
-html.light div.bg-amber-500\/10:not(.pointer-events-none) {
-  background-color: #fef3c7 !important; /* amber-100 */
-  opacity: 1 !important;
-}
-html.light span.border-amber-500\/20,
-html.light div.border-amber-500\/20:not(.pointer-events-none) {
-  border-color: #fde68a !important; /* amber-200 */
+html.light .bg-\[\#0b0d13\]\/60,
+html.light .bg-\[\#0b0d13\] {
+  background-color: rgba(248, 250, 252, 0.9) !important;
 }
 
-/* Glow adjustments - Override all background ambient glows to soft purple in light mode */
-html.light .bg-amber-500\/10.pointer-events-none,
-html.light .bg-amber-500\/5.pointer-events-none,
-html.light .bg-orange-500\/10.pointer-events-none,
-html.light .bg-blue-500\/10.pointer-events-none,
-html.light .bg-blue-500\/5.pointer-events-none {
-  background-color: rgba(139, 92, 246, 0.15) !important;
-  opacity: 0.7 !important;
+/* Card Surfaces & Floating Elements: Elevated Pure White Glass */
+html.light .bg-\[\#0e1117\],
+html.light .bg-\[\#0e1117\]\/80,
+html.light .bg-\[\#0e1117\]\/85,
+html.light .bg-\[\#0e1117\]\/90,
+html.light .bg-\[\#0c0e14\],
+html.light .bg-\[\#0c0f17\],
+html.light .bg-\[\#0c0f17\]\/90,
+html.light .bg-\[\#0d0d10\],
+html.light .bg-\[\#0b0b0d\],
+html.light .bg-\[\#0f0f12\]\/90,
+html.light .bg-\[\#0f0f12\]\/40,
+html.light .bg-gray-950,
+html.light .bg-gray-900\/60,
+html.light .bg-slate-900,
+html.light .bg-slate-950,
+html.light .bg-slate-950\/90 {
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 20px -2px rgba(6, 78, 59, 0.05), 0 2px 8px -1px rgba(15, 23, 42, 0.04) !important;
 }
 
-
-html.light .shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
+/* Horizontal Ticker Pill Cards in Light Mode */
+html.light .animate-ticker .inline-flex {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
 }
 
-.section-curly-arrow {
-  display: block !important;
+html.light .animate-ticker .inline-flex:hover {
+  border-color: #d97706 !important;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.15) !important;
 }
 
-/* Light Mode Hover overrides to Soft Purple */
-html.light [class*="hover:border-amber"]:hover,
-html.light [class*="hover:border-orange"]:hover,
-html.light .group:hover [class*="group-hover:border-amber"],
-html.light .group:hover [class*="group-hover:border-orange"],
-html.light .group:hover .group-hover\:border-amber-500\/30,
-html.light .group:hover .group-hover\:border-amber-500\/20 {
-  border-color: rgba(139, 92, 246, 0.4) !important;
+/* Terminal & Code Sub-panels */
+html.light .bg-black\/40,
+html.light .bg-black\/60,
+html.light .bg-black\/80 {
+  background-color: #f8fafc !important;
 }
 
-html.light [class*="hover:text-amber"]:hover,
-html.light [class*="hover:text-orange"]:hover,
-html.light .group:hover [class*="group-hover:text-amber"],
-html.light .group:hover [class*="group-hover:text-orange"] {
-  color: #8b5cf6 !important;
+/* Soft White Overlay Tweaks in Light Mode */
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/\[0\.05\],
+html.light .bg-white\/\[0\.06\] {
+  background-color: #f1f5f9 !important;
 }
 
-html.light [class*="hover:bg-amber"]:hover,
-html.light [class*="hover:bg-orange"]:hover {
-  background-color: #8b5cf6 !important;
+html.light .bg-white\/\[0\.08\],
+html.light .bg-white\/\[0\.1\] {
+  background-color: #e2e8f0 !important;
+}
+
+/* Subtle Borders in Light Mode */
+html.light .border-white\/\[0\.04\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.07\],
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.09\],
+html.light .border-white\/\[0\.1\],
+html.light .border-white\/\[0\.12\],
+html.light .border-gray-800,
+html.light .border-gray-800\/60,
+html.light .border-gray-800\/40,
+html.light .border-gray-800\/80,
+html.light .border-gray-900 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Headings Typography: Deep Forest Emerald Green with Enhanced Weight */
+html.light .text-white,
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light .section-heading-font {
+  color: #064e3b !important; /* Deep Forest Emerald Green */
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+
+/* Body & Description Typography: Deep Charcoal & Bold Weight for Maximum Clarity */
+html.light p,
+html.light li,
+html.light span,
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300,
+html.light .text-gray-200,
+html.light .text-gray-300 {
+  color: #0f172a !important; /* Ultra-clear Deep Navy Slate */
+  font-weight: 500 !important; /* Medium-Bold for effortless reading */
+}
+
+/* Secondary & Subtitle Typography: Darker Slate for high contrast */
+html.light .text-slate-400,
+html.light .text-gray-400,
+html.light .text-slate-500,
+html.light .text-gray-500 {
+  color: #334155 !important; /* High-contrast readable slate */
+  font-weight: 500 !important;
+}
+
+/* Enforce bold on all strong elements */
+html.light strong,
+html.light b,
+html.light .font-bold,
+html.light .font-semibold {
+  font-weight: 700 !important;
+  color: #064e3b !important;
+}
+
+/* Warm Orange Accents for Primary CTAs & Active Highlights */
+html.light .text-amber-400,
+html.light .text-amber-400\/90,
+html.light .text-amber-400\/80 {
+  color: #c2410c !important; /* Deep High-Contrast Rust Orange */
+  font-weight: 600 !important;
+}
+
+html.light .bg-amber-500\/10,
+html.light .bg-amber-500\/15 {
+  background-color: rgba(217, 119, 6, 0.12) !important;
+}
+
+html.light .border-amber-500\/20,
+html.light .border-amber-500\/25,
+html.light .border-amber-500\/30 {
+  border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+/* Purple Accent Badges & Tags (Royal Purple for domain chips & highlights) */
+html.light .font-mono.text-amber-400,
+html.light .font-mono.text-amber-400\/80,
+html.light .font-mono.text-amber-400\/90 {
+  color: #6d28d9 !important; /* Royal Purple */
+  font-weight: 600 !important;
+}
+
+/* Form Inputs in Light Mode */
+html.light input,
+html.light textarea {
+  background-color: #f8fafc !important;
+  color: #064e3b !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light input:focus,
+html.light textarea:focus {
+  background-color: #ffffff !important;
+  border-color: #7c3aed !important; /* Royal Purple Focus Ring */
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Social Sidebar & Floating Icons in Light Mode */
+html.light aside div.rounded-2xl {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(6, 78, 59, 0.08) !important;
+}
+
+html.light aside a {
+  color: #475569 !important;
+}
+
+html.light aside a:hover {
+  color: #b45309 !important;
+  background-color: #f1ede4 !important;
+  border-color: #d97706 !important;
+}
+
+html.light aside span.font-mono {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25) !important;
+}
+
+/* Modal Overlays in Light Mode */
+html.light .bg-black\/80,
+html.light .bg-black\/85 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* Mobile App Dock & Drawer in Light Mode */
+html.light nav[aria-label="Mobile App Dock Navigation"] {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12) !important;
+}
+
+html.light nav[aria-label="Mobile App Dock Navigation"] button {
+  color: #334155 !important;
+}
+
+html.light nav[aria-label="Mobile App Dock Navigation"] button span {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+html.light nav[aria-label="Mobile App Dock Navigation"] button div {
+  background-color: rgba(217, 119, 6, 0.15) !important;
+  border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+html.light nav[aria-label="Mobile App Dock Navigation"] .text-amber-400 {
+  color: #c2410c !important;
+}
+
+html.light header div.md\:hidden {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light header div.md\:hidden a {
+  color: #0f172a !important;
+}
+
+html.light header div.md\:hidden a:hover {
+  background-color: #f1f5f9 !important;
+  color: #064e3b !important;
+}
+
+/* Large Signature in Light Mode */
+html.light .signature-text-original {
+  background-image: linear-gradient(120deg, #64748b 0%, #475569 35%, #d97706 50%, #475569 65%, #64748b 100%) !important;
+}
+
+/* Preserve deliberate dark elements where appropriate */
+html.light .preserve-dark {
+  background-color: #0f172a !important;
   color: #ffffff !important;
 }
 
-html.light .shadow-2xl:hover,
-html.light [class*="hover:shadow-"]:hover {
-  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.12) !important;
+/* Subtle signature shine */
+@keyframes signatureGlow {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.15));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 28px rgba(245, 158, 11, 0.35));
+  }
 }
 
-/* Utilities */
+.signature-branding {
+  animation: signatureGlow 6s ease-in-out infinite;
+}
+
+/* Hide scrollbars cleanly */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -168,10 +375,116 @@ html.light [class*="hover:shadow-"]:hover {
   scrollbar-width: none;
 }
 
-/* Momentum touch scrolling for smooth hand swipe across overflow containers */
-.overflow-x-auto,
-.overflow-y-auto,
-.overflow-auto,
-[class*="overflow-"] {
-  -webkit-overflow-scrolling: touch !important;
+/* Horizontal infinite leftward ticker */
+@keyframes tickerMoveLeft {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: tickerMoveLeft 30s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+.mask-gradient-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Original Decorative Heading Font & Accents */
+.font-display,
+.section-heading-font {
+  font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+.cartoonish-logo-text {
+  font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif;
+  color: #4e2a14 !important;
+  display: inline-block;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  text-shadow:
+    -2px -2px 0 #facc15,
+     2px -2px 0 #facc15,
+    -2px  2px 0 #facc15,
+     2px  2px 0 #facc15,
+    -2px  0px 0 #facc15,
+     2px  0px 0 #facc15,
+     0px -2px 0 #facc15,
+     0px  2px 0 #facc15,
+     4px  4px 0 #2a1205,
+     5px  5px 0 #2a1205;
+}
+
+.cartoonish-nav-logo {
+  font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif;
+  color: #4e2a14 !important;
+  transform: rotate(-3deg);
+  display: inline-block;
+  letter-spacing: -0.01em;
+  text-shadow:
+    -2px -2px 0 #facc15,
+     2px -2px 0 #facc15,
+    -2px  2px 0 #facc15,
+     2px  2px 0 #facc15,
+    -2px  0px 0 #facc15,
+     2px  0px 0 #facc15,
+     0px -2px 0 #facc15,
+     0px  2px 0 #facc15,
+    -1px -1px 0 #facc15,
+     1px -1px 0 #facc15,
+    -1px  1px 0 #facc15,
+     1px  1px 0 #facc15,
+     3px  3px 0 #2a1205,
+     4px  4px 0 #2a1205;
+}
+
+html.light .cartoonish-nav-logo {
+  color: #4e2a14 !important;
+}
+
+/* Original Curved Arrows */
+.section-curly-arrow {
+  display: block !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Original Signature Text Shine & Mask */
+.signature-text-original {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.25) 10%,
+    rgba(0, 0, 0, 1) 25%,
+    rgba(0, 0, 0, 1) 75%,
+    rgba(0, 0, 0, 0.25) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.25) 10%,
+    rgba(0, 0, 0, 1) 25%,
+    rgba(0, 0, 0, 1) 75%,
+    rgba(0, 0, 0, 0.25) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
 }

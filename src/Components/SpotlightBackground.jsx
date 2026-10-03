@@ -13,9 +13,8 @@ export default function SpotlightBackground() {
       if (opacity === 0) setOpacity(1);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-    // Track theme changes dynamically
     const observer = new MutationObserver(() => {
       const isLight = document.documentElement.classList.contains("light");
       setTheme(isLight ? "light" : "dark");
@@ -28,15 +27,28 @@ export default function SpotlightBackground() {
     };
   }, [opacity]);
 
-  const spotlightColor = theme === "light" ? "rgba(139, 92, 246, 0.15)" : "rgba(245, 158, 11, 0.055)";
-  const gridLineColor = theme === "light" ? "rgba(15, 23, 42, 0.025)" : "rgba(255, 255, 255, 0.012)";
+  // Light Mode uses deep Emerald Green with a hint of Royal Purple, Dark Mode uses Honey Amber
+  const spotlightColor =
+    theme === "light"
+      ? "radial-gradient(550px circle at " +
+        mousePos.x +
+        "px " +
+        mousePos.y +
+        "px, rgba(5, 150, 105, 0.09) 0%, rgba(124, 58, 237, 0.06) 45%, transparent 75%)"
+      : "radial-gradient(600px circle at " +
+        mousePos.x +
+        "px " +
+        mousePos.y +
+        "px, rgba(245, 158, 11, 0.055) 0%, rgba(249, 115, 22, 0.02) 50%, transparent 80%)";
+
+  const gridLineColor = theme === "light" ? "rgba(6, 78, 59, 0.035)" : "rgba(255, 255, 255, 0.012)";
 
   return (
     <div 
-      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 spotlight-grid-container"
+      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-700 overflow-hidden"
       style={{
         opacity: opacity,
-        background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, ${spotlightColor}, transparent 80%), 
+        background: `${spotlightColor}, 
                      linear-gradient(${gridLineColor} 1px, transparent 1px),
                      linear-gradient(90deg, ${gridLineColor} 1px, transparent 1px)`,
         backgroundSize: "100% 100%, 48px 48px, 48px 48px",

@@ -1,0 +1,18 @@
+{
+  "short_name": "PRATIK.OS",
+  "name": "Pratik Pathak | Software Engineer Portfolio",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#08090c",
+  "theme_color": "#08090c",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/"
+}

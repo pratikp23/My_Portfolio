@@ -1,655 +1,499 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ExternalLink, Layers, Terminal, Upload } from "lucide-react";
-import Magnetic from "../Components/Magnetic";
+import { ExternalLink, X, CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Cpu } from "lucide-react";
+import { GithubIcon } from "../Components/Icons";
+import { motion, AnimatePresence } from "framer-motion";
 
-const GithubIcon = ({ size = 16 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-    <path d="M9 18c-4.51 2-5-2-7-2" />
-  </svg>
-);
+const projectsData = [
+  {
+    id: "lms",
+    title: "AI-Learning Management System",
+    category: "Full Stack & AI",
+    badge: "Core Project",
+    image: "/lms.png",
+    demo: "https://learning-management-system-five-azure.vercel.app/",
+    github: "https://github.com/pratikp23/Learning-Management-System",
+    problem:
+      "Standard learning platforms offer static, one-way course delivery without tailored recommendations or automated doubt resolution for students.",
+    whatIBuilt:
+      "A complete full-stack web application combining course administration with AI-assisted learning paths and automated doubt clearing.",
+    myContribution:
+      "Architected the full MERN application, developed RESTful API endpoints with Express and Node.js, structured MongoDB collections for user and course records, built responsive frontend views in React and Tailwind CSS, and integrated AI evaluation models.",
+    technologies: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
+    features: [
+      "Personalized course recommendation engine powered by AI models",
+      "Interactive doubt resolution and automated resume review assistant",
+      "Comprehensive course catalog with student progress tracking",
+      "Secure user authentication and MongoDB state persistence",
+      "Fast, responsive user interface engineered with Tailwind CSS",
+    ],
+  },
+  {
+    id: "healthai",
+    title: "HealthAI Guardian",
+    category: "Healthcare & AI",
+    badge: "Top 10 Finalist Void Hacks 7.0",
+    image: "/Project2.png",
+    demo: "https://healthai-guardian.netlify.app",
+    github: "https://github.com/krrish-cypto/HealthAI-Guardian",
+    problem:
+      "Patients and care teams lack a centralized, intelligent bridge between fragmented personal health metrics and actionable early anomaly detection.",
+    whatIBuilt:
+      "A predictive healthcare monitoring platform that records vital statistics and leverages AI models to provide actionable health insights.",
+    myContribution:
+      "Built client-side views using React and TypeScript, connected machine learning and OpenAI API endpoints for data evaluation, implemented secure health metrics forms, and styled high-contrast data visualization dashboards.",
+    technologies: ["React", "TypeScript", "Node.js", "OpenAI API", "MongoDB"],
+    features: [
+      "Real-time vital statistics tracking and health parameter logs",
+      "Predictive analytics assessing trend deviations in patient data",
+      "Structured health record repository with privacy safeguards",
+      "Automated summary insights translating raw stats into clear guidance",
+      "Developed as a Top 10 Finalist project at Void Hacks 7.0 2025",
+    ],
+  },
+];
 
 const Projects = () => {
   const location = useLocation();
   const isStandalone = location.pathname === "/projects";
-
-  const [activeDetailProject, setActiveDetailProject] = useState(null);
-
-  // Admin Mode detection
-  const [isAdminMode, setIsAdminMode] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("edit") === "true") {
-      localStorage.setItem("prtx_admin_mode", "true");
-      return true;
-    }
-    return localStorage.getItem("prtx_admin_mode") === "true";
-  });
-
-  // Dynamic projects list loaded/saved from/to localStorage
-  const [projectsList, setProjectsList] = useState(() => {
-    const saved = localStorage.getItem("prtx_projects");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved projects", e);
-      }
-    }
-    return [
-      {
-        title: "AI-Learning Management System",
-        description: "An AI-powered Learning Management System that provides personalized learning experiences through AI recommendations, intelligent doubt resolution, course management, progress tracking, and interactive learning analytics. The platform combines modern web technologies with AI to make education smarter, faster, and more accessible.",
-        fullDetails: "Developed a full-stack AI Learning Management System using React, Tailwind CSS, Node.js, and MongoDB. Integrated AI recommendation algorithms to personalize learning paths for users. Implemented real-time resume checker and doubt resolution features using AI models. Designed a responsive UI with Tailwind CSS and ensured secure authentication and data management with MongoDB.",
-        tags: ["React", "Tailwind CSS", "MongoDB", "Node.js"],
-        github: "https://github.com/pratikp23/Learning-Management-System",
-        demo: "https://learning-management-system-five-azure.vercel.app/",
-        complexity: "High",
-        category: "Fullstack",
-        image: "/lms.png",
-      },
-      {
-        title: "HealthAI Guardian",
-        description: "HealthAI Guardian is a next-generation healthcare application designed to leverage artificial intelligence for enhanced patient monitoring and health data management. This platform serves as a secure and intelligent bridge between personal health metrics and actionable medical insights.",
-        fullDetails: "HealthAI Guardian is a next-generation healthcare application designed to leverage artificial intelligence for enhanced patient monitoring and health data management. This platform serves as a secure and intelligent bridge between personal health metrics and actionable medical insights  HealthAI Guardian is built to address the growing need for accessible and intelligent health oversight. By integrating intuitive UI design with robust data processing, the application allows users to track vital statistics, receive AI-driven health insights, and manage medical records securely and efficiently. The system employs advanced machine learning algorithms to analyze health data, providing predictive analytics and personalized recommendations for users. With a focus on privacy and security, HealthAI Guardian ensures that sensitive health information is protected while still being easily accessible to authorized users.",
-        tags: ["React", "TypeScript", "OpenAI API", "MongoDB"],
-        github: "https://github.com/krrish-cypto/HealthAI-Guardian",
-        demo: "https://healthai-guardian.netlify.app",
-        complexity: "High",
-        category: "AI Integration",
-        image: "/Project2.png",
-      }
-    ];
-  });
-
-  // Edit project states
-  const [editingProjectIdx, setEditingProjectIdx] = useState(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editDesc, setEditDesc] = useState("");
-  const [editDetails, setEditDetails] = useState("");
-  const [editTags, setEditTags] = useState("");
-  const [editGithub, setEditGithub] = useState("");
-  const [editDemo, setEditDemo] = useState("");
-  const [editComplexity, setEditComplexity] = useState("High");
-  const [editImage, setEditImage] = useState("");
-
-  const startEditingProject = (idx) => {
-    const project = projectsList[idx];
-    setEditingProjectIdx(idx);
-    setEditTitle(project?.title || "");
-    setEditCategory(project?.category || "");
-    setEditDesc(project?.description || "");
-    setEditDetails(project?.fullDetails || "");
-    setEditTags(project?.tags ? project.tags.join(", ") : "");
-    setEditGithub(project?.github || "");
-    setEditDemo(project?.demo || "");
-    setEditComplexity(project?.complexity || "High");
-    setEditImage(project?.image || "");
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSaveProject = () => {
-    if (editingProjectIdx !== null) {
-      const updatedList = [...projectsList];
-      updatedList[editingProjectIdx] = {
-        title: editTitle,
-        description: editDesc,
-        fullDetails: editDetails,
-        tags: editTags.split(",").map(t => t.trim()).filter(Boolean),
-        github: editGithub,
-        demo: editDemo,
-        complexity: editComplexity,
-        category: editCategory,
-        image: editImage,
-      };
-      setProjectsList(updatedList);
-      localStorage.setItem("prtx_projects", JSON.stringify(updatedList));
-      setEditingProjectIdx(null);
-    }
-  };
-
-  const handleExitAdmin = () => {
-    localStorage.removeItem("prtx_admin_mode");
-    setIsAdminMode(false);
-  };
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [activeTab, setActiveTab] = useState("featured"); // "featured" | "building"
 
   return (
-    <div className="relative w-full bg-[#070708] py-16 md:py-24 overflow-hidden">
-      
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
-
-      {/* Header Block */}
-      <div className="relative z-10 flex flex-col w-full gap-4 px-6 mx-auto mb-16 max-w-7xl md:flex-row md:items-end md:justify-between">
-        <div>
-          <span className="text-[10px] font-bold tracking-[0.35em] text-amber-500 uppercase block mb-2">Portfolio</span>
-          <h1 className="text-4xl font-extrabold text-white md:text-5xl relative inline-block">
-            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="arrow-grad-projects" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#4e2a14" />
-                  <stop offset="100%" stopColor="#fb923c" />
-                </linearGradient>
-              </defs>
-              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-projects)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Projects</span>
+    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Section Header */}
+        <div className="mb-14 text-center sm:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
+            <span>Engineering Portfolio</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <div className="relative inline-block">
+                <svg
+                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="arrow-grad-projects" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#4e2a14" />
+                      <stop offset="100%" stopColor="#fb923c" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99"
+                    stroke="url(#arrow-grad-projects)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <h2 className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider">
+                  Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">Projects</span>
+                </h2>
+              </div>
+              <svg className="w-48 sm:w-56 h-3 mt-2 mx-auto sm:mx-0 select-none pointer-events-none" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="brush-grad-projects" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#fb923c" />
+                    <stop offset="60%" stopColor="#d97706" />
+                    <stop offset="100%" stopColor="#4e2a14" />
+                  </linearGradient>
+                </defs>
+                <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-projects)" />
+                <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-projects)" opacity="0.8" />
+              </svg>
+              <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
+                Production-deployed full-stack web applications and AI-integrated platforms.
+              </p>
+            </div>
             {!isStandalone && (
-              <Link to="/projects" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
-                [Full View ↗]
+              <Link
+                to="/projects"
+                className="font-mono text-xs text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1"
+              >
+                <span>Full View</span>
+                <span>↗</span>
               </Link>
             )}
-          </h1>
-          <svg className="w-56 h-4 mt-3 mx-auto md:mx-0" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="brush-grad-projects" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#fb923c" />
-                <stop offset="60%" stopColor="#d97706" />
-                <stop offset="100%" stopColor="#4e2a14" />
-              </linearGradient>
-            </defs>
-            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-projects)" />
-            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-projects)" opacity="0.8" />
-          </svg>
+          </div>
         </div>
-        
-        <div className="flex flex-col gap-2 md:items-end">
-          <p className="max-w-xs text-xs font-light text-slate-400 md:text-right">
-            Showcasing my works, applications, and full-stack implementations.
-          </p>
-          {isAdminMode && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[9px] uppercase tracking-wider w-max">
-              <span>🔧 Admin Mode Active</span>
-              <button
-                onClick={handleExitAdmin}
-                className="font-bold text-red-400 cursor-pointer hover:text-red-300 hover:underline"
-              >
-                [Exit]
-              </button>
-            </div>
-          )}
+
+        {/* Filter Navigation Toggle */}
+        <div className="flex items-center justify-center sm:justify-start gap-2 mb-8 p-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] w-fit mx-auto sm:mx-0 backdrop-blur-md">
+          <button
+            type="button"
+            onClick={() => setActiveTab("featured")}
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+              activeTab === "featured"
+                ? "bg-amber-500 text-slate-950 shadow-md font-bold"
+                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+            }`}
+          >
+            <span>Featured Deployments</span>
+            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+              activeTab === "featured" ? "bg-slate-950/20 text-slate-900" : "bg-white/[0.06] text-slate-400"
+            }`}>
+              {projectsData.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("building")}
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+              activeTab === "building"
+                ? "bg-amber-500 text-slate-950 shadow-md font-bold"
+                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+            }`}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Currently Building</span>
+            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+              activeTab === "building" ? "bg-slate-950/20 text-slate-900" : "bg-white/[0.06] text-slate-400"
+            }`}>
+              1 Active
+            </span>
+          </button>
         </div>
-      </div>
 
-      {/* Projects Grid Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {projectsList.map((project, idx) => {
-            return (
-              <div
-                key={idx}
-                className="flex flex-col rounded-[24px] p-6 border relative overflow-visible project-card group whitespace-normal cursor-pointer transition-all duration-300 hover:-translate-y-1"
-                onClick={(e) => {
-                  if (e.target.closest("a, button, input, textarea, select")) return;
-                  setActiveDetailProject(project);
-                }}
-              >
-                {/* Card border decor */}
-                <div className="absolute inset-0 rounded-[24px] border border-white/[0.04] group-hover:border-amber-500/25 transition-colors duration-500 pointer-events-none z-10" />
+        {/* Dynamic Display based on activeTab */}
+        {activeTab === "building" ? (
+          /* CURRENTLY BUILDING / THE LAB SPOTLIGHT CARD */
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="mb-6 relative group"
+          >
+            <div className="relative rounded-3xl bg-[#0c0e14] border border-amber-500/30 p-6 sm:p-8 md:p-9 shadow-[0_4px_30px_rgba(245,158,11,0.06)] hover:border-amber-500/50 transition-all duration-300">
+              
+              {/* Header Ribbon / Status Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/[0.08]">
+                <div className="flex items-center gap-3">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400">
+                    Currently Building &bull; V1 In Active Development
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    GovTech &bull; Welfare Intelligence
+                  </span>
+                </div>
+              </div>
 
-                {/* Top Side: Browser Mockup Frame with Pop-Out Hover Animation */}
-                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9.5] rounded-xl overflow-hidden shadow-2xl flex-shrink-0 transition-all duration-500 group-hover:-translate-y-6 group-hover:scale-[1.04] group-hover:rotate-[-1deg] group-hover:shadow-[0_25px_50px_rgba(245,158,11,0.3)] border border-white/[0.05] flex flex-col bg-slate-950 mb-6 z-20">
-                  {/* Browser header */}
-                  <div className="w-full h-5 bg-slate-900 border-b border-white/[0.05] flex items-center px-2.5 gap-1.5 flex-shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
-                    <div className="w-20 h-3 bg-slate-950/60 border border-white/[0.03] rounded mx-auto flex items-center justify-center">
-                      <span className="text-[5px] text-slate-500 font-mono scale-90">pratik.os/project</span>
+              {/* Core Card Content */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6 items-start">
+                
+                {/* Left / Main Overview (7 cols) */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                      HAQ-DWAAR-AI
+                    </h3>
+                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-white/[0.06] text-slate-300 border border-white/[0.08]">
+                      Civic Tech
+                    </span>
+                  </div>
+
+                  <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
+                    An AI-augmented citizen welfare platform connecting Indian citizens to eligible government schemes with zero hallucination. Features a centralized <span className="text-amber-400 font-medium">Benefit Passport</span>, bilingual voice navigation via Bhashini, and DigiLocker credential simulation.
+                  </p>
+
+                  {/* Architecture Highlights Pill Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-start gap-2.5">
+                      <ShieldCheck size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-xs font-semibold text-slate-200">Benefit Firewall</div>
+                        <div className="text-[11px] text-slate-400">Deterministic mathematical rules prevent LLM hallucination in welfare eligibility.</div>
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-start gap-2.5">
+                      <Cpu size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-xs font-semibold text-slate-200">Multilingual Voice</div>
+                        <div className="text-[11px] text-slate-400">Bhashini-compliant voice-to-text allowing citizens to speak in Hindi or English.</div>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Sliding Screenshot */}
-                  <div className="w-full h-[calc(100%-20px)] overflow-hidden relative bg-slate-900">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      loading="lazy"
-                      className="w-full h-auto min-h-full object-cover object-top transition-transform duration-[3s] ease-in-out group-hover:translate-y-[-24%]"
-                    />
-                    
-                    {/* Floating label badges */}
-                    <span className="absolute top-2 left-2 bg-black/85 backdrop-blur-md border border-white/[0.08] text-amber-500 font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md z-20">
-                      {project.category}
-                    </span>
-                    <span className={`absolute top-2 right-2 backdrop-blur-md border font-mono text-[8px] tracking-wider uppercase px-2 py-0.5 rounded font-bold shadow-md flex items-center gap-1 z-20 ${
-                      project.complexity === "Expert"
-                        ? "bg-red-950/80 border-red-500/30 text-red-400"
-                        : project.complexity === "High"
-                        ? "bg-amber-950/80 border-amber-500/30 text-amber-400"
-                        : "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
-                    }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        project.complexity === "Expert" ? "bg-red-400" : project.complexity === "High" ? "bg-amber-400" : "bg-emerald-400"
-                      } animate-pulse`} />
-                      {project.complexity}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Details */}
-                <div className="flex-grow flex flex-col justify-between text-left">
-                  <div>
-                    <h3 className="mb-2 text-xl font-bold tracking-tight transition-colors duration-300 text-slate-100 group-hover:text-amber-400">
-                      {project.title}
-                    </h3>
-                    <p className="font-light text-xs sm:text-sm text-slate-400 leading-relaxed line-clamp-4 group-hover:text-slate-300 transition-colors">
-                      {project.description}
-                    </p>
-                    
-                    {/* Tech Tags */}
-                    <div className="flex flex-wrap gap-1 mt-4">
-                      {project.tags.map((tag, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded text-[8px] font-mono border border-white/[0.04] bg-white/[0.01] text-slate-400 uppercase tracking-wider transition-all duration-300 group-hover:border-amber-500/20 group-hover:text-amber-400">
-                          {tag}
+                  {/* Tech Stack Chips */}
+                  <div className="pt-2">
+                    <span className="text-[11px] font-mono uppercase text-slate-400 block mb-2 font-medium">Engineering Stack:</span>
+                    <div className="flex flex-wrap gap-2">
+                      {["React 18", "Node.js", "Express", "MongoDB", "Google Gemini 1.5", "Bhashini Voice", "Tailwind CSS", "Zod"].map((t) => (
+                        <span
+                          key={t}
+                          className="px-2.5 py-1 rounded-lg text-xs font-mono bg-white/[0.04] text-slate-300 border border-white/[0.08]"
+                        >
+                          {t}
                         </span>
                       ))}
                     </div>
                   </div>
+                </div>
 
-                  {/* Buttons row */}
-                  <div className="flex items-center justify-between pt-4 mt-6 border-t border-white/[0.04] z-20">
-                    <span className="text-[9px] font-mono text-slate-500">
-                      Project {idx + 1}
+                {/* Right / Current Milestone & Progress (5 cols) */}
+                <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-black/40 border border-white/[0.08] space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold flex items-center gap-1.5">
+                      <Sparkles size={13} />
+                      Current Engineering Milestone
                     </span>
-                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
-                      <Magnetic>
-                        <button
-                          onClick={() => setActiveDetailProject(project)}
-                          className="flex items-center gap-1 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg text-xs transition-all font-mono cursor-pointer shadow-md shadow-amber-500/10"
-                        >
-                          <span>Specs</span>
-                        </button>
-                      </Magnetic>
-                      <Magnetic>
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 border border-white/[0.08] bg-slate-950/40 rounded-lg text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
-                        >
-                          <GithubIcon size={12} />
-                          <span>Code</span>
-                        </a>
-                      </Magnetic>
-                      <Magnetic>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 border border-white/[0.08] bg-slate-950/40 rounded-lg text-xs text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
-                        >
-                          <ExternalLink size={12} className="text-slate-400" />
-                          <span>Demo</span>
-                        </a>
-                      </Magnetic>
-                      
-                      {isAdminMode && (
-                        <button
-                          onClick={() => startEditingProject(idx)}
-                          className="flex items-center gap-1 px-3 py-1.5 border rounded-lg text-xs transition-all font-mono cursor-pointer text-amber-500 hover:text-amber-400 border-amber-500/20 hover:-translate-y-0.5"
-                        >
-                          <span>Edit</span>
-                        </button>
-                      )}
+                    <span className="text-[11px] font-mono text-emerald-400">Active Sprint</span>
+                  </div>
+
+                  {/* Milestone Checklist */}
+                  <div className="space-y-2.5 text-xs">
+                    <div className="flex items-start gap-2 text-slate-300">
+                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span>Deterministic rule engine & 0–100 Readiness Scorer</span>
                     </div>
+                    <div className="flex items-start gap-2 text-slate-300">
+                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span>DigiLocker synthetic credential vault & PII masking</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-slate-100 font-medium bg-amber-500/[0.08] p-2 rounded-lg border border-amber-500/20">
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0 mt-1" />
+                      <span>Hardening PDF circular parser & Bhashini Voice pipeline</span>
+                    </div>
+                  </div>
+
+                  {/* Action Links */}
+                  <div className="pt-3 border-t border-white/[0.08] flex items-center gap-3">
+                    <a
+                      href="https://github.com/pratikp23/HAQ-DWAAR-AI"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-2.5 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all inline-flex items-center justify-center gap-2"
+                    >
+                      <GithubIcon size={14} />
+                      <span>View Repository</span>
+                      <ArrowRight size={13} />
+                    </a>
                   </div>
                 </div>
 
               </div>
-            );
-          })}
-        </div>
+
+            </div>
+          </motion.div>
+        ) : (
+          /* Projects Showcase Grid */
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch"
+          >
+            {projectsData.map((project, pIdx) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.45, delay: pIdx * 0.15 }}
+                className="flex flex-col rounded-3xl bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] hover:border-amber-500/30 transition-all overflow-hidden shadow-2xl group"
+              >
+                {/* Project Visual / Browser Mockup */}
+                <div className="relative aspect-[16/9] w-full bg-slate-950 overflow-hidden border-b border-white/[0.06]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  
+                  {/* Overlay Badges */}
+                  <div className="absolute top-3 left-3 flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold bg-slate-950/90 backdrop-blur-md border border-white/[0.1] text-amber-400">
+                      {project.category}
+                    </span>
+                    {project.badge && (
+                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold bg-amber-500/90 text-slate-950 shadow-sm">
+                        {project.badge}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between space-y-5 text-left">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 tracking-tight">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed line-clamp-2">
+                      {project.whatIBuilt}
+                    </p>
+                  </div>
+
+                  {/* Tech Tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-white/[0.03] text-slate-300 border border-white/[0.06]"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-3">
+                    <button
+                      onClick={() => setSelectedProject(project)}
+                      className="text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors cursor-pointer py-1.5"
+                    >
+                      Architecture Details &rarr;
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-semibold text-slate-200 hover:text-white transition-all shadow-sm"
+                          aria-label={`View ${project.title} source code on GitHub`}
+                        >
+                          <GithubIcon size={14} className="text-slate-300" />
+                          <span>GitHub</span>
+                        </a>
+                      )}
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.2)] active:scale-95"
+                          aria-label={`View live demo of ${project.title}`}
+                        >
+                          <span>Live Demo</span>
+                          <ExternalLink size={13} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
       </div>
 
-      {/* DETAILED SPECS MODAL OVERLAY */}
-      {activeDetailProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-lg p-6 border shadow-2xl sm:p-8 modal-bg rounded-3xl border-amber-500/15">
-            <button
-              onClick={() => setActiveDetailProject(null)}
-              className="absolute text-lg font-bold text-gray-400 transition-colors cursor-pointer top-4 right-4 hover:text-amber-500"
-              aria-label="Close details"
+      {/* Project Detail Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0e1117] border border-white/[0.12] p-6 sm:p-8 shadow-2xl text-left"
             >
-              ✕
-            </button>
-            
-            <div className="flex items-center gap-2 mb-2 text-amber-500">
-              <Layers size={18} />
-              <span className="font-mono text-xs font-bold tracking-wider uppercase">Architecture Specs</span>
-            </div>
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-5 right-5 p-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-all cursor-pointer"
+                aria-label="Close project modal"
+              >
+                <X size={18} />
+              </button>
 
-            <h3 className="mb-1 text-2xl font-bold modal-title">{activeDetailProject.title}</h3>
-            
-            <span className="inline-block px-2.5 py-1 rounded-full text-[9px] font-mono border card-tag mb-4">
-              {activeDetailProject.category}
-            </span>
-
-            <p className="mb-6 text-xs leading-relaxed modal-text md:text-sm">
-              {activeDetailProject.fullDetails}
-            </p>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {activeDetailProject.tags.map((t, i) => (
-                <span key={i} className="px-2.5 py-1 rounded-full text-[9px] font-mono border card-tag">
-                  {t}
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                  {selectedProject.category}
                 </span>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-between pt-4 border-t border-gray-800/40">
-              <span className="text-[9px] font-mono card-subtle flex items-center gap-1.5">
-                <Terminal size={12} className="text-amber-500" /> Complexity: {activeDetailProject.complexity}
-              </span>
-              <button
-                onClick={() => setActiveDetailProject(null)}
-                className="px-4 py-2 font-mono text-xs font-bold border cursor-pointer rounded-xl card-action-btn"
-              >
-                Close Specs
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* DYNAMIC PROJECT EDIT CUSTOMIZER MODAL */}
-      {editingProjectIdx !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/80 backdrop-blur-md">
-          <div className="modal-bg p-6 md:p-8 rounded-3xl max-w-xl w-full relative shadow-2xl border border-amber-500/25 my-8 max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setEditingProjectIdx(null)}
-              className="absolute text-lg font-bold text-gray-400 transition-colors cursor-pointer top-4 right-4 hover:text-amber-500"
-              aria-label="Close editor"
-            >
-              ✕
-            </button>
-            
-            <div className="flex items-center gap-2 mb-4 text-amber-500">
-              <Terminal size={18} />
-              <span className="font-mono text-xs font-bold tracking-wider uppercase">Configure Project #{editingProjectIdx + 1}</span>
-            </div>
-
-            <div className="space-y-4 font-sans text-xs text-left md:text-sm">
-              {/* Project Title */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Project Title</label>
-                <input
-                  type="text"
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl focus:outline-none modal-input"
-                />
               </div>
 
-              {/* Category & Complexity Grid */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">
+                {selectedProject.title}
+              </h3>
+
+              <div className="space-y-4 text-xs sm:text-sm text-slate-300 mb-6">
                 <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Category</label>
-                  <input
-                    type="text"
-                    value={editCategory}
-                    onChange={(e) => setEditCategory(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-xl focus:outline-none modal-input"
-                  />
+                  <h4 className="font-mono text-xs uppercase text-amber-400 font-semibold mb-1">
+                    Problem Solved
+                  </h4>
+                  <p className="leading-relaxed font-normal">{selectedProject.problem}</p>
                 </div>
+
                 <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Complexity</label>
-                  <select
-                    value={editComplexity}
-                    onChange={(e) => setEditComplexity(e.target.value)}
-                    className="w-full px-3 py-2 border cursor-pointer rounded-xl focus:outline-none modal-input"
+                  <h4 className="font-mono text-xs uppercase text-amber-400 font-semibold mb-1">
+                    System Architecture & Technical Contribution
+                  </h4>
+                  <p className="leading-relaxed font-normal">{selectedProject.myContribution}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-mono text-xs uppercase text-amber-400 font-semibold mb-2">
+                    Implemented Features
+                  </h4>
+                  <ul className="space-y-1.5">
+                    {selectedProject.features.map((feat, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-slate-300">
+                        <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 mb-6">
+                {selectedProject.technologies.map((t, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2.5 py-1 rounded-lg text-xs font-mono bg-white/[0.04] border border-white/[0.08] text-slate-200"
                   >
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                    <option value="Expert">Expert</option>
-                  </select>
-                </div>
+                    {t}
+                  </span>
+                ))}
               </div>
 
-              {/* Description */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Short Description</label>
-                <textarea
-                  value={editDesc}
-                  rows={2}
-                  onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl focus:outline-none modal-input"
-                />
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+                <a
+                  href={selectedProject.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.1] transition-all"
+                >
+                  <GithubIcon size={14} />
+                  <span>GitHub Repository</span>
+                </a>
+                <a
+                  href={selectedProject.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all"
+                >
+                  <span>Open Live Demo</span>
+                  <ExternalLink size={14} />
+                </a>
               </div>
-
-              {/* Full Specs Details */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Architecture & Implementation Specs</label>
-                <textarea
-                  value={editDetails}
-                  rows={3}
-                  onChange={(e) => setEditDetails(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl focus:outline-none modal-input"
-                />
-              </div>
-
-              {/* Tech Tags */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Tech Tags (Comma separated)</label>
-                <input
-                  type="text"
-                  value={editTags}
-                  placeholder="React, Next.js, Node.js"
-                  onChange={(e) => setEditTags(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-xl focus:outline-none modal-input"
-                />
-              </div>
-
-              {/* Code & Live Demo links */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">GitHub Repo URL</label>
-                  <input
-                    type="text"
-                    value={editGithub}
-                    onChange={(e) => setEditGithub(e.target.value)}
-                    className="w-full px-3 py-2 font-mono text-xs border rounded-xl focus:outline-none modal-input"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Live Demo URL</label>
-                  <input
-                    type="text"
-                    value={editDemo}
-                    onChange={(e) => setEditDemo(e.target.value)}
-                    className="w-full px-3 py-2 font-mono text-xs border rounded-xl focus:outline-none modal-input"
-                  />
-                </div>
-              </div>
-
-              {/* Image Picker */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono mb-1 modal-label">Upload Project Showcase Image</label>
-                <div className="flex items-center gap-4">
-                  {editImage && (
-                    <div className="flex-shrink-0 w-16 h-12 overflow-hidden border border-gray-800 rounded">
-                      <img src={editImage} className="object-cover w-full h-full" alt="preview" />
-                    </div>
-                  )}
-                  <label className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl border border-gray-700 cursor-pointer font-mono text-[10px] font-bold uppercase transition-colors">
-                    <Upload size={12} />
-                    <span>Choose Image</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Modal Actions */}
-            <div className="flex justify-end gap-3 pt-4 mt-6 border-t border-gray-800/40">
-              <button
-                onClick={() => setEditingProjectIdx(null)}
-                className="px-4 py-2 font-mono text-xs font-semibold text-gray-400 transition-colors border border-gray-800 cursor-pointer rounded-xl hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveProject}
-                className="px-5 py-2 font-mono text-xs font-bold text-black transition-colors cursor-pointer bg-amber-500 hover:bg-amber-400 rounded-xl"
-              >
-                Save Project
-              </button>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      )}
-
-      {/* Light/Dark responsiveness and card styling */}
-      <style>{`
-        :root {
-          --card-bg: linear-gradient(135deg, rgba(16, 15, 14, 0.8) 0%, rgba(10, 10, 11, 0.95) 100%);
-          --card-border: rgba(255, 255, 255, 0.04);
-          --card-title: #ffffff;
-          --card-text: #94a3b8;
-          --card-tag-bg: rgba(255, 255, 255, 0.02);
-          --card-tag-border: rgba(255, 255, 255, 0.04);
-          --card-tag-text: #94a3b8;
-          --card-subtle: #4b5563;
-          --card-btn-bg: rgba(255, 255, 255, 0.02);
-          --card-btn-border: rgba(255, 255, 255, 0.08);
-          --card-btn-text: #e2e8f0;
-        }
-
-        html.light {
-          --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 1) 100%);
-          --card-border: rgba(15, 23, 42, 0.06);
-          --card-title: #0f172a;
-          --card-text: #475569;
-          --card-tag-bg: #f8fafc;
-          --card-tag-border: #cbd5e1;
-          --card-tag-text: #475569;
-          --card-subtle: #94a3b8;
-          --card-btn-bg: #ffffff;
-          --card-btn-border: #cbd5e1;
-          --card-btn-text: #0f172a;
-        }
-
-        .project-card {
-          background: var(--card-bg) !important;
-          border: 1px solid var(--card-border) !important;
-          color: var(--card-text) !important;
-          backdrop-filter: blur(24px);
-          position: relative;
-          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 50px -10px rgba(245, 158, 11, 0.02) !important;
-        }
-
-        .modal-bg {
-          background: var(--card-bg) !important;
-          border-color: var(--card-border) !important;
-          backdrop-filter: blur(20px);
-        }
-
-        .modal-title {
-          color: var(--card-title) !important;
-        }
-
-        .modal-text {
-          color: var(--card-text) !important;
-        }
-
-        .card-title {
-          color: var(--card-title) !important;
-        }
-
-        .card-text {
-          color: var(--card-text) !important;
-        }
-
-        .card-tag {
-          background-color: var(--card-tag-bg) !important;
-          border-color: var(--card-tag-border) !important;
-          color: var(--card-tag-text) !important;
-        }
-
-        .card-subtle {
-          color: var(--card-subtle) !important;
-        }
-
-        /* Slider styling overrides */
-        .project-card {
-          cursor: pointer;
-        }
-
-        .mask-linear {
-          mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
-        }
-
-        /* Hide scrollbars */
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-
-        /* Modal inputs */
-        .modal-input {
-          background-color: rgba(15, 23, 42, 0.8) !important;
-          border-color: rgba(245, 158, 11, 0.2) !important;
-          color: #ffffff !important;
-        }
-        .modal-input:focus {
-          border-color: #f59e0b !important;
-        }
-        .modal-input option {
-          background-color: #0c0a09 !important;
-          color: #ffffff !important;
-        }
-        .modal-label {
-          color: #94a3b8 !important;
-        }
-
-        /* Light Mode inputs */
-        html.light .modal-input {
-          background-color: #ffffff !important;
-          border-color: #cbd5e1 !important;
-          color: #0f172a !important;
-        }
-        html.light .modal-input:focus {
-          border-color: #f59e0b !important;
-        }
-        html.light .modal-input option {
-          background-color: #ffffff !important;
-          color: #0f172a !important;
-        }
-        html.light .modal-label {
-          color: #475569 !important;
-        }
-      `}</style>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

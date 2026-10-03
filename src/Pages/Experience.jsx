@@ -1,6 +1,6 @@
-
-import { Briefcase, Calendar } from "lucide-react";
+import { Calendar, CheckCircle2, Building2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Experience = () => {
   const location = useLocation();
@@ -8,101 +8,163 @@ const Experience = () => {
 
   const experiences = [
     {
-      role: "Frontend Developer Intern",
+      role: "Software Development Engineer (SDE) Intern",
       company: "Bluestock Fintech",
-      duration: "Aug 2025 - Sept 2025",
-      description: "Building scalable web solutions using React and Node.js. Optimized load speeds by 25% and implemented modular component libraries.",
+      location: "Pune, India",
+      duration: "Aug 2025 – Sep 2025",
+      type: "Internship",
+      highlights: [
+        "Engineered and maintained responsive client interfaces using React.js and modern component patterns.",
+        "Collaborated on full-stack application modules integrating Node.js backend services and REST APIs.",
+        "Implemented modular, reusable UI components and assisted with client-side performance and rendering optimization.",
+      ],
+      skills: ["React.js", "Node.js", "JavaScript", "REST APIs", "Tailwind CSS"],
     },
     {
-      role: "Campuss Ambassador",
+      role: "Campus Ambassador",
       company: "IIT Bombay",
-      duration: "Aug 2025 - Dec 2025",
-      description: "Promoted IIT Bombay's tech initiatives and events, organized workshops, and facilitated student engagement in coding competitions and hackathons.",
+      location: "Remote / Campus",
+      duration: "Aug 2025 – Dec 2025",
+      type: "Student Leadership",
+      highlights: [
+        "Coordinated student outreach for national technical initiatives, hackathons, and programming events.",
+        "Organized coding workshops and facilitated peer participation in inter-college competitive programming.",
+        "Acted as the liaison between student developer communities and IIT Bombay event organizers.",
+      ],
+      skills: ["Community Leadership", "Event Coordination", "Technical Outreach"],
     },
-    // {
-    //   role: "Freelance Web Developer",
-    //   company: "Self-Employed",
-    //   duration: "Sep 2024 - May 2025",
-    //   description: "Designed and built custom portfolios, landing pages, and business presentation sites for clients using modern styling libraries.",
-    // },
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-[#070708] text-white flex flex-col justify-center items-center overflow-hidden pt-32 pb-16">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
-
-      <div className="relative z-10 w-full max-w-4xl px-6 mx-auto">
-        <div className="mb-16 text-center">
-          <h1 className="mb-4 text-4xl font-extrabold text-white md:text-6xl relative inline-block">
-            <svg className="section-curly-arrow hidden absolute -left-10 -top-8 w-9 h-9 md:-left-16 md:-top-10 md:w-14 md:h-14 scale-x-[-1] select-none pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="arrow-grad-exp" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#4e2a14" />
-                  <stop offset="100%" stopColor="#fb923c" />
-                </linearGradient>
-              </defs>
-              <path d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99" stroke="url(#arrow-grad-exp)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            My <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Experience</span>
+    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Section Header */}
+        <div className="mb-14 text-center sm:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
+            <span>Career History</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <div className="relative inline-block">
+                <svg
+                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="arrow-grad-experience" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#4e2a14" />
+                      <stop offset="100%" stopColor="#fb923c" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99"
+                    stroke="url(#arrow-grad-experience)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <h2 className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider">
+                  Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">Experience</span>
+                </h2>
+              </div>
+              <svg className="w-48 sm:w-56 h-3 mt-2 mx-auto sm:mx-0 select-none pointer-events-none" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="brush-grad-experience" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#fb923c" />
+                    <stop offset="60%" stopColor="#d97706" />
+                    <stop offset="100%" stopColor="#4e2a14" />
+                  </linearGradient>
+                </defs>
+                <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-experience)" />
+                <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-experience)" opacity="0.8" />
+              </svg>
+              <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
+                Hands-on professional software engineering internship and technical leadership roles.
+              </p>
+            </div>
             {!isStandalone && (
-              <Link to="/experience" className="inline-flex items-center ml-4 font-mono text-xs font-medium tracking-wider uppercase transition-colors text-amber-500 hover:text-amber-400">
-                [Full View ↗]
+              <Link
+                to="/experience"
+                className="font-mono text-xs text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1"
+              >
+                <span>Full View</span>
+                <span>↗</span>
               </Link>
             )}
-          </h1>
-          <svg className="w-56 h-4 mt-3 mx-auto" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="brush-grad-exp" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#fb923c" />
-                <stop offset="60%" stopColor="#d97706" />
-                <stop offset="100%" stopColor="#4e2a14" />
-              </linearGradient>
-            </defs>
-            <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-exp)" />
-            <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-exp)" opacity="0.8" />
-          </svg>
-          <p className="max-w-xl mx-auto font-light text-gray-400">
-            A chronological timeline of my professional journey and software development career.
-          </p>
+          </div>
         </div>
 
-        <div className="relative pl-6 ml-2 space-y-12 md:ml-8 md:pl-12">
-          {experiences.map((exp, index) => (
-            <div key={index} className="relative group">
-              {/* Vertical timeline connector line segments */}
-              {index !== experiences.length - 1 && (
-                <span className="absolute -left-[24px] md:-left-[48px] top-1.5 bottom-[-48px] border-l border-gray-800 pointer-events-none" />
-              )}
-              {/* Timeline marker */}
-              <span className="absolute -left-[33px] md:-left-[57px] top-1.5 bg-[#070708] border-2 border-gray-800 rounded-full p-2.5 text-gray-500 group-hover:border-amber-500 group-hover:text-amber-500 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-300">
-                <Briefcase size={16} />
-              </span>
-
-              {/* Card content */}
-              <div className="p-6 sm:p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-gray-900/40 to-black/60 rounded-3xl border-gray-800/60 backdrop-blur-sm hover:border-amber-500/20">
-                <div className="flex flex-col gap-2 mb-4 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold text-white transition-colors duration-300 group-hover:text-amber-500">
+        {/* Experience Timeline Cards */}
+        <div className="space-y-6">
+          {experiences.map((exp, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: idx * 0.12 }}
+              className="p-6 sm:p-8 rounded-3xl bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] hover:border-amber-500/30 transition-all shadow-xl"
+            >
+              {/* Header Row */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-white/[0.08]">
+                <div>
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                       {exp.role}
                     </h3>
-                    <p className="text-sm font-medium text-gray-400 text-amber-550/90">
-                      {exp.company}
-                    </p>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                      {exp.type}
+                    </span>
                   </div>
-                  <div className="flex items-center text-gray-500 text-sm font-medium gap-1.5">
-                    <Calendar size={14} />
-                    <span>{exp.duration}</span>
+                  
+                  <div className="flex items-center gap-3 mt-1.5 text-xs sm:text-sm text-slate-300 font-medium">
+                    <span className="inline-flex items-center gap-1.5 text-amber-400 font-semibold">
+                      <Building2 size={15} />
+                      {exp.company}
+                    </span>
+                    <span className="text-slate-600">•</span>
+                    <span className="text-slate-400">{exp.location}</span>
                   </div>
                 </div>
-                <p className="font-light leading-relaxed text-gray-400">
-                  {exp.description}
-                </p>
+
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-300 self-start sm:self-center">
+                  <Calendar size={13} className="text-amber-400" />
+                  <span>{exp.duration}</span>
+                </div>
               </div>
-            </div>
+
+              {/* Responsibilities / Bullet points */}
+              <div className="space-y-2.5 mb-6">
+                {exp.highlights.map((point, i) => (
+                  <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                    <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span>{point}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Technologies / Competencies tags */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-4 border-t border-white/[0.06]">
+                <span className="text-xs font-mono text-slate-500 mr-2">Key Skills:</span>
+                {exp.skills.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="px-2.5 py-1 rounded-lg text-xs font-mono bg-white/[0.03] border border-white/[0.06] text-slate-300"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+
+            </motion.div>
           ))}
         </div>
+
       </div>
     </div>
   );

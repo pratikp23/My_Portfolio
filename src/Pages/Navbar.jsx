@@ -1,53 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { Music, Moon, Sun, ArrowRight, Menu, X } from "lucide-react";
+import { Moon, Sun, ArrowUpRight, Menu, X, FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import Magnetic from "../Components/Magnetic";
+import { motion, AnimatePresence } from "framer-motion";
+import { SOCIAL_LINKS } from "../config";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
-  
-  // Custom states and refs to ensure smooth route/capsule transition
   const isClickScrollRef = useRef(false);
   const clickTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  const togglePlay = () => {
-    // Lazy load audio element only when play is requested to optimize bandwidth/initial load
-    if (!audioRef.current) {
-      const audio = new Audio("/ambient.mp3");
-      audio.loop = true;
-      audio.volume = 0.25; // Soft background music volume
-      audioRef.current = audio;
-    }
-
-    const audio = audioRef.current;
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      audio.play()
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch((err) => {
-          console.error("Audio play failed:", err);
-        });
-    }
-  };
 
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -56,9 +17,6 @@ const Navbar = () => {
       return "light";
     } else {
       document.documentElement.classList.remove("light");
-      if (!savedTheme) {
-        localStorage.setItem("theme", "dark");
-      }
       return "dark";
     }
   });
@@ -75,48 +33,21 @@ const Navbar = () => {
     }
   };
 
-  const handleLogoDoubleClick = () => {
-    const pin = prompt("Enter Admin Access Pin to toggle Edit Mode:");
-    if (pin === "pratik2026") {
-      const current = localStorage.getItem("prtx_admin_mode") === "true";
-      if (current) {
-        localStorage.removeItem("prtx_admin_mode");
-        alert("Admin Edit Mode Deactivated.");
-        window.location.reload();
-      } else {
-        localStorage.setItem("prtx_admin_mode", "true");
-        alert("Admin Edit Mode Activated! You can now edit your About Me photo and Projects.");
-        window.location.reload();
-      }
-    } else if (pin !== null) {
-      alert("Access Denied.");
-    }
-  };
-
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("home");
+  const currentSection = location.pathname !== "/" ? "" : activeSection;
 
   useEffect(() => {
-    // Only run scroll spy on the main landing page "/"
-    if (location.pathname !== "/") {
-      setActiveSection("");
-      return;
-    }
-
-    const sections = ["about", "skills", "projects", "experience", "certifications", "achievements", "contact"];
-    
     const handleScroll = () => {
-      // Ignore scroll updates during manual nav link clicking to keep pill transition smooth
-      if (isClickScrollRef.current) return;
+      if (location.pathname !== "/" || isClickScrollRef.current) return;
 
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-
-      // Check if we are near the top of the page (Hero section)
       if (window.scrollY < 120) {
         setActiveSection("home");
         return;
       }
 
-      let currentSection = "home";
+      const scrollPosition = window.scrollY + window.innerHeight * 0.35;
+      const sections = ["about", "experience", "projects", "skills", "achievements", "certifications", "contact"];
+      let detected = "home";
 
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
@@ -124,251 +55,214 @@ const Navbar = () => {
           const top = el.offsetTop;
           const height = el.offsetHeight;
           if (scrollPosition >= top && scrollPosition < top + height) {
-            currentSection = sectionId;
+            detected = sectionId;
             break;
           }
         }
       }
 
-      // If scrolled to the bottom of the page, force contact section highlight
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
-        currentSection = "contact";
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 70) {
+        detected = "contact";
       }
 
-      setActiveSection(currentSection);
+      setActiveSection(detected);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    // Call once on mount to set initial active section
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     };
   }, [location.pathname]);
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/#about" },
-    { name: "Skills", path: "/#skills" },
-    { name: "Projects", path: "/#projects" },
-    { name: "Experience", path: "/#experience" },
-    { name: "Certifications", path: "/#certifications" },
-    { name: "Achievements", path: "/#achievements" },
-    { name: "Contact", path: "/#contact" },
+    { name: "About", path: "/#about", id: "about" },
+    { name: "Experience", path: "/#experience", id: "experience" },
+    { name: "Projects", path: "/#projects", id: "projects" },
+    { name: "Skills", path: "/#skills", id: "skills" },
+    { name: "Achievements", path: "/#achievements", id: "achievements" },
+    { name: "Contact", path: "/#contact", id: "contact" },
   ];
 
-  const handleNavLinkClick = (sectionId) => {
+  const handleNavLinkClick = (sectionId, e) => {
     isClickScrollRef.current = true;
     setActiveSection(sectionId);
-    
+    setIsOpen(false);
+
+    if (location.pathname === "/") {
+      if (e) e.preventDefault();
+      if (sectionId === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.history.pushState(null, "", "/");
+      } else {
+        const targetEl = document.getElementById(sectionId);
+        if (targetEl) {
+          const topOffset = targetEl.getBoundingClientRect().top + window.scrollY - 75;
+          window.scrollTo({ top: topOffset, behavior: "smooth" });
+          window.history.pushState(null, "", `/#${sectionId}`);
+        }
+      }
+    }
+
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
       isClickScrollRef.current = false;
-    }, 1000); // 1s buffer for the smooth scroll transition to complete
+    }, 850);
   };
 
   return (
-    <div>
-      <nav className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0c]/80 backdrop-blur-md border-b border-gray-800/40 px-6 py-4 md:px-12">
-        <div className="flex items-center justify-between mx-auto max-w-7xl">
-          {/* Logo Style: Playful cartoonish yellow & blue */}
-          <Magnetic>
-            <div
-              onDoubleClick={handleLogoDoubleClick}
-              title="Double-click to toggle admin mode"
-              className="flex items-center cursor-pointer select-none py-1 relative group"
-            >
-              <span className="cartoonish-nav-logo text-lg font-black tracking-tight uppercase mr-1">
-                PRATIK
-              </span>
-              <span className="text-xs font-mono font-normal text-gray-400 self-end mb-0.5">.OS</span>
-            </div>
-          </Magnetic>
+    <header className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-8 py-3.5 bg-transparent border-b border-transparent pointer-events-none">
+      <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
+        
+        {/* Brand / Logo */}
+        <Link
+          to="/"
+          onClick={(e) => handleNavLinkClick("home", e)}
+          className="group flex items-center py-1 cursor-pointer select-none relative"
+          aria-label="Pratik Pathak Home"
+        >
+          <span className="cartoonish-nav-logo text-xl sm:text-2xl md:text-[26px] font-black tracking-tight uppercase mr-1.5 leading-none transition-transform duration-200 group-hover:scale-105">
+            PRATIK
+          </span>
+          <span className="text-xs sm:text-sm font-mono font-medium text-slate-400 light:text-slate-500 group-hover:text-amber-400 transition-colors self-end mb-0.5">
+            .OS
+          </span>
+        </Link>
 
-          {/* Desktop Navigation Links (Capsule Tab Group) */}
-          <div className="items-center hidden space-x-1 lg:flex bg-[#0f0f12]/40 border border-white/[0.04] p-1.5 rounded-full backdrop-blur-md">
-            {navLinks.map((link) => {
-              const isHomeLink = link.path === "/";
-              const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
-              const sectionId = isHomeLink ? "home" : hash.replace("#", "");
-              
-              const isActive = activeSection 
-                ? (isHomeLink && activeSection === "home") || (hash && activeSection === hash.replace("#", ""))
-                : link.path.includes('#')
-                  ? location.hash === hash
-                  : location.pathname === link.path && !location.hash;
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => handleNavLinkClick(sectionId)}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors duration-300 z-10 ${
-                    isActive ? "text-slate-950 font-bold" : "text-gray-300 hover:text-white"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeNavPill"
-                      className="absolute inset-0 bg-amber-500 rounded-full z-[-1] shadow-[0_0_12px_rgba(245,158,11,0.35)]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {link.name}
-                </Link>
-              );
-            })}
-          </div>
+        {/* Desktop Navigation Capsule */}
+        <nav 
+          aria-label="Main Navigation"
+          className="hidden md:flex items-center gap-1 bg-[#0e1117]/85 light:bg-white/90 backdrop-blur-xl border border-white/[0.08] light:border-slate-300/80 p-1.5 rounded-full shadow-lg"
+        >
+          <Link
+            to="/"
+            onClick={(e) => handleNavLinkClick("home", e)}
+            className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 z-10 ${
+              currentSection === "home"
+                ? "text-slate-950 font-bold"
+                : "text-slate-300 light:text-slate-600 hover:text-white light:hover:text-slate-950"
+            }`}
+          >
+            {currentSection === "home" && (
+              <motion.span
+                layoutId="activeNavPill"
+                className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full z-[-1] shadow-[0_0_14px_rgba(245,158,11,0.4)]"
+                transition={{ type: "spring", stiffness: 450, damping: 32, mass: 0.8 }}
+              />
+            )}
+            Home
+          </Link>
 
-          {/* Right Side Controls & CTA */}
-          <div className="items-center hidden space-x-4 lg:flex">
-            {/* Ambient Audio Button */}
-            <Magnetic>
-              <button 
-                onClick={togglePlay}
-                className={`p-2.5 border rounded-full transition-all duration-300 shadow-inner relative flex items-center justify-center cursor-pointer ${
-                  isPlaying 
-                    ? "bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]" 
-                    : "bg-gray-900/60 border-gray-800 text-gray-400 hover:text-white hover:border-gray-700"
-                }`}
-                aria-label="Toggle background music"
-              >
-                <Music size={16} className={isPlaying ? "animate-pulse text-amber-500" : ""} />
-                {isPlaying && (
-                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full">
-                    <span className="absolute inset-0 rounded-full bg-amber-400 animate-ping opacity-75" />
-                  </span>
-                )}
-              </button>
-            </Magnetic>
-
-            {/* Theme Toggle Button */}
-            <Magnetic>
-              <button 
-                onClick={toggleTheme}
-                className="p-2.5 bg-gray-900/60 border border-gray-800 rounded-full text-gray-400 hover:text-white hover:border-gray-700 transition-all shadow-inner"
-                aria-label="Toggle Theme"
-              >
-                {theme === "dark" ? <Moon size={16} /> : <Sun size={16} />}
-              </button>
-            </Magnetic>
-
-            {/* "Let's Talk" CTA Button with Amber Gradient & Glow */}
-            <Magnetic>
+          {navLinks.map((link) => {
+            const isActive = currentSection === link.id;
+            return (
               <Link
-                to="/#contact"
-                className="
-                              flex items-center space-x-2 
-                              px-5 py-2.5 
-                              text-white 
-                              font-medium 
-                              text-sm 
-                              rounded-xl 
-                              border border-[#f59e0b]/30
-                              shadow-[0_0_15px_rgba(217,119,6,0.15)]
-                              hover:shadow-[0_0_25px_rgba(217,119,6,0.35)]
-                              transition-all duration-300
-
-                              bg-gradient-to-l
-                              from-[#6b3e1e]
-                              to-[#f97316]
-                              "
+                key={link.name}
+                to={link.path}
+                onClick={(e) => handleNavLinkClick(link.id, e)}
+                className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 z-10 ${
+                  isActive
+                    ? "text-slate-950 font-bold"
+                    : "text-slate-300 light:text-slate-600 hover:text-white light:hover:text-slate-950"
+                }`}
               >
-                <span>Let's Talk</span>
-
-                <ArrowRight size={14} />
+                {isActive && (
+                  <motion.span
+                    layoutId="activeNavPill"
+                    className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full z-[-1] shadow-[0_0_14px_rgba(245,158,11,0.4)]"
+                    transition={{ type: "spring", stiffness: 450, damping: 32, mass: 0.8 }}
+                  />
+                )}
+                {link.name}
               </Link>
-            </Magnetic>
-          </div>
+            );
+          })}
+        </nav>
+
+        {/* Right CTA Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          
+          {/* Quick Resume Link (Prominent for recruiters) */}
+          <a
+            href={SOCIAL_LINKS.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 transition-all shadow-sm"
+            aria-label="View Resume in new tab"
+          >
+            <FileText size={13} />
+            <span>Resume</span>
+            <ArrowUpRight size={12} className="opacity-70" />
+          </a>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white transition-all shadow-sm cursor-pointer"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
+            {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-3 lg:hidden">
-            <button 
-              onClick={toggleTheme}
-              className="p-2 text-gray-400 bg-gray-900 border border-gray-800 rounded-full"
-              aria-label="Toggle Theme"
-            >
-              {theme === "dark" ? <Moon size={16} /> : <Sun size={16} />}
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-400 hover:text-white focus:outline-none"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-full bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
+      </div>
 
-        {/* Mobile Menu Dropdown */}
+      {/* Mobile Drawer */}
+      <AnimatePresence>
         {isOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-[#0a0a0c] border-b border-gray-800 px-6 py-6 space-y-4 shadow-xl max-h-[calc(100vh-80px)] overflow-y-auto no-scrollbar">
-            {navLinks.map((link) => {
-              const isHomeLink = link.path === "/";
-              const hash = link.path.includes("#") ? link.path.substring(link.path.indexOf("#")) : "";
-              
-              const isActive = activeSection 
-                ? (isHomeLink && activeSection === "home") || (hash && activeSection === hash.replace("#", ""))
-                : link.path.includes('#')
-                  ? location.hash === hash
-                  : location.pathname === link.path && !location.hash;
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`block text-base font-medium ${
-                    isActive ? "text-[#f59e0b]" : "text-gray-300"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-800">
-              <button 
-                onClick={togglePlay}
-                className={`flex items-center p-2 space-x-2 transition-colors cursor-pointer ${
-                  isPlaying ? "text-amber-500" : "text-gray-400 hover:text-white"
-                }`}
-              >
-                <Music size={16} className={isPlaying ? "animate-pulse" : ""} />
-                <span className="text-sm font-medium">
-                  {isPlaying ? "Mute Background Music" : "Play Background Music"}
-                </span>
-              </button>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden mt-2 p-4 rounded-2xl bg-[#0e1117]/95 backdrop-blur-xl border border-white/[0.1] shadow-2xl flex flex-col gap-2"
+          >
+            <Link
+              to="/"
+              onClick={(e) => handleNavLinkClick("home", e)}
+              className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Home
+            </Link>
+            {navLinks.map((link) => (
               <Link
-                to="/#contact"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white text-sm rounded-xl"
+                key={link.name}
+                to={link.path}
+                onClick={(e) => handleNavLinkClick(link.id, e)}
+                className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-white hover:bg-white/[0.05] transition-colors"
               >
-                <span className="text-[#d6a15d]">Let's Talk</span>
-                <ArrowRight size={14} />
+                {link.name}
               </Link>
+            ))}
+
+            <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between">
+              <a
+                href={SOCIAL_LINKS.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-colors w-full justify-center"
+              >
+                <FileText size={14} />
+                <span>Download / View Resume</span>
+                <ArrowUpRight size={14} />
+              </a>
             </div>
-          </div>
+          </motion.div>
         )}
-      </nav>
-      <style>{`
-        .cartoonish-nav-logo {
-          font-family: 'Luckiest Guy', 'Impact', 'Arial Black', sans-serif;
-          color: #4e2a14 !important;
-          transform: rotate(-3deg);
-          display: inline-block;
-          text-shadow:
-            -1.5px -1.5px 0 #facc15,  
-             1.5px -1.5px 0 #facc15,
-            -1.5px  1.5px 0 #facc15,
-             1.5px  1.5px 0 #facc15,
-            -1.5px  0px 0 #facc15,
-             1.5px  0px 0 #facc15,
-             0px -1.5px 0 #facc15,
-             0px  1.5px 0 #facc15,
-             2.5px  2.5px 0 #2a1205;
-        }
-      `}</style>
-    </div>
+      </AnimatePresence>
+    </header>
   );
 };
 
 export default Navbar;
-
