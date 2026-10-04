@@ -1,4 +1,4 @@
-import { Mail, ArrowRight, FileText, ArrowUpRight, Briefcase, Award, Trophy, Code2 } from 'lucide-react';
+import { Mail, ArrowRight, FileText, ArrowUpRight, Briefcase, Award, Trophy, Code2, Sparkles } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../Components/Icons';
 import { motion } from 'framer-motion';
 import { SOCIAL_LINKS, PROFILE } from '../config';
@@ -66,8 +66,29 @@ const Home = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 mb-3 sm:mb-4 select-none"
           >
-            <span className="text-xl sm:text-2xl md:text-3xl font-medium text-slate-400 self-center">
-              Hi, I'm
+            <span className="inline-flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-medium text-slate-400 self-center">
+              <motion.span
+                animate={{
+                  rotate: [0, 20, -10, 20, -6, 14, 0]
+                }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  repeatDelay: 0.8,
+                  ease: "easeInOut"
+                }}
+                whileHover={{
+                  scale: 1.25,
+                  rotate: [0, 25, -15, 25, -10, 15, 0],
+                  transition: { duration: 0.6, repeat: Infinity }
+                }}
+                style={{ transformOrigin: "70% 70%" }}
+                className="inline-block text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)] cursor-pointer"
+                title="Hi there!"
+              >
+                👋
+              </motion.span>
+              <span>Hi, I'm</span>
             </span>
             <span className="cartoonish-logo-text px-3 py-1 text-4xl sm:text-6xl md:text-7xl lg:text-8xl">
               PRATIK
@@ -197,11 +218,20 @@ const Home = () => {
 
         {/* FULL-WIDTH CONTINUOUS HORIZONTAL MOVING TICKER (Direct child of section, naturally 100% width) */}
         <div className="w-full mt-10 pt-6 pb-2 border-t border-white/[0.07] bg-[#0b0d13]/60 backdrop-blur-md overflow-hidden flex flex-col items-center">
-          <div className="flex items-center gap-2 mb-3.5 px-4 text-center">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />
-            <span className="text-[11px] sm:text-xs font-mono text-slate-300 uppercase tracking-[0.2em] font-bold">
-              Technologies I Engineer Scalable Systems With
-            </span>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-3.5 px-4 text-center">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />
+              <span className="text-[11px] sm:text-xs font-mono text-slate-300 uppercase tracking-[0.2em] font-bold">
+                Technologies I Engineer Scalable Systems With
+              </span>
+            </div>
+            <a
+              href="#skills"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[11px] font-semibold transition-all hover:scale-105 shadow-[0_0_12px_rgba(245,158,11,0.2)] cursor-pointer"
+            >
+              <Sparkles size={11} className="text-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
+              <span>Try Physics Lab 🕹️</span>
+            </a>
           </div>
 
           <div className="w-full relative overflow-hidden mask-gradient-x py-2">

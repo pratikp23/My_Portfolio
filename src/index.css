@@ -339,7 +339,17 @@ html.light header div.md\:hidden a:hover {
   color: #064e3b !important;
 }
 
-/* Large Signature in Light Mode */
+/* Original Signature in Light & Dark Mode */
+.signature-text {
+  -webkit-text-fill-color: transparent !important;
+}
+
+html.light .signature-text {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background-image: linear-gradient(120deg, #64748b 0%, #475569 35%, #0f172a 50%, #475569 65%, #64748b 100%) !important;
+}
+
 html.light .signature-text-original {
   background-image: linear-gradient(120deg, #64748b 0%, #475569 35%, #d97706 50%, #475569 65%, #64748b 100%) !important;
 }
@@ -487,4 +497,11 @@ html.light .cartoonish-nav-logo {
   100% {
     background-position: -200% center;
   }
+}
+
+/* Jitter-Style Stacking Project Cards in Light Mode */
+html.light .project-stack-card {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 -10px 35px rgba(15, 23, 42, 0.08) !important;
 }

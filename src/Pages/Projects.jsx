@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ExternalLink, X, CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Cpu } from "lucide-react";
+import { ExternalLink, X, CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Cpu, Layers } from "lucide-react";
 import { GithubIcon } from "../Components/Icons";
 import { motion, AnimatePresence } from "framer-motion";
+import ProjectCardStack from "../Components/ProjectCardStack";
 
 const projectsData = [
   {
@@ -58,9 +59,30 @@ const Projects = () => {
   const isStandalone = location.pathname === "/projects";
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeTab, setActiveTab] = useState("featured"); // "featured" | "building"
+  const [viewMode, setViewMode] = useState("stack"); // "stack" | "grid"
+
+  const [theme, setTheme] = useState(() => {
+    return typeof document !== "undefined" && document.documentElement.classList.contains("light")
+      ? "light"
+      : "dark";
+  });
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const isLightMode = document.documentElement.classList.contains("light");
+      setTheme(isLightMode ? "light" : "dark");
+    };
+
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  const isLight = theme === "light";
 
   return (
-    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+    <div className={`relative w-full py-20 px-4 sm:px-6 lg:px-8 transition-colors ${isLight ? "text-slate-900" : "text-white"}`}>
       <div className="max-w-6xl mx-auto">
         
         {/* Section Header */}
@@ -123,45 +145,110 @@ const Projects = () => {
           </div>
         </div>
 
-        {/* Filter Navigation Toggle */}
-        <div className="flex items-center justify-center sm:justify-start gap-2 mb-8 p-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] w-fit mx-auto sm:mx-0 backdrop-blur-md">
-          <button
-            type="button"
-            onClick={() => setActiveTab("featured")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
-              activeTab === "featured"
-                ? "bg-amber-500 text-slate-950 shadow-md font-bold"
-                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
-            }`}
-          >
-            <span>Featured Deployments</span>
-            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
-              activeTab === "featured" ? "bg-slate-950/20 text-slate-900" : "bg-white/[0.06] text-slate-400"
-            }`}>
-              {projectsData.length}
-            </span>
-          </button>
+        {/* Filter Navigation Toggle & View Mode Switcher */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-4 border-b border-white/[0.08] light:border-slate-200">
+          
+          {/* Tabs: Featured vs Building */}
+          <div className={`flex items-center gap-2 p-1.5 rounded-2xl border backdrop-blur-md transition-colors ${
+            isLight
+              ? "bg-slate-100 border-slate-200"
+              : "bg-white/[0.03] border-white/[0.08]"
+          }`}>
+            <button
+              type="button"
+              onClick={() => setActiveTab("featured")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+                activeTab === "featured"
+                  ? "bg-amber-500 text-slate-950 shadow-md font-bold"
+                  : isLight
+                  ? "text-slate-600 hover:text-slate-950 hover:bg-slate-200/60"
+                  : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+              }`}
+            >
+              <span>Featured Deployments</span>
+              <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                activeTab === "featured"
+                  ? "bg-slate-950/20 text-slate-900"
+                  : isLight
+                  ? "bg-slate-200 text-slate-700"
+                  : "bg-white/[0.06] text-slate-400"
+              }`}>
+                {projectsData.length}
+              </span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("building")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
-              activeTab === "building"
-                ? "bg-amber-500 text-slate-950 shadow-md font-bold"
-                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
-            }`}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span>Currently Building</span>
-            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
-              activeTab === "building" ? "bg-slate-950/20 text-slate-900" : "bg-white/[0.06] text-slate-400"
+            <button
+              type="button"
+              onClick={() => setActiveTab("building")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+                activeTab === "building"
+                  ? "bg-amber-500 text-slate-950 shadow-md font-bold"
+                  : isLight
+                  ? "text-slate-600 hover:text-slate-950 hover:bg-slate-200/60"
+                  : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+              }`}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>Currently Building</span>
+              <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                activeTab === "building"
+                  ? "bg-slate-950/20 text-slate-900"
+                  : isLight
+                  ? "bg-slate-200 text-slate-700"
+                  : "bg-white/[0.06] text-slate-400"
+              }`}>
+                1 Active
+              </span>
+            </button>
+          </div>
+
+          {/* View Mode Switcher: Card Stack vs Grid View */}
+          {activeTab === "featured" && (
+            <div className={`flex items-center gap-1.5 p-1 rounded-xl border shadow-sm transition-colors ${
+              isLight
+                ? "bg-slate-100 border-slate-200"
+                : "bg-black/40 border-white/[0.08]"
             }`}>
-              1 Active
-            </span>
-          </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("stack")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewMode === "stack"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                    : isLight
+                    ? "text-slate-600 hover:text-slate-950 hover:bg-slate-200/60"
+                    : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                }`}
+              >
+                <Sparkles size={12} className={viewMode === "stack" ? "text-slate-950" : (isLight ? "text-amber-700" : "text-amber-400")} />
+                <span>Card Stack</span>
+                <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono ${
+                  isLight
+                    ? "bg-amber-100 text-amber-900 border border-amber-300"
+                    : "bg-amber-950/40 text-amber-200"
+                }`}>Jitter</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewMode("grid")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewMode === "grid"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                    : isLight
+                    ? "text-slate-600 hover:text-slate-950 hover:bg-slate-200/60"
+                    : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                }`}
+              >
+                <Layers size={12} className={viewMode === "grid" ? "text-slate-950" : (isLight ? "text-amber-700" : "text-amber-400")} />
+                <span>Grid View</span>
+              </button>
+            </div>
+          )}
+
         </div>
 
         {/* Dynamic Display based on activeTab */}
@@ -291,6 +378,12 @@ const Projects = () => {
 
             </div>
           </motion.div>
+        ) : viewMode === "stack" ? (
+          /* Jitter-Style Stacking Cards */
+          <ProjectCardStack
+            projects={projectsData}
+            onSelectProject={setSelectedProject}
+          />
         ) : (
           /* Projects Showcase Grid */
           <motion.div

@@ -7,20 +7,15 @@ import {
   Server, 
   Database, 
   Settings, 
-  Folder, 
-  Trophy, 
-  Compass, 
   Rocket, 
   LineChart, 
   Quote,
   Network,
-  Cloud,
   CheckCircle2,
   Sparkles,
-  Layers,
-  Terminal,
-  Zap
+  Layers
 } from "lucide-react";
+import PhysicsSkillSandbox from "../Components/PhysicsSkillSandbox";
 
 // Customized authentic SVG Brand Icons with vibrant styling
 const HTMLIcon = () => (
@@ -195,6 +190,7 @@ const Skills = () => {
   const location = useLocation();
   const isStandalone = location.pathname === "/skills";
   const [activeFilter, setActiveFilter] = useState("all");
+  const [viewMode, setViewMode] = useState("physics");
 
   const skillCategories = [
     {
@@ -340,8 +336,66 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* Decorative & Simple Filter Capsule Dock with Framer Motion Layout Animation */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-white/[0.08]">
+        {/* VIEW MODE SELECTOR (Cuberto-inspired Physics Lab vs Grid Architecture) */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-3 rounded-2xl bg-[#0e1117]/80 light:bg-white/95 border border-white/[0.08] light:border-slate-300/80 backdrop-blur-xl shadow-lg light:shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.8)]" />
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-300 light:text-slate-700 font-bold">
+              Experience View:
+            </span>
+            <span className="text-xs text-amber-400 light:text-amber-600 font-semibold">
+              {viewMode === "physics" ? "🕹️ Interactive 2D Physics Lab (Cuberto Style)" : "🔲 Bento Architecture Grid"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 light:bg-slate-100 border border-white/[0.06] light:border-slate-200">
+            <button
+              onClick={() => setViewMode("physics")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                viewMode === "physics"
+                  ? "bg-amber-400 text-slate-950 font-bold shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                  : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-950 hover:bg-white/[0.04] light:hover:bg-slate-200/60"
+              }`}
+            >
+              <Sparkles size={13} className={viewMode === "physics" ? "text-slate-950" : "text-amber-400 light:text-amber-600"} />
+              <span>Physics Lab</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-950/60 text-amber-200 light:bg-amber-100 light:text-amber-800 border border-amber-500/30 font-mono">NEW</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                viewMode === "grid"
+                  ? "bg-amber-400 text-slate-950 font-bold shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                  : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-950 hover:bg-white/[0.04] light:hover:bg-slate-200/60"
+              }`}
+            >
+              <Layers size={13} className={viewMode === "grid" ? "text-slate-950" : "text-amber-400 light:text-amber-600"} />
+              <span>Bento Grid</span>
+            </button>
+          </div>
+        </div>
+
+        {viewMode === "physics" ? (
+          <div className="w-full mb-10 flex flex-col items-center">
+            <PhysicsSkillSandbox />
+            <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-white/[0.02] light:bg-white/90 border border-white/[0.06] light:border-slate-200 mb-8 light:shadow-sm">
+              <span className="text-xs text-slate-400 light:text-slate-600">
+                Looking for the structured categorical view with all toolchains & proficiencies?
+              </span>
+              <button
+                onClick={() => setViewMode("grid")}
+                className="text-xs font-semibold text-amber-400 light:text-amber-700 hover:text-amber-300 light:hover:text-amber-800 flex items-center gap-1.5 cursor-pointer hover:underline"
+              >
+                <span>Switch to Bento Grid Architecture</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* Decorative & Simple Filter Capsule Dock with Framer Motion Layout Animation */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-white/[0.08]">
           
           {/* Decorative Section Tag */}
           <div className="flex items-center gap-2.5">
@@ -583,6 +637,8 @@ const Skills = () => {
             </motion.div>
           )}
         </AnimatePresence>
+          </div>
+        )}
 
         {/* ROW 2: Currently Exploring (Horizontal Innovation Dock) */}
         <div className="w-full rounded-3xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 p-6 sm:p-7 flex flex-col md:flex-row gap-6 items-center shadow-2xl transition-all mb-8 relative overflow-hidden group">
