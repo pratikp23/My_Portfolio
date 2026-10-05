@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Mail, MapPin, Send, Phone, Copy, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, MapPin, Send, Phone, Copy, Check, Clock } from "lucide-react";
 import { LinkedinIcon, GithubIcon } from "../Components/Icons";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -26,13 +26,36 @@ const Contact = () => {
   };
 
   const [emailValidationError, setEmailValidationError] = useState("");
+  const [cooldownRemaining, setCooldownRemaining] = useState(0);
+
+  // Check initial cooldown on mount and run a 1-second countdown interval
+  useEffect(() => {
+    const updateCooldown = () => {
+      const lastSentTime = localStorage.getItem("portfolio_last_contact_time");
+      const COOLDOWN_MS = 60 * 1000; // 1 minute
+      if (lastSentTime) {
+        const elapsed = Date.now() - parseInt(lastSentTime, 10);
+        if (elapsed < COOLDOWN_MS) {
+          const remainingSeconds = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+          setCooldownRemaining(remainingSeconds);
+          return;
+        }
+      }
+      setCooldownRemaining(0);
+    };
+
+    updateCooldown();
+    const interval = setInterval(updateCooldown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Common disposable/throwaway and fake email domains to reject
   const DISPOSABLE_EMAIL_DOMAINS = [
     "tempmail.com", "throwawaymail.com", "10minutemail.com", "guerrillamail.com",
     "sharklasers.com", "mailinator.com", "yopmail.com", "trashmail.com",
     "temp-mail.org", "fakeinbox.com", "dispostable.com", "getairmail.com",
-    "mohmal.com", "generator.email", "tempail.com", "mytemp.email", "crazymailing.com"
+    "mohmal.com", "generator.email", "tempail.com", "mytemp.email", "crazymailing.com",
+    "nada.ltd", "burnermail.io", "getnada.com", "emailondeck.com", "10mail.org"
   ];
 
   const validateEmailFormat = (email) => {
@@ -74,6 +97,27 @@ const Contact = () => {
     setSubmitError("");
     setEmailValidationError("");
 
+    // Check honeypot field (hidden from real users, only filled by automated spam bots)
+    const honeypotVal = e.target.elements.botcheck?.value;
+    if (honeypotVal && honeypotVal.trim() !== "") {
+      // Fake success for bots so they stop retrying without wasting your quota
+      setSubmitted(true);
+      return;
+    }
+
+    // Rate limiting: 1-minute cooldown between submissions from the same browser
+    const lastSentTime = localStorage.getItem("portfolio_last_contact_time");
+    const COOLDOWN_MS = 60 * 1000; // 1 minute
+    if (lastSentTime) {
+      const elapsed = Date.now() - parseInt(lastSentTime, 10);
+      if (elapsed < COOLDOWN_MS) {
+        const remainingSeconds = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+        setCooldownRemaining(remainingSeconds);
+        setSubmitError(`Please wait ${remainingSeconds}s (under 1 minute) before sending another message.`);
+        return;
+      }
+    }
+
     // Strict name validation
     if (!formData.name.trim() || formData.name.trim().length < 2) {
       setSubmitError("Please enter your full name (minimum 2 characters).");
@@ -100,7 +144,8 @@ const Contact = () => {
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
       message: formData.message.trim(),
-      subject: `New Recruiter Message from ${formData.name.trim()}`,
+      from_name: formData.name.trim(),
+      subject: `Portfolio Message from ${formData.name.trim()}`,
     };
 
     try {
@@ -115,6 +160,7 @@ const Contact = () => {
 
       const result = await response.json();
       if (result.success) {
+        localStorage.setItem("portfolio_last_contact_time", Date.now().toString());
         setSubmitted(true);
         setFormData({ name: "", email: "", message: "" });
       } else {
@@ -349,6 +395,17 @@ const Contact = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Honeypot field - invisible to humans, traps automated spam bots */}
+                <input
+                  type="text"
+                  name="botcheck"
+                  defaultValue=""
+                  className="hidden"
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {/* Name Input */}
                   <div>
@@ -417,6 +474,16 @@ const Contact = () => {
                   />
                 </div>
 
+                {/* Cooldown alert banner when user submitted in the last 1 minute */}
+                {cooldownRemaining > 0 && (
+                  <div className="flex items-center gap-2 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-mono">
+                    <Clock size={16} className="text-amber-400 shrink-0 animate-pulse" />
+                    <span>
+                      Please wait <strong>{cooldownRemaining}s</strong> before sending another message.
+                    </span>
+                  </div>
+                )}
+
                 {submitError && (
                   <p className="text-xs text-red-400 bg-red-500/10 p-3.5 rounded-xl border border-red-500/20">
                     {submitError}
@@ -426,13 +493,18 @@ const Contact = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.99]"
+                  disabled={isSubmitting || cooldownRemaining > 0}
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.99]"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
                       <span>Sending message...</span>
+                    </div>
+                  ) : cooldownRemaining > 0 ? (
+                    <div className="flex items-center gap-2 text-slate-900 font-mono">
+                      <Clock size={15} />
+                      <span>Wait {cooldownRemaining}s</span>
                     </div>
                   ) : (
                     <>
