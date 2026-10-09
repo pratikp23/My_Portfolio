@@ -190,7 +190,7 @@ const Skills = () => {
   const location = useLocation();
   const isStandalone = location.pathname === "/skills";
   const [activeFilter, setActiveFilter] = useState("all");
-  const [viewMode, setViewMode] = useState("physics");
+  const [viewMode, setViewMode] = useState("grid");
 
   const skillCategories = [
     {

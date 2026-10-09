@@ -103,7 +103,8 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base sm:text-xl md:text-2xl font-semibold text-slate-300 mb-4 sm:mb-5 tracking-tight"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            className="text-base sm:text-xl md:text-2xl font-semibold text-slate-300 mb-4 sm:mb-5 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]"
           >
             Full Stack Developer <span className="text-amber-400 font-mono">/</span> CSE Student
           </motion.p>
