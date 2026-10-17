@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, MapPin, Send, Phone, Copy, Check, Clock } from "lucide-react";
+import { Mail, MapPin, Send, Phone, Copy, Check, Clock, Rocket, Sparkles } from "lucide-react";
 import { LinkedinIcon, GithubIcon } from "../Components/Icons";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -375,24 +375,40 @@ const Contact = () => {
             </p>
 
             {submitted ? (
-              <div className="p-8 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/25 text-center">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-3 text-emerald-400">
-                  <Check size={22} />
-                </div>
-                <h4 className="text-base font-bold text-emerald-400 mb-1">
-                  Message Sent Successfully
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className="p-8 sm:p-10 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/30 text-center relative overflow-hidden shadow-xl"
+              >
+                {/* Ambient celebratory flares */}
+                <div className="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                <motion.div 
+                  initial={{ scale: 0, rotate: -30 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 220, damping: 14 }}
+                  className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                >
+                  <Rocket size={26} className="text-emerald-400 -rotate-45" />
+                </motion.div>
+
+                <h4 className="text-lg font-bold text-white mb-1.5 flex items-center justify-center gap-2">
+                  <span>Message Dispatched!</span>
+                  <span className="text-xl">🚀</span>
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-300 mb-6 font-normal max-w-sm mx-auto">
-                  Thank you for reaching out. I’ve received your message and will respond shortly.
+                <p className="text-xs sm:text-sm text-slate-300 mb-6 font-normal max-w-sm mx-auto leading-relaxed">
+                  Thank you for reaching out. Your message landed directly in my inbox and I will respond within 24 hours.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] transition-all cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/[0.12] hover:border-amber-500/40 transition-all cursor-pointer shadow-sm"
                 >
                   Send another message
                 </button>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Honeypot field - invisible to humans, traps automated spam bots */}
@@ -490,17 +506,31 @@ const Contact = () => {
                   </p>
                 )}
 
-                {/* Submit Button */}
+                {/* Submit Button with Rocket Dispatch Animation (Option 4) */}
                 <button
                   type="submit"
                   disabled={isSubmitting || cooldownRemaining > 0}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.99]"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-md hover:shadow-amber-500/25 active:scale-[0.99] group relative overflow-hidden"
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                      <span>Sending message...</span>
-                    </div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-slate-950 font-bold"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <motion.div
+                        animate={{
+                          x: [0, 2, -1, 3, 0],
+                          y: [-1, -3, -1, -4, -1],
+                          rotate: [45, 48, 43, 46, 45],
+                        }}
+                        transition={{ repeat: Infinity, duration: 0.5, ease: "easeInOut" }}
+                        className="inline-block"
+                      >
+                        <Rocket size={17} className="fill-slate-950 text-slate-950" />
+                      </motion.div>
+                      <span>Launching Dispatch...</span>
+                    </motion.div>
                   ) : cooldownRemaining > 0 ? (
                     <div className="flex items-center gap-2 text-slate-900 font-mono">
                       <Clock size={15} />
@@ -509,7 +539,11 @@ const Contact = () => {
                   ) : (
                     <>
                       <span>Send Message</span>
-                      <Send size={15} />
+                      <motion.span
+                        className="inline-block group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                      >
+                        <Send size={15} />
+                      </motion.span>
                     </>
                   )}
                 </button>

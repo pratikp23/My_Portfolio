@@ -14,6 +14,7 @@ import SpotlightBackground from './Components/SpotlightBackground';
 import SocialSidebar from './Components/SocialSidebar';
 import CustomCursor from './Components/CustomCursor';
 import MobileAppDock from './Components/MobileAppDock';
+import FloatingMascot from './Components/FloatingMascot';
 
 const App = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const App = () => {
       <SocialSidebar />
       <Navbar />
       <MobileAppDock />
+      <FloatingMascot />
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />

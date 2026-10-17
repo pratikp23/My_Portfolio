@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { GraduationCap, BookOpen, School, Target, Terminal, CheckCircle2 } from "lucide-react";
+import { GraduationCap, BookOpen, School, Target, Code2, CheckCircle2 } from "lucide-react";
 
 const About = () => {
   const location = useLocation();
@@ -99,176 +99,181 @@ const About = () => {
           </div>
         </div>
 
-        {/* 3-Column Profile Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Unified Master Profile Card (Combining Visual Identity, Engineering Overview, and Education) */}
+        <div className="rounded-3xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 transition-all shadow-2xl relative overflow-hidden group p-6 sm:p-8 lg:p-9">
           
-          {/* Card 1: Visual Identity & Interactive Developer Badge (lg:col-span-4) */}
-          <div className="lg:col-span-4 p-6 sm:p-7 rounded-3xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 transition-all flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-            
-            {/* Ambient Background Aura */}
-            <div className="absolute -top-16 -left-16 w-44 h-44 bg-amber-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/20 transition-all" />
-            
-            {/* Status Pill Header */}
-            <div className="w-full flex items-center justify-between mb-4 z-10">
-              <span className="font-mono text-[10px] text-slate-500 uppercase tracking-widest">
-                ID // PRATIK.DEV
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-mono font-medium shadow-[0_0_10px_rgba(16,185,129,0.15)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Available</span>
-              </span>
-            </div>
+          {/* Ambient Background Auras (Top-Left & Bottom-Right) */}
+          <div className="absolute -top-24 -left-24 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/25 transition-all" />
+          <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/20 transition-all" />
 
-            {/* Profile Avatar Frame with Interactive Amber Ring */}
-            <div className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-2xl p-1 bg-gradient-to-tr from-amber-500/50 via-white/[0.1] to-amber-500/20 border border-white/[0.12] shadow-2xl mb-4 group-hover:scale-[1.02] transition-transform">
-              <div className="w-full h-full rounded-[14px] overflow-hidden bg-slate-900 flex items-center justify-center relative">
+          {/* 3-Column Layout inside Single Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-stretch relative z-10">
+            
+            {/* Column 1: Visual Identity & Profile (Exact original format) */}
+            <div className="lg:col-span-4 rounded-3xl bg-[#0e1117] border border-white/[0.08] hover:border-amber-500/40 transition-all flex flex-col justify-end shadow-2xl relative overflow-hidden group min-h-[440px]">
+              
+              {/* Ambient Background Aura */}
+              <div className="absolute -top-16 -left-16 w-44 h-44 bg-amber-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/20 transition-all z-10" />
+
+              {/* Top Right Floating Available Status Badge */}
+              <div className="absolute top-3.5 right-3.5 z-20">
+                <span className="available-status-badge inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-medium shadow-lg">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="status-text">Available</span>
+                </span>
+              </div>
+
+              {/* Photo filling the card seamlessly - no white/black half-and-half split */}
+              <div className="absolute inset-0 z-0">
                 {!imageError ? (
                   <img
                     src="/profile_pic.png"
                     alt="Pratik Pathak"
                     onError={() => setImageError(true)}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover object-[center_10%] transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <span className="font-mono text-4xl font-extrabold text-amber-500">PP</span>
+                  <div className="w-full h-full flex items-center justify-center bg-slate-900">
+                    <span className="font-mono text-4xl font-extrabold text-amber-500">PP</span>
+                  </div>
                 )}
-              </div>
-            </div>
 
-            <h3 className="text-xl font-bold text-white tracking-tight z-10">Pratik Kumar Pathak</h3>
-            <p className="text-xs font-mono font-bold text-amber-400 mt-1 uppercase tracking-wider z-10">
-              Full Stack Developer &bull; CSE Student
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-1.5 mt-3 z-10">
-              <span className="px-2.5 py-1 text-[10px] font-mono rounded-lg bg-white/[0.04] border border-white/[0.08] text-slate-300">
-                B.Tech (2023–27)
-              </span>
-              <span className="px-2.5 py-1 text-[10px] font-mono rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold">
-                Ex-SDE Intern
-              </span>
-            </div>
-
-            {/* Micro Stats Grid with Glass Tiles */}
-            <div className="w-full grid grid-cols-3 gap-2 pt-5 mt-5 border-t border-white/[0.08] z-10">
-              {stats.map((s, idx) => (
-                <div key={idx} className="p-2.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-amber-500/30 transition-all flex flex-col items-center">
-                  <p className="text-base sm:text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-300">
-                    {s.value}
-                  </p>
-                  <p className="text-[9px] font-mono uppercase text-slate-400 mt-0.5 tracking-wider text-center leading-tight">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-          </div>
-
-          {/* Card 2: Developer Terminal & Architecture Focus (lg:col-span-4) */}
-          <div className="lg:col-span-4 p-6 sm:p-7 rounded-3xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 transition-all flex flex-col justify-between shadow-2xl relative overflow-hidden group">
-            <div>
-              {/* macOS / Terminal Titlebar */}
-              <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-white/[0.08]">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Terminal size={14} className="text-amber-400" />
-                  <span className="font-mono text-xs font-semibold text-slate-300">overview.tsx</span>
-                </div>
-                <span className="text-[10px] font-mono text-slate-500">UTF-8</span>
+                {/* Little dark gradient strictly at the bottom for text readability (adapts to light & dark mode) */}
+                <div className="profile-gradient absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#0e1117] via-[#0e1117]/85 to-transparent pointer-events-none" />
               </div>
 
-              {/* Bio Content with Architecture Tags */}
-              <div className="space-y-3.5 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                <p>
-                  I am a Computer Science & Engineering undergraduate with practical industry experience as an <strong className="text-white font-semibold underline decoration-amber-500/50 underline-offset-4">SDE Intern at Bluestock Fintech</strong>, where I developed modular client views and connected REST services.
+              {/* Content Section: Sits at the bottom over the smooth dark fade */}
+              <div className="px-5 pb-6 pt-3 flex flex-col items-center text-center z-20 relative">
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-md">
+                  Pratik Pathak
+                </h3>
+                <p className="text-xs font-mono font-semibold text-amber-400 mt-1 uppercase tracking-wider flex items-center gap-1.5 justify-center">
+                  <span>Full Stack Developer</span>
+                  <span className="w-1 h-1 rounded-full bg-amber-400/60" />
+                  <span>CSE Student</span>
                 </p>
-                <p>
-                  My engineering workflow centers around the <strong className="text-slate-200 font-semibold">MERN stack</strong> (MongoDB, Express, React, Node.js), TypeScript, Python, and integrating real-world AI capabilities.
-                </p>
-                <p>
-                  I prioritize <strong className="text-slate-200 font-semibold">clean architecture</strong>, defensive API error handling, and high-performance, accessible user interfaces.
-                </p>
+
+                <div className="flex flex-wrap justify-center items-center gap-2 mt-3.5">
+                  <span className="px-3 py-1 text-[11px] font-mono rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-slate-200 shadow-sm">
+                    B.Tech (2023–2027)
+                  </span>
+                  <span className="px-3 py-1 text-[11px] font-mono rounded-lg bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-amber-400 font-semibold shadow-[0_0_12px_rgba(245,158,11,0.2)]">
+                    Ex-SDE Intern
+                  </span>
+                </div>
               </div>
 
-              {/* Technical Pillars Tags */}
-              <div className="flex flex-wrap gap-1.5 pt-4 mt-2">
-                <span className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                  #RESTfulAPIs
-                </span>
-                <span className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] border border-white/[0.08] text-slate-300">
-                  #ReactPatterns
-                </span>
-                <span className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] border border-white/[0.08] text-slate-300">
-                  #ModularUI
-                </span>
-                <span className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] border border-white/[0.08] text-slate-300">
-                  #AIIntegration
-                </span>
-              </div>
             </div>
 
-            <div className="pt-4 mt-6 border-t border-white/[0.08] flex items-center gap-2 text-xs font-mono text-slate-400">
-              <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
-              <span className="truncate">Ready for Full-Stack &amp; SDE Roles</span>
-            </div>
-          </div>
-
-          {/* Card 3: Educational Stepper Timeline with Connected Track (lg:col-span-4) */}
-          <div className="lg:col-span-4 p-6 sm:p-7 rounded-3xl bg-[#0e1117]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 transition-all flex flex-col shadow-2xl">
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3.5 mb-5 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2">
-                <GraduationCap size={18} className="text-amber-400" />
-                <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wider">
-                  Education
-                </span>
-              </div>
-              <span className="font-mono text-[10px] text-amber-400/90 font-semibold uppercase tracking-wider">
-                Academic Journey
-              </span>
-            </div>
-
-            {/* Stepper with Connected Vertical Line */}
-            <div className="flex flex-col flex-grow">
-              {educationList.map((item, idx) => (
-                <div key={idx} className="flex gap-3.5 items-start relative group/item">
-                  
-                  {/* Left Column: Icon Node + Connector Line */}
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 flex items-center justify-center shadow-[0_0_12px_rgba(245,158,11,0.2)] z-10 group-hover/item:border-amber-400 transition-colors">
-                      {item.icon}
-                    </div>
-                    {/* Vertical Connector Line */}
-                    {idx < educationList.length - 1 && (
-                      <div className="w-[1.5px] h-12 sm:h-14 bg-gradient-to-b from-amber-500/40 via-amber-500/20 to-white/[0.06] my-1" />
-                    )}
-                  </div>
-
-                  {/* Right Column: Educational Content */}
-                  <div className="text-left flex-grow pb-4 pt-0.5">
-                    <span className="inline-block px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-1">
-                      {item.year}
+            {/* Column 2: Engineering Overview & Track Record (lg:col-span-4) */}
+            <div className="lg:col-span-4 flex flex-col justify-between lg:border-r border-white/[0.06] lg:px-4 pb-6 lg:pb-0">
+              <div>
+                {/* Clean Section Header */}
+                <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2">
+                    <Code2 size={16} className="text-amber-400" />
+                    <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wider">
+                      Engineering Overview
                     </span>
-                    <h4 className="text-xs sm:text-sm font-bold text-white group-hover/item:text-amber-400 transition-colors leading-snug">
-                      {item.title}
-                    </h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5 leading-normal font-light">
-                      {item.institution}
-                    </p>
                   </div>
+                  <span className="font-mono text-[10px] text-amber-400/90 font-semibold uppercase tracking-wider">
+                    Full-Stack &amp; SDE
+                  </span>
                 </div>
-              ))}
+
+                {/* Authentic Bio Content */}
+                <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                  <p>
+                    I am a Computer Science & Engineering undergraduate at Shri Ram Institute of Technology (RGPV) with practical industry experience as an <strong className="text-white font-semibold underline decoration-amber-500/50 underline-offset-4">SDE Intern at Bluestock Fintech</strong>, where I developed modular client interfaces and integrated live RESTful endpoints.
+                  </p>
+                  <p>
+                    My engineering workflow centers around the <strong className="text-slate-200 font-semibold">MERN stack</strong> (MongoDB, Express, React, Node.js), TypeScript, Python, and modern cloud deployment pipelines.
+                  </p>
+                  <p>
+                    I prioritize clean architecture, resilient error handling, and building high-performance web products that solve concrete real-world challenges.
+                  </p>
+                </div>
+              </div>
+
+              {/* Bottom Section: Micro Stats Grid + Status Footer */}
+              <div className="pt-4 mt-4 border-t border-white/[0.08]">
+                {/* Micro Stats Grid with Glass Tiles */}
+                <div className="w-full grid grid-cols-3 gap-2 mb-3.5">
+                  {stats.map((s, idx) => (
+                    <div 
+                      key={idx} 
+                      className="py-2 px-1.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-amber-500/30 transition-all flex flex-col items-center group/stat shadow-sm"
+                    >
+                      <p className="about-stat-number text-base sm:text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 group-hover/stat:scale-105 transition-transform">
+                        {s.value}
+                      </p>
+                      <p className="text-[9px] font-mono uppercase text-slate-400 mt-0.5 tracking-wider text-center leading-tight">
+                        {s.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2 text-xs font-mono text-slate-400 pt-2 border-t border-white/[0.06]">
+                  <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
+                  <span className="truncate">Ready for Full-Stack &amp; SDE Roles</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Column 3: Educational Stepper Timeline (lg:col-span-4) */}
+            <div className="lg:col-span-4 flex flex-col justify-between lg:pl-4">
+              <div>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-3.5 mb-5 border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap size={18} className="text-amber-400" />
+                    <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wider">
+                      Education
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-amber-400/90 font-semibold uppercase tracking-wider">
+                    Academic Journey
+                  </span>
+                </div>
+
+                {/* Stepper with Connected Vertical Line */}
+                <div className="flex flex-col">
+                  {educationList.map((item, idx) => (
+                    <div key={idx} className="flex gap-3.5 items-start relative group/item">
+                      
+                      {/* Left Column: Icon Node + Connector Line */}
+                      <div className="flex flex-col items-center flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 flex items-center justify-center shadow-[0_0_12px_rgba(245,158,11,0.2)] z-10 group-hover/item:border-amber-400 transition-colors">
+                          {item.icon}
+                        </div>
+                        {/* Vertical Connector Line */}
+                        {idx < educationList.length - 1 && (
+                          <div className="edu-connector w-[1.5px] h-12 sm:h-14 bg-gradient-to-b from-amber-500/40 via-amber-500/20 to-white/[0.06] my-1" />
+                        )}
+                      </div>
+
+                      {/* Right Column: Educational Content */}
+                      <div className="text-left flex-grow pb-4 pt-0.5">
+                        <span className="inline-block px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-1">
+                          {item.year}
+                        </span>
+                        <h4 className="text-xs sm:text-sm font-bold text-white group-hover/item:text-amber-400 transition-colors leading-snug">
+                          {item.title}
+                        </h4>
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-normal font-light">
+                          {item.institution}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
           </div>
-
         </div>
 
         {/* Vision Statement Banner with Restored Vector Mountain Art */}
@@ -291,7 +296,7 @@ const About = () => {
 
           {/* Center Quote & Commitment */}
           <div className="flex-grow space-y-2 text-center md:text-left">
-            <blockquote className="font-light text-sm sm:text-base leading-relaxed text-amber-300/95 italic">
+            <blockquote className="about-vision-quote font-light text-sm sm:text-base leading-relaxed text-amber-300/95 italic">
               &ldquo;My vision is to become an exceptional software engineer who builds dependable, scalable, and user-centric digital products.&rdquo;
             </blockquote>
             <p className="text-xs text-slate-400 font-light leading-relaxed">
@@ -299,24 +304,40 @@ const About = () => {
             </p>
           </div>
 
-          {/* Far-Right: Restored Hand-Drawn Mountain & Summit Flag Vector Artwork */}
-          <svg
-            className="w-32 h-20 text-amber-500/70 hidden lg:block flex-shrink-0 self-end ml-4 select-none pointer-events-none group-hover:text-amber-400 transition-colors"
-            viewBox="0 0 120 90"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            aria-hidden="true"
-          >
-            <path d="M10 80 L50 35 L70 60 L90 20 L110 80 Z" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M45 42 L50 35 L55 42 Z" fill="currentColor" opacity="0.25" />
-            <path d="M85 27 L90 20 L95 27 Z" fill="currentColor" opacity="0.25" />
-            <line x1="90" y1="20" x2="90" y2="5" stroke="currentColor" strokeWidth="1.2" />
-            <path d="M90 5 L102 9 L90 13 Z" fill="currentColor" />
-            <circle cx="30" cy="25" r="1.2" fill="currentColor" />
-            <circle cx="70" cy="15" r="0.9" fill="currentColor" />
-            <circle cx="105" cy="12" r="1.3" fill="currentColor" />
-          </svg>
+          {/* Far-Right: Animated Mountain & Fluttering Summit Flag Artwork (Option 3) */}
+          <div className="relative hidden lg:block flex-shrink-0 self-end ml-4">
+            {/* Soft Ambient Summit Glow */}
+            <div className="absolute top-2 right-4 w-16 h-16 bg-amber-500/20 rounded-full blur-xl pointer-events-none group-hover:bg-amber-500/35 transition-all" />
+            <svg
+              className="w-36 h-22 text-amber-500/75 flex-shrink-0 select-none pointer-events-none group-hover:text-amber-400 transition-colors drop-shadow-[0_2px_10px_rgba(245,158,11,0.2)]"
+              viewBox="0 0 120 90"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              aria-hidden="true"
+            >
+              {/* Mountain Outline with animated line glow */}
+              <path 
+                d="M10 80 L50 35 L70 60 L90 20 L110 80 Z" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="mountain-ridge"
+              />
+              <path d="M45 42 L50 35 L55 42 Z" fill="currentColor" opacity="0.25" />
+              <path d="M85 27 L90 20 L95 27 Z" fill="currentColor" opacity="0.25" />
+              
+              {/* Flagpole */}
+              <line x1="90" y1="20" x2="90" y2="5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              
+              {/* Fluttering Summit Flag */}
+              <path d="M90 5 L103 9 L90 13 Z" fill="currentColor" className="mountain-flag" />
+              
+              {/* Twinkling Constellation Stars */}
+              <circle cx="30" cy="25" r="1.5" fill="currentColor" className="mountain-star-1" />
+              <circle cx="70" cy="15" r="1.2" fill="currentColor" className="mountain-star-2" />
+              <circle cx="105" cy="12" r="1.6" fill="currentColor" className="mountain-star-3" />
+            </svg>
+          </div>
 
         </div>
       </div>
