@@ -1,126 +1,148 @@
 import { useState, useEffect } from "react";
-import { motion, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+
+const EASE = [0.22, 1, 0.36, 1];
 
 export default function CustomCursor() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
-  const [theme, setTheme] = useState(
-    typeof document !== "undefined"
-      ? document.documentElement.classList.contains("light")
-        ? "light"
-        : "dark"
-      : "dark"
-  );
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  });
+  const [label, setLabel] = useState("");
+  const reduced = useReducedMotion();
 
-  // Smooth trailing spring physics for outer ring
-  const springConfig = { damping: 25, stiffness: 350, mass: 0.5 };
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
+  // Coordinates start at (-100, -100)
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
 
-  // Direct fast coordinates for center dot
-  const [rawPos, setRawPos] = useState({ x: 0, y: 0 });
+  // DOT: useSpring on mouse x/y with { stiffness: 500, damping: 40, mass: 0.6 }
+  const sx = useSpring(x, { stiffness: 500, damping: 40, mass: 0.6 });
+  const sy = useSpring(y, { stiffness: 500, damping: 40, mass: 0.6 });
+
+  // RING: useSpring with { stiffness: 120, damping: 20 }, visibly trailing the dot
+  const rx = useSpring(x, { stiffness: 120, damping: 20 });
+  const ry = useSpring(y, { stiffness: 120, damping: 20 });
 
   useEffect(() => {
-    // Only enable on desktop pointer devices
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setEnabled(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
-    const handleMouseMove = (e) => {
-      setRawPos({ x: e.clientX, y: e.clientY });
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+  useEffect(() => {
+    if (!enabled) return;
+
+    const move = (e) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
-
-    // Track clickable elements for magnetic expansion
-    const handleTargetCheck = (e) => {
-      const target = e.target;
-      const isInteractive =
-        target.closest("button") ||
-        target.closest("a") ||
-        target.closest("input") ||
-        target.closest("textarea") ||
-        target.closest("[role='button']") ||
-        target.closest(".cursor-pointer");
-
-      setIsHovered(Boolean(isInteractive));
+    const over = (e) => {
+      const t = e.target.closest("[data-cursor]");
+      setLabel(t ? t.getAttribute("data-cursor") || "" : "");
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseenter", handleMouseEnter);
-    window.addEventListener("mouseover", handleTargetCheck, { passive: true });
-
-    const observer = new MutationObserver(() => {
-      const isLight = document.documentElement.classList.contains("light");
-      setTheme(isLight ? "light" : "dark");
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseover", over);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseenter", handleMouseEnter);
-      window.removeEventListener("mouseover", handleTargetCheck);
-      observer.disconnect();
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseover", over);
     };
-  }, [isVisible, cursorX, cursorY]);
+  }, [enabled, x, y]);
 
-  if (!isVisible) return null;
+  // On touch devices render nothing
+  if (!enabled) return null;
 
-  // Palette assignments
-  // Dark: Vibrant Amber Dot & Golden Ring
-  // Light: Deep Emerald Dot with Royal Purple Ring
-  const dotColor =
-    theme === "light" ? "bg-emerald-600" : "bg-amber-400";
-  const ringBorder =
-    theme === "light"
-      ? "border-purple-600/70 bg-purple-500/[0.06]"
-      : "border-amber-400/60 bg-amber-400/[0.05]";
+  const big = Boolean(label);
 
   return (
     <>
-      {/* Precision Center Dot */}
-      <div
-        className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full transition-transform duration-75 ${dotColor}`}
-        style={{
-          width: isHovered ? "6px" : "5px",
-          height: isHovered ? "6px" : "5px",
-          transform: `translate3d(${rawPos.x - (isHovered ? 3 : 2.5)}px, ${
-            rawPos.y - (isHovered ? 3 : 2.5)
-          }px, 0) scale(${isClicking ? 0.7 : 1})`,
-        }}
-      />
+      {/* Hide native cursor in media query */}
+      <style>{`
+        @media (hover: hover) and (pointer: fine) {
+          body, a, button, [data-cursor] {
+            cursor: none !important;
+          }
+        }
+      `}</style>
 
-      {/* Magnetic Outer Floating Ring */}
+      {/* DOT: 8px circle, solid colour, centered with translate(-50%,-50%), z-index 9999 */}
       <motion.div
-        className={`fixed top-0 left-0 pointer-events-none z-[9998] rounded-full border transition-[border-color,background-color] duration-200 ${ringBorder}`}
         style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: "-50%",
-          translateY: "-50%",
-          width: isHovered ? "44px" : "28px",
-          height: isHovered ? "44px" : "28px",
-          scale: isClicking ? 0.85 : 1,
+          x: sx,
+          y: sy,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 9999,
+          pointerEvents: "none",
         }}
-        transition={{
-          width: { duration: 0.18, ease: "easeOut" },
-          height: { duration: 0.18, ease: "easeOut" },
+      >
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: "var(--cursor-color, #c8f542)",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      </motion.div>
+
+      {/* RING: 36px circle, 1px border (same colour at 60% opacity), transparent fill, z-index 9998.
+          On non-empty data-cursor, animates to 84px x 84px with near-solid fill (95% opacity), centered label. */}
+      <motion.div
+        style={{
+          x: rx,
+          y: ry,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 9998,
+          pointerEvents: "none",
         }}
-      />
+      >
+        <motion.div
+          animate={{
+            width: big ? 84 : 36,
+            height: big ? 84 : 36,
+            backgroundColor: big
+              ? "color-mix(in srgb, var(--cursor-color, #c8f542) 95%, transparent)"
+              : "transparent",
+          }}
+          transition={{
+            duration: reduced ? 0 : 0.3,
+            ease: EASE,
+          }}
+          style={{
+            borderRadius: "50%",
+            border: "1px solid color-mix(in srgb, var(--cursor-color, #c8f542) 60%, transparent)",
+            transform: "translate(-50%, -50%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {big && (
+            <span
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.15em",
+                color: "#07070c",
+                fontWeight: 600,
+                fontFamily: "'Space Grotesk', 'Plus Jakarta Sans', sans-serif",
+                lineHeight: 1,
+                textAlign: "center",
+                userSelect: "none",
+              }}
+            >
+              {label}
+            </span>
+          )}
+        </motion.div>
+      </motion.div>
     </>
   );
 }

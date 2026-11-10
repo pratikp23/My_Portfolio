@@ -2,17 +2,21 @@ import { ArrowUp } from "lucide-react";
 
 const Signature = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 1.6 });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
-    <footer className="relative w-full overflow-hidden flex flex-col justify-center items-center select-none bg-[#070708] signature-section pt-16 md:pt-24 pb-8">
+    <footer className="relative w-full overflow-hidden flex flex-col justify-center items-center select-none bg-[#08080a] signature-section pt-16 md:pt-24 pb-8">
       {/* Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(226,232,240,0.03)_0%,transparent_70%)] pointer-events-none z-0 signature-glow" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,transparent_70%)] pointer-events-none z-0 signature-glow" />
 
       {/* Signature Display */}
       <div className="relative z-10 flex items-center justify-center w-full px-6 mx-auto max-w-7xl mb-12 sm:mb-16">
-        <span className="inline-block text-[20vw] leading-none font-bold whitespace-nowrap tracking-tighter bg-clip-text text-transparent bg-[linear-gradient(120deg,#cbd5e1_0%,#cbd5e1_35%,#000000_50%,#cbd5e1_65%,#cbd5e1_100%)] bg-[length:200%_auto] animate-[shine_5s_linear_infinite] select-none signature-text">
+        <span className="inline-block text-[20vw] leading-none font-bold whitespace-nowrap tracking-tighter bg-clip-text text-transparent bg-[linear-gradient(120deg,#94a3b8_0%,#cbd5e1_35%,#ffffff_50%,#cbd5e1_65%,#94a3b8_100%)] bg-[length:200%_auto] animate-[shine_5s_linear_infinite] select-none signature-text">
           PRATIK
         </span>
       </div>

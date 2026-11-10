@@ -97,7 +97,7 @@ class SpeechService {
         onEnd();
       };
 
-      utterance.onerror = (e) => {
+      utterance.onerror = () => {
         this.speaking = false;
         onEnd();
       };

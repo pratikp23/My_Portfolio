@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Projects Section Styles (Framer Motion Only)
+   ========================================================================== */
+
+.glass {
+  background: rgba(13, 13, 21, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Project Rows */
+.proj-row {
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proj-row:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.proj-row .row-title {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s;
+}
+
+.proj-row:hover .row-title,
+.proj-row:focus-visible .row-title {
+  transform: translateX(1.5rem);
+}
+
+.proj-row .row-arrow {
+  opacity: 0;
+  transform: translate(-10px, 10px);
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proj-row:hover .row-arrow,
+.proj-row:focus-visible .row-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.proj-row .row-idx {
+  transition: color 0.4s;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .proj-row .row-title,
+  .proj-row:hover .row-title,
+  .proj-row:focus-visible .row-title,
+  .proj-row .row-arrow,
+  .proj-row:hover .row-arrow,
+  .proj-row:focus-visible .row-arrow {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   Light Mode Overrides for Projects
+   ========================================================================== */
+html.light .glass {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 -20px 60px rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light .glass h3,
+html.light .glass h4 {
+  color: #0f172a !important;
+}
+
+html.light .glass p,
+html.light .glass li {
+  color: #334155 !important;
+}
+
+html.light .proj-row {
+  border-top-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light .proj-row:last-child {
+  border-bottom-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light .proj-row:hover {
+  background-color: rgba(15, 23, 42, 0.02) !important;
+}
+
+html.light .proj-row .row-idx {
+  color: #64748b !important;
+}
+
+html.light .proj-row .row-title {
+  color: #0f172a !important;
+}
+
+html.light .proj-row:hover .row-title {
+  color: #020617 !important;
+}
+
+html.light .proj-row p {
+  color: #475569 !important;
+}
+
+html.light .proj-row .row-arrow {
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light .proj-quick-link {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+html.light .proj-quick-link:hover {
+  background-color: #ffffff !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+html.light .project-demo-btn,
+html.light .glass [style*="color"] {
+  filter: brightness(0.72) saturate(1.25) contrast(1.15);
+}

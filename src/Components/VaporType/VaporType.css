@@ -1,0 +1,87 @@
+.vapor-type {
+  display: inline-block;
+  position: relative;
+  letter-spacing: inherit;
+}
+
+.vapor-word {
+  display: inline-block;
+  position: relative;
+  will-change: transform, filter, opacity;
+  transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              text-shadow 0.45s ease;
+}
+
+.vapor-word--condensing {
+  animation-name: vaporCondense;
+  animation-duration: 0.95s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.vapor-word--drifting {
+  animation-name: vaporCondense, vaporDrift;
+  animation-duration: 0.95s, 6s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: both, none;
+}
+
+.vapor-word--gradient {
+  background-image: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.35));
+}
+
+.vapor-word:hover {
+  filter: blur(1.5px) brightness(1.2);
+  transform: translateY(-2px) scale(1.02);
+  text-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+  cursor: default;
+}
+
+.vapor-word--gradient:hover {
+  filter: blur(1.5px) brightness(1.25) drop-shadow(0 0 20px rgba(245, 158, 11, 0.7));
+}
+
+@keyframes vaporCondense {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+    transform: translateY(-8px) scale(1.08);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(5px);
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes vaporDrift {
+  0%, 100% {
+    transform: translateY(0px) skewX(0deg);
+  }
+  50% {
+    transform: translateY(-3px) skewX(-0.6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vapor-word,
+  .vapor-word--condensing,
+  .vapor-word--drifting {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}

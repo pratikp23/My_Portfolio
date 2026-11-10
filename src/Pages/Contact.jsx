@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import { Mail, MapPin, Send, Phone, Copy, Check, Clock, Rocket, Sparkles } from "lucide-react";
+import { Mail, MapPin, Send, Phone, Copy, Check, Clock, Rocket } from "lucide-react";
 import { LinkedinIcon, GithubIcon } from "../Components/Icons";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SOCIAL_LINKS } from "../config";
+import Magnetic from "../Components/Magnetic";
+import { Reveal } from "../Components/ScrollReveal";
+import SectionParticleHeading from "../Components/SectionParticleHeading";
+import ScrollStatement from "../Components/ScrollStatement";
 
 const Contact = () => {
   const location = useLocation();
@@ -180,15 +184,17 @@ const Contact = () => {
   };
 
   return (
-    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+    <div className="relative w-full px-4 py-20 text-white sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
-        <div className="mb-14 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
-            <span>Direct Communication</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="text-center mb-14 sm:text-left">
+          <Reveal>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 font-mono text-xs tracking-wider text-amber-400 uppercase border rounded-full bg-amber-500/10 border-amber-500/25">
+              <span>Direct Communication</span>
+            </div>
+          </Reveal>
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
               <div className="relative inline-block">
                 <svg
@@ -200,8 +206,8 @@ const Contact = () => {
                 >
                   <defs>
                     <linearGradient id="arrow-grad-contact" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#4e2a14" />
-                      <stop offset="100%" stopColor="#fb923c" />
+                      <stop offset="0%" stopColor="#334155" />
+                      <stop offset="100%" stopColor="#f8fafc" />
                     </linearGradient>
                   </defs>
                   <path
@@ -212,59 +218,56 @@ const Contact = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <h2 className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider">
-                  Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">Touch</span>
-                </h2>
+                <SectionParticleHeading text="GET IN TOUCH" maxWidth="max-w-xs sm:max-w-sm" />
               </div>
-              <svg className="w-48 sm:w-56 h-3 mt-2 mx-auto sm:mx-0 select-none pointer-events-none" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-48 h-3 mx-auto mt-2 pointer-events-none select-none sm:w-56 sm:mx-0" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="brush-grad-contact" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#fb923c" />
-                    <stop offset="60%" stopColor="#d97706" />
-                    <stop offset="100%" stopColor="#4e2a14" />
+                    <stop offset="0%" stopColor="#f8fafc" />
+                    <stop offset="60%" stopColor="#cbd5e1" />
+                    <stop offset="100%" stopColor="#334155" />
                   </linearGradient>
                 </defs>
                 <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-contact)" />
                 <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-contact)" opacity="0.8" />
               </svg>
-              <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
-                Interested in working together or have an engineering opportunity? Send a message or reach out directly.
-              </p>
+              <Reveal delay={0.1}>
+                <p className="max-w-xl mt-2 text-sm font-normal sm:text-base text-slate-400">
+                  Interested in working together or have an engineering opportunity? Send a message or reach out directly.
+                </p>
+              </Reveal>
             </div>
             {!isStandalone && (
-              <Link
-                to="/contact"
-                className="font-mono text-xs text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1"
-              >
-                <span>Full View</span>
-                <span>↗</span>
-              </Link>
+              <Reveal delay={0.15}>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-1 font-mono text-xs transition-colors text-amber-400 hover:text-amber-300"
+                >
+                  <span>Full View</span>
+                  <span>↗</span>
+                </Link>
+              </Reveal>
             )}
           </div>
         </div>
 
         {/* Main Grid Layout: Minimalist, Architectural, Professional */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-start">
+        <div className="grid items-start grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
           
           {/* Left Column: Direct Info & Professional Presence (5 cols) */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-5 space-y-8"
-          >
+          <div className="space-y-8 lg:col-span-5">
             <div>
-              <h3 className="text-2xl font-bold text-white tracking-tight mb-3">
-                Let’s talk about your next project.
-              </h3>
-              <p className="text-sm text-slate-300 leading-relaxed font-normal">
-                Whether you’re looking to hire a Full Stack Developer, explore an engineering collaboration, or just say hello — my inbox is always open.
-              </p>
+              <ScrollStatement
+                text="Let’s build something extraordinary together. My inbox is always open."
+                description="Whether you’re looking to hire a Full Stack Developer, explore an engineering collaboration, or just say hello — let’s connect."
+                headingClassName="text-2xl font-semibold leading-snug tracking-tight text-white sm:text-3xl lg:text-4xl"
+                descriptionClassName="mt-4 text-base font-normal leading-relaxed text-slate-400"
+              />
             </div>
 
             {/* Direct Contact Items */}
-            <div className="space-y-4 pt-2">
+            <Reveal delay={0.35}>
+              <div className="pt-2 space-y-4">
               {/* Email */}
               <div className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] hover:border-amber-500/40 transition-colors group">
                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
@@ -272,29 +275,33 @@ const Contact = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-xs uppercase tracking-wider font-semibold text-slate-400">Email Address</span>
-                    <button
-                      type="button"
-                      onClick={handleCopyEmail}
-                      className="inline-flex items-center gap-1 text-[11px] font-mono text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
-                      title="Copy email address"
-                    >
-                      {copiedEmail ? (
-                        <>
-                          <Check size={12} className="text-emerald-400" />
-                          <span className="text-emerald-400 font-medium">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={12} />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
+                    <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">Email Address</span>
+                    <Magnetic>
+                      <button
+                        type="button"
+                        onClick={handleCopyEmail}
+                        data-cursor="COPY"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
+                        title="Copy email address"
+                      >
+                        {copiedEmail ? (
+                          <>
+                            <Check size={12} className="text-emerald-400" />
+                            <span className="font-medium text-emerald-400">Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={12} />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </Magnetic>
                   </div>
                   <a
                     href={`mailto:${SOCIAL_LINKS.email}`}
-                    className="text-sm font-medium text-slate-200 hover:text-amber-400 transition-colors block truncate"
+                    data-cursor="COPY"
+                    className="block text-sm font-medium truncate transition-colors text-slate-200 hover:text-amber-400"
                   >
                     {SOCIAL_LINKS.email}
                   </a>
@@ -308,10 +315,10 @@ const Contact = () => {
                     <Phone size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1">Phone</span>
+                    <span className="block mb-1 text-xs font-semibold tracking-wider uppercase text-slate-400">Phone</span>
                     <a
                       href={`tel:${SOCIAL_LINKS.phone}`}
-                      className="text-sm font-medium text-slate-200 hover:text-amber-400 transition-colors block"
+                      className="block text-sm font-medium transition-colors text-slate-200 hover:text-amber-400"
                     >
                       {SOCIAL_LINKS.phone}
                     </a>
@@ -325,9 +332,9 @@ const Contact = () => {
                   <MapPin size={18} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1">Location</span>
+                  <span className="block mb-1 text-xs font-semibold tracking-wider uppercase text-slate-400">Location</span>
                   <p className="text-sm font-medium text-slate-200">
-                    {SOCIAL_LINKS.location} &bull; <span className="text-slate-400 font-normal">Open to Remote & Relocation</span>
+                    {SOCIAL_LINKS.location} &bull; <span className="font-normal text-slate-400">Open to Remote & Relocation</span>
                   </p>
                 </div>
               </div>
@@ -335,42 +342,44 @@ const Contact = () => {
 
             {/* Social Channels */}
             <div className="pt-4 border-t border-white/[0.08]">
-              <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-3">Connect Online</span>
+              <span className="block mb-3 text-xs font-semibold tracking-wider uppercase text-slate-400">Connect Online</span>
               <div className="flex items-center gap-3">
-                <a
-                  href={SOCIAL_LINKS.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/30 text-xs font-semibold text-slate-300 hover:text-white transition-all"
-                >
-                  <LinkedinIcon size={15} className="text-amber-400" />
-                  <span>LinkedIn</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/30 text-xs font-semibold text-slate-300 hover:text-white transition-all"
-                >
-                  <GithubIcon size={15} className="text-amber-400" />
-                  <span>GitHub</span>
-                </a>
+                <Magnetic>
+                  <a
+                    href={SOCIAL_LINKS.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor="IN"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/30 text-xs font-semibold text-slate-300 hover:text-white transition-all"
+                  >
+                    <LinkedinIcon size={15} className="text-blue-400" />
+                    <span>LinkedIn</span>
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href={SOCIAL_LINKS.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor="GH"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/30 text-xs font-semibold text-slate-300 hover:text-white transition-all"
+                  >
+                    <GithubIcon size={15} className="text-grey-400" />
+                    <span>GitHub</span>
+                  </a>
+                </Magnetic>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
+        </div>
 
-          {/* Right Column: Clean Executive Contact Form (7 cols) */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-7 p-7 sm:p-9 rounded-2xl bg-[#0c0e14] border border-white/[0.08] shadow-lg"
-          >
-            <h3 className="text-xl font-bold text-white tracking-tight mb-2">
+        {/* Right Column: Clean Executive Contact Form (7 cols) */}
+        <Reveal delay={0.18} className="lg:col-span-7">
+          <div className="p-7 sm:p-9 rounded-3xl bg-[#111115]/85 backdrop-blur-xl border border-white/[0.08] hover:border-amber-500/40 transition-all shadow-xl">
+            <h3 className="mb-2 text-xl font-bold tracking-tight text-white sm:text-2xl">
               Send a Message
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 font-normal mb-8">
+            <p className="mb-8 text-sm font-normal text-slate-400">
               Fill out the form below and I will get back to you within 24 hours.
             </p>
 
@@ -382,8 +391,8 @@ const Contact = () => {
                 className="p-8 sm:p-10 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/30 text-center relative overflow-hidden shadow-xl"
               >
                 {/* Ambient celebratory flares */}
-                <div className="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute rounded-full pointer-events-none -top-12 -right-12 w-36 h-36 bg-emerald-500/15 blur-3xl" />
+                <div className="absolute rounded-full pointer-events-none -bottom-12 -left-12 w-36 h-36 bg-amber-500/10 blur-3xl" />
 
                 <motion.div 
                   initial={{ scale: 0, rotate: -30 }}
@@ -391,20 +400,20 @@ const Contact = () => {
                   transition={{ type: "spring", stiffness: 220, damping: 14 }}
                   className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
                 >
-                  <Rocket size={26} className="text-emerald-400 -rotate-45" />
+                  <Rocket size={26} className="-rotate-45 text-emerald-400" />
                 </motion.div>
 
                 <h4 className="text-lg font-bold text-white mb-1.5 flex items-center justify-center gap-2">
                   <span>Message Dispatched!</span>
                   <span className="text-xl">🚀</span>
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-300 mb-6 font-normal max-w-sm mx-auto leading-relaxed">
+                <p className="max-w-sm mx-auto mb-6 text-xs font-normal leading-relaxed sm:text-sm text-slate-300">
                   Thank you for reaching out. Your message landed directly in my inbox and I will respond within 24 hours.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/[0.12] hover:border-amber-500/40 transition-all cursor-pointer shadow-sm"
+                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/[0.12] hover:border-green-500/40 transition-all cursor-pointer shadow-sm"
                 >
                   Send another message
                 </button>
@@ -422,11 +431,11 @@ const Contact = () => {
                   autoComplete="off"
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* Name Input */}
                   <div>
-                    <label htmlFor="name" className="block text-xs font-semibold text-slate-300 mb-2">
-                      Full Name <span className="text-amber-400">*</span>
+                    <label htmlFor="name" className="block mb-2 text-xs font-semibold text-slate-300">
+                      Full Name <span className="text-green-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -444,7 +453,7 @@ const Contact = () => {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label htmlFor="email" className="block text-xs font-semibold text-slate-300">
-                        Email Address <span className="text-amber-400">*</span>
+                        Email Address <span className="text-green-400">*</span>
                       </label>
                       <span className="text-[10px] font-mono text-slate-500">Must be genuine email</span>
                     </div>
@@ -462,7 +471,7 @@ const Contact = () => {
                       className={`w-full px-4 py-3 rounded-xl bg-[#07090e] border text-sm text-white placeholder-slate-500 transition-colors outline-none ${
                         emailValidationError
                           ? "border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                          : "border-white/[0.1] focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                          : "border-white/[0.1] focus:border-green-500 focus:ring-1 focus:ring-green-500"
                       }`}
                     />
                     {emailValidationError && (
@@ -475,8 +484,8 @@ const Contact = () => {
 
                 {/* Message Input */}
                 <div>
-                  <label htmlFor="message" className="block text-xs font-semibold text-slate-300 mb-2">
-                    Message <span className="text-amber-400">*</span>
+                  <label htmlFor="message" className="block mb-2 text-xs font-semibold text-slate-300">
+                    Message <span className="text-green-400">*</span>
                   </label>
                   <textarea
                     id="message"
@@ -507,14 +516,16 @@ const Contact = () => {
                 )}
 
                 {/* Submit Button with Rocket Dispatch Animation (Option 4) */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting || cooldownRemaining > 0}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-md hover:shadow-amber-500/25 active:scale-[0.99] group relative overflow-hidden"
-                >
+                <Magnetic>
+                  <button
+                    type="submit"
+                    data-cursor="HI"
+                    disabled={isSubmitting || cooldownRemaining > 0}
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-md hover:shadow-amber-500/25 active:scale-[0.99] group relative overflow-hidden"
+                  >
                   {isSubmitting ? (
                     <motion.div 
-                      className="flex items-center gap-2 text-slate-950 font-bold"
+                      className="flex items-center gap-2 font-bold text-slate-950"
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
@@ -532,7 +543,7 @@ const Contact = () => {
                       <span>Launching Dispatch...</span>
                     </motion.div>
                   ) : cooldownRemaining > 0 ? (
-                    <div className="flex items-center gap-2 text-slate-900 font-mono">
+                    <div className="flex items-center gap-2 font-mono text-slate-900">
                       <Clock size={15} />
                       <span>Wait {cooldownRemaining}s</span>
                     </div>
@@ -540,18 +551,20 @@ const Contact = () => {
                     <>
                       <span>Send Message</span>
                       <motion.span
-                        className="inline-block group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                        className="inline-block transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
                       >
                         <Send size={15} />
                       </motion.span>
                     </>
                   )}
                 </button>
+              </Magnetic>
               </form>
             )}
-          </motion.div>
+          </div>
+        </Reveal>
 
-        </div>
+      </div>
 
       </div>
     </div>

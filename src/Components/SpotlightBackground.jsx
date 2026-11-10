@@ -27,21 +27,21 @@ export default function SpotlightBackground() {
     };
   }, [opacity]);
 
-  // Light Mode uses deep Emerald Green with a hint of Royal Purple, Dark Mode uses Honey Amber
+  // Light Mode uses Honey Amber & Slate architectural grid, Dark Mode uses Titanium Silver & Liquid Platinum
   const spotlightColor =
     theme === "light"
       ? "radial-gradient(550px circle at " +
         mousePos.x +
         "px " +
         mousePos.y +
-        "px, rgba(5, 150, 105, 0.09) 0%, rgba(124, 58, 237, 0.06) 45%, transparent 75%)"
+        "px, rgba(217, 119, 6, 0.08) 0%, rgba(245, 158, 11, 0.04) 45%, transparent 75%)"
       : "radial-gradient(600px circle at " +
         mousePos.x +
         "px " +
         mousePos.y +
-        "px, rgba(245, 158, 11, 0.055) 0%, rgba(249, 115, 22, 0.02) 50%, transparent 80%)";
+        "px, rgba(255, 255, 255, 0.065) 0%, rgba(203, 213, 225, 0.02) 45%, transparent 80%)";
 
-  const gridLineColor = theme === "light" ? "rgba(6, 78, 59, 0.035)" : "rgba(255, 255, 255, 0.012)";
+  const gridLineColor = theme === "light" ? "rgba(15, 23, 42, 0.035)" : "rgba(255, 255, 255, 0.02)";
 
   return (
     <div 

@@ -1,35 +1,47 @@
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
-export default function Magnetic({ children, className = "inline-block" }) {
+export default function Magnetic({ children, strength = 0.35, className = "" }) {
   const ref = useRef(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 180, damping: 14 });
+  const sy = useSpring(y, { stiffness: 180, damping: 14 });
 
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const centerX = left + width / 2;
-    const centerY = top + height / 2;
-    
-    const distanceX = clientX - centerX;
-    const distanceY = clientY - centerY;
-    
-    // Magnetic pull strength (multiply by offset distance)
-    setPosition({ x: distanceX * 0.35, y: distanceY * 0.35 });
+  const [enabled, setEnabled] = useState(false);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setEnabled(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const onMove = (e) => {
+    if (!enabled || reduced || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    x.set((e.clientX - (r.left + r.width / 2)) * strength);
+    y.set((e.clientY - (r.top + r.height / 2)) * strength);
   };
 
-  const handleMouseLeave = () => {
-    setPosition({ x: 0, y: 0 });
+  const onLeave = () => {
+    x.set(0);
+    y.set(0);
   };
 
   return (
     <motion.div
       ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
       className={className}
+      style={{
+        x: enabled && !reduced ? sx : 0,
+        y: enabled && !reduced ? sy : 0,
+        display: "inline-block",
+      }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
     >
       {children}
     </motion.div>

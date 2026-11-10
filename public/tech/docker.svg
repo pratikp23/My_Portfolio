@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="750" viewBox="0 0 600 750">
+  <defs>
+    <radialGradient id="cardGlow_docker" cx="50%" cy="38%" r="48%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.32" />
+      <stop offset="60%" stop-color="#38BDF8" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#0c1017" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="cardBg_docker" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#141a24" />
+      <stop offset="50%" stop-color="#0d1117" />
+      <stop offset="100%" stop-color="#080b0f" />
+    </linearGradient>
+    <linearGradient id="borderGrad_docker" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.45" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.25" />
+    </linearGradient>
+    <filter id="shadow_docker" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#38BDF8" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Card Background -->
+  <rect x="10" y="10" width="580" height="730" rx="32" ry="32" fill="url(#cardBg_docker)" stroke="url(#borderGrad_docker)" stroke-width="2" />
+  
+  <!-- Ambient Radial Glow -->
+  <circle cx="300" cy="270" r="230" fill="url(#cardGlow_docker)" />
+
+  <!-- Corner Tech Accent Marks -->
+  <path d="M 28 56 L 28 28 L 56 28" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 572 56 L 572 28 L 544 28" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 28 694 L 28 722 L 56 722" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 572 694 L 572 722 L 544 722" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+
+  <!-- Center Logo Container -->
+  <g filter="url(#shadow_docker)">
+    
+      <g transform="translate(180, 165) scale(10)">
+        <path fill="#38BDF8" d="M13.983 11.078h2.119c.102 0 .186-.083.186-.185V8.774c0-.102-.084-.185-.186-.185h-2.119c-.102 0-.186.083-.186.185v2.119c0 .102.084.185.186.185zM11.261 11.078h2.119c.102 0 .186-.083.186-.185V8.774c0-.102-.084-.185-.186-.185h-2.119c-.102 0-.186.083-.186.185v2.119c0 .102.084.185.186.185zm-2.722 0h2.119c.102 0 .186-.083.186-.185V8.774c0-.102-.084-.185-.186-.185H8.539c-.102 0-.186.083-.186.185v2.119c0 .102.084.185.186.185zm-2.722 0h2.119c.102 0 .186-.083.186-.185V8.774c0-.102-.084-.185-.186-.185H5.816c-.102 0-.186.083-.186.185v2.119c0 .102.084.185.186.185zm2.722-2.722h2.119c.102 0 .186-.084.186-.186V6.052c0-.102-.084-.186-.186-.186H8.539c-.102 0-.186.084-.186.186v2.119c0 .102.084.186.186.186zm2.722 0h2.119c.102 0 .186-.084.186-.186V6.052c0-.102-.084-.186-.186-.186h-2.119c-.102 0-.186.084-.186.186v2.119c0 .102.084.186.186.186zm-5.444 0h2.119c.102 0 .186-.084.186-.186V6.052c0-.102-.084-.186-.186-.186H5.816c-.102 0-.186.084-.186.186v2.119c0 .102.084.186.186.186zm8.166 0h2.119c.102 0 .186-.084.186-.186V6.052c0-.102-.084-.186-.186-.186h-2.119c-.102 0-.186.084-.186.186v2.119c0 .102.084.186.186.186zm-5.444-2.722h2.119c.102 0 .186-.083.186-.185V3.33c0-.102-.084-.185-.186-.185H8.539c-.102 0-.186.083-.186.185v2.119c0 .102.084.185.186.185z M23.99 12.528c-.015-.098-.03-.198-.052-.295c-.218-1.127-1.127-1.921-2.196-1.921c-.08 0-.16.006-.239.018c-.89.136-1.637.755-1.932 1.573c-.097.266-.145.548-.145.83v2.898c0 1.83-1.488 3.32-3.32 3.32H6.969c-1.398 0-2.531-1.134-2.531-2.532v-.125c.01-.225.105-.436.27-.585c.162-.147.379-.222.597-.206h12.981c.218-.016.435.059.597.206c.165.149.26.36.27.585v.125c0 2.274 1.848 4.122 4.122 4.122h.001c.224 0 .445-.02.662-.058c1.332-.234 2.37-1.272 2.604-2.604c.038-.217.058-.438.058-.662l-.029-4.819z" />
+      </g>
+    
+  </g>
+
+  <!-- Tech Name -->
+  <text x="300" y="490" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#F8FAFC" letter-spacing="-0.5">
+    Docker
+  </text>
+
+  <!-- Category Pill Badge -->
+  <g transform="translate(300, 555)">
+    <rect x="-140" y="-22" width="280" height="44" rx="22" ry="22" fill="#0f172a" stroke="#38BDF8" stroke-width="1.5" stroke-opacity="0.5" />
+    <text x="0" y="6" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#38BDF8" letter-spacing="1.5">
+      CONTAINERS & DEVOPS
+    </text>
+  </g>
+
+  <!-- Bottom Terminal Tag -->
+  <text x="300" y="665" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', Consolas, monospace" font-size="15" font-weight="500" fill="#64748B" letter-spacing="2">
+    // CORE SYSTEM STACK
+  </text>
+</svg>

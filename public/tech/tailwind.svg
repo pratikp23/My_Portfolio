@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="750" viewBox="0 0 600 750">
+  <defs>
+    <radialGradient id="cardGlow_tailwind" cx="50%" cy="38%" r="48%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.32" />
+      <stop offset="60%" stop-color="#38BDF8" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#0c1017" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="cardBg_tailwind" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#141a24" />
+      <stop offset="50%" stop-color="#0d1117" />
+      <stop offset="100%" stop-color="#080b0f" />
+    </linearGradient>
+    <linearGradient id="borderGrad_tailwind" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.45" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.25" />
+    </linearGradient>
+    <filter id="shadow_tailwind" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#38BDF8" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Card Background -->
+  <rect x="10" y="10" width="580" height="730" rx="32" ry="32" fill="url(#cardBg_tailwind)" stroke="url(#borderGrad_tailwind)" stroke-width="2" />
+  
+  <!-- Ambient Radial Glow -->
+  <circle cx="300" cy="270" r="230" fill="url(#cardGlow_tailwind)" />
+
+  <!-- Corner Tech Accent Marks -->
+  <path d="M 28 56 L 28 28 L 56 28" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 572 56 L 572 28 L 544 28" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 28 694 L 28 722 L 56 722" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+  <path d="M 572 694 L 572 722 L 544 722" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+
+  <!-- Center Logo Container -->
+  <g filter="url(#shadow_tailwind)">
+    
+      <g transform="translate(190, 160) scale(9.2)">
+        <path fill="#38BDF8" d="M12 4.8C8.8 4.8 6.8 6.4 6 9.6c1.2-1.6 2.6-2.2 4.2-1.8.9.2 1.6.9 2.3 1.6C13.7 10.6 15 12 18 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.9-.2-1.6-.9-2.3-1.6C16.3 6.2 15 4.8 12 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.9.2 1.6.9 2.3 1.6 1.2 1.2 2.5 2.6 5.5 2.6 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.9-.2-1.6-.9-2.3-1.6C10.3 13.4 9 12 6 12z" />
+      </g>
+    
+  </g>
+
+  <!-- Tech Name -->
+  <text x="300" y="490" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#F8FAFC" letter-spacing="-0.5">
+    Tailwind CSS
+  </text>
+
+  <!-- Category Pill Badge -->
+  <g transform="translate(300, 555)">
+    <rect x="-140" y="-22" width="280" height="44" rx="22" ry="22" fill="#0f172a" stroke="#38BDF8" stroke-width="1.5" stroke-opacity="0.5" />
+    <text x="0" y="6" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#38BDF8" letter-spacing="1.5">
+      MODERN DESIGN SYSTEMS
+    </text>
+  </g>
+
+  <!-- Bottom Terminal Tag -->
+  <text x="300" y="665" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', Consolas, monospace" font-size="15" font-weight="500" fill="#64748B" letter-spacing="2">
+    // CORE SYSTEM STACK
+  </text>
+</svg>

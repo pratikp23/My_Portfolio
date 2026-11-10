@@ -23,7 +23,7 @@ export default function FloatingMascot() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [scrollContextMessage, setScrollContextMessage] = useState("");
+  const [scrollContextMessage] = useState("");
   const [waveTrigger, setWaveTrigger] = useState(0);
 
   // Theme observer for crisp Dark/Light mode reactivity
@@ -133,8 +133,12 @@ export default function FloatingMascot() {
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
-      const topOffset = el.getBoundingClientRect().top + window.scrollY - 75;
-      window.scrollTo({ top: topOffset, behavior: "smooth" });
+      if (window.__lenis) {
+        window.__lenis.scrollTo(el, { offset: -75, duration: 1.4 });
+      } else {
+        const topOffset = el.getBoundingClientRect().top + window.scrollY - 75;
+        window.scrollTo({ top: topOffset, behavior: "smooth" });
+      }
     }
   };
 
@@ -151,7 +155,7 @@ export default function FloatingMascot() {
             className={`mb-3 w-[295px] sm:w-[335px] p-4 rounded-2xl backdrop-blur-2xl relative transition-colors duration-300 ${
               isLight
                 ? "bg-white/95 border border-amber-600/25 text-slate-900 shadow-[0_15px_35px_rgba(15,23,42,0.12),0_0_20px_rgba(217,119,6,0.12)]"
-                : "bg-[#0e1117]/95 border border-amber-500/35 text-slate-100 shadow-[0_12px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(245,158,11,0.18)]"
+                : "bg-[#111115]/95 border border-amber-500/35 text-slate-100 shadow-[0_12px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(255,255,255,0.15)]"
             }`}
           >
             {/* Top Toolbar: Voice Button & Close Button */}
@@ -165,7 +169,7 @@ export default function FloatingMascot() {
                   isSpeaking
                     ? isLight
                       ? "bg-amber-600 text-white shadow-[0_0_12px_rgba(217,119,6,0.35)]"
-                      : "bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+                      : "bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.4)]"
                     : isLight
                     ? "bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-300"
                     : "bg-white/[0.06] hover:bg-white/[0.12] text-amber-300 border border-amber-500/30"
@@ -526,7 +530,7 @@ export default function FloatingMascot() {
                       className={`w-full py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md disabled:opacity-50 ${
                         isLight
                           ? "bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-[0_0_15px_rgba(217,119,6,0.25)]"
-                          : "bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)]"
+                          : "bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.22)]"
                       }`}
                     >
                       {formStatus === "loading" ? (
@@ -575,7 +579,7 @@ export default function FloatingMascot() {
             <div className={`absolute -bottom-1.5 right-8 w-3 h-3 border-r border-b transform rotate-45 ${
               isLight
                 ? "bg-white border-amber-600/25"
-                : "bg-[#0e1117] border-amber-500/35"
+                : "bg-[#111115] border-amber-500/35"
             }`} />
           </motion.div>
         )}
@@ -601,7 +605,7 @@ export default function FloatingMascot() {
           <div className={`absolute -inset-3 rounded-full blur-2xl opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none ${
             isLight
               ? "bg-gradient-to-t from-amber-500/20 via-orange-400/10 to-transparent"
-              : "bg-gradient-to-t from-amber-500/25 via-orange-500/10 to-transparent"
+              : "bg-gradient-to-t from-white/10 via-slate-400/5 to-transparent"
           }`} />
 
           {/* Minimize Button */}
@@ -640,7 +644,7 @@ export default function FloatingMascot() {
             className={`relative w-28 h-32 sm:w-32 sm:h-36 md:w-36 md:h-40 ${
               isLight
                 ? "drop-shadow-[0_12px_24px_rgba(15,23,42,0.18)] drop-shadow-[0_0_12px_rgba(217,119,6,0.18)]"
-                : "drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)] drop-shadow-[0_0_15px_rgba(245,158,11,0.22)]"
+                : "drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)] drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
             }`}
           >
             <img
@@ -667,7 +671,7 @@ export default function FloatingMascot() {
           className={`w-12 h-12 rounded-full border flex items-center justify-center relative overflow-hidden group transition-colors shadow-lg ${
             isLight
               ? "bg-white border-amber-600/30 shadow-[0_4px_20px_rgba(217,119,6,0.2)]"
-              : "bg-[#0e1117] border-amber-500/40 shadow-[0_4px_22px_rgba(245,158,11,0.3)]"
+              : "bg-[#111115] border-amber-500/40 shadow-[0_4px_22px_rgba(255,255,255,0.2)]"
           }`}
           title="Open Pratik.AI assistant"
         >

@@ -462,7 +462,7 @@ export default function PhysicsSkillSandbox() {
       className={`relative w-full rounded-3xl overflow-hidden mb-10 transition-colors duration-200 border ${
         isLight
           ? 'bg-white border-slate-200 shadow-[0_10px_35px_rgba(15,23,42,0.06)]'
-          : 'bg-[#090b10] border-white/[0.08] shadow-[0_0_60px_rgba(0,0,0,0.6)]'
+          : 'bg-[#0f0f13] border-white/[0.08] shadow-[0_0_60px_rgba(0,0,0,0.6)]'
       }`}
     >
       {/* Ambient background glows */}
@@ -594,7 +594,7 @@ export default function PhysicsSkillSandbox() {
                   active
                     ? isLight
                       ? 'bg-amber-500 text-slate-950 font-bold shadow-[0_2px_8px_rgba(217,119,6,0.3)]'
-                      : 'bg-amber-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(245,158,11,0.35)]'
+                      : 'bg-amber-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(255,255,255,0.35)]'
                     : isLight
                     ? 'text-slate-600 hover:text-slate-950 hover:bg-slate-200/80'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'

@@ -3,24 +3,25 @@
 @tailwind utilities;
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 80px;
 }
 
 @layer base {
   :root {
-    --bg-page: #08090c;
-    --card-surface: #0e1117;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-highlight: rgba(245, 158, 11, 0.35);
+    --cursor-color: #f8fafc;
+    --bg-page: #08080a;
+    --card-surface: #111115;
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-highlight: rgba(255, 255, 255, 0.35);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
-    --accent: #f59e0b;
-    --accent-glow: rgba(245, 158, 11, 0.15);
+    --accent: #f8fafc;
+    --accent-glow: rgba(255, 255, 255, 0.16);
   }
 
   html.light {
+    --cursor-color: #f59e0b;
     --bg-page: #f8fafc;
     --card-surface: #ffffff;
     --border-subtle: rgba(15, 23, 42, 0.08);
@@ -50,8 +51,20 @@ html {
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid #f59e0b;
+    outline: 2px solid #f8fafc;
     outline-offset: 2px;
+  }
+
+  html.light a:focus-visible,
+  html.light button:focus-visible,
+  html.light input:focus-visible,
+  html.light textarea:focus-visible {
+    outline-color: #d97706;
+  }
+
+  html.light ::selection {
+    background-color: #fde68a;
+    color: #0f172a;
   }
 }
 
@@ -67,10 +80,10 @@ html {
 
 /* Glass & Card Utilities */
 .glass-panel {
-  background: rgba(14, 17, 23, 0.72);
+  background: rgba(17, 17, 21, 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 html.light .glass-panel {
@@ -79,10 +92,10 @@ html.light .glass-panel {
 }
 
 .glass-pill {
-  background: rgba(14, 17, 23, 0.6);
+  background: rgba(17, 17, 21, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 html.light .glass-pill {
@@ -96,9 +109,12 @@ html.light .glass-pill {
    ========================================================================= */
 
 /* Base Page Backgrounds & Containers: Crisp White/80 Glass Aesthetic */
+html.light .bg-\[\#08080a\],
+html.light .bg-\[\#050807\],
 html.light .bg-\[\#08090c\],
 html.light .bg-\[\#07080b\],
 html.light .bg-\[\#070708\],
+html.light .bg-\[\#040605\],
 html.light .bg-\[\#0a0a0c\],
 html.light .bg-\[\#07090e\] {
   background-color: rgba(255, 255, 255, 0.85) !important;
@@ -110,11 +126,21 @@ html.light .bg-\[\#0b0d13\] {
 }
 
 /* Card Surfaces & Floating Elements: Elevated Pure White Glass */
+html.light .bg-\[\#111115\],
+html.light .bg-\[\#111115\]\/85,
+html.light .bg-\[\#111115\]\/90,
+html.light .bg-\[\#111115\]\/95,
+html.light .bg-\[\#0b110e\],
+html.light .bg-\[\#0b110e\]\/85,
+html.light .bg-\[\#0b110e\]\/90,
+html.light .bg-\[\#0b110e\]\/95,
 html.light .bg-\[\#0e1117\],
 html.light .bg-\[\#0e1117\]\/80,
 html.light .bg-\[\#0e1117\]\/85,
 html.light .bg-\[\#0e1117\]\/90,
+html.light .bg-\[\#0d1117\],
 html.light .bg-\[\#0c0e14\],
+html.light .bg-\[\#0c0e14\]\/85,
 html.light .bg-\[\#0c0f17\],
 html.light .bg-\[\#0c0f17\]\/90,
 html.light .bg-\[\#0d0d10\],
@@ -127,7 +153,7 @@ html.light .bg-slate-900,
 html.light .bg-slate-950,
 html.light .bg-slate-950\/90 {
   background-color: #ffffff !important;
-  box-shadow: 0 4px 20px -2px rgba(6, 78, 59, 0.05), 0 2px 8px -1px rgba(15, 23, 42, 0.04) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 8px -1px rgba(15, 23, 42, 0.04) !important;
 }
 
 /* Horizontal Ticker Pill Cards in Light Mode */
@@ -179,36 +205,45 @@ html.light .border-gray-900 {
   border-color: #e2e8f0 !important;
 }
 
-/* Headings Typography: Deep Forest Emerald Green with Enhanced Weight */
+/* Headings Typography: Deep Obsidian Slate with Enhanced Weight & Contrast */
 html.light .text-white,
+html.light .text-white\/90,
 html.light h1,
 html.light h2,
 html.light h3,
 html.light h4,
-html.light .section-heading-font {
-  color: #064e3b !important; /* Deep Forest Emerald Green */
+html.light .section-heading-font,
+html.light .shuffle-char,
+html.light .shuffle-word {
+  color: #0f172a !important; /* Crisp Deep Navy Slate 900 */
   font-weight: 700 !important;
   letter-spacing: -0.01em;
 }
 
-/* Body & Description Typography: Deep Charcoal & Bold Weight for Maximum Clarity */
+/* Body & Description Typography: Deep Charcoal & Medium Weight for Maximum Clarity */
 html.light p,
 html.light li,
-html.light span,
 html.light .text-slate-100,
 html.light .text-slate-200,
 html.light .text-slate-300,
 html.light .text-gray-200,
-html.light .text-gray-300 {
+html.light .text-gray-300,
+html.light .text-white\/70,
+html.light .text-white\/65,
+html.light .text-white\/60 {
   color: #0f172a !important; /* Ultra-clear Deep Navy Slate */
-  font-weight: 500 !important; /* Medium-Bold for effortless reading */
+  font-weight: 500 !important; /* Medium for effortless reading */
 }
 
 /* Secondary & Subtitle Typography: Darker Slate for high contrast */
 html.light .text-slate-400,
 html.light .text-gray-400,
 html.light .text-slate-500,
-html.light .text-gray-500 {
+html.light .text-gray-500,
+html.light .text-white\/55,
+html.light .text-white\/40,
+html.light .text-white\/35,
+html.light .text-white\/30 {
   color: #334155 !important; /* High-contrast readable slate */
   font-weight: 500 !important;
 }
@@ -219,7 +254,78 @@ html.light b,
 html.light .font-bold,
 html.light .font-semibold {
   font-weight: 700 !important;
-  color: #064e3b !important;
+  color: #0f172a !important;
+}
+
+/* Primary Action Pills / Buttons in Light Mode */
+html.light .bg-amber-500,
+html.light .from-amber-500 {
+  background-color: #f59e0b !important;
+  --tw-gradient-from: #f59e0b !important;
+  --tw-gradient-to: #d97706 !important;
+  color: #0f172a !important;
+}
+
+html.light .hover\:bg-amber-400:hover {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+html.light nav[aria-label="Main Navigation"] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light nav[aria-label="Main Navigation"] a.text-slate-950 {
+  color: #0f172a !important;
+}
+
+html.light header a[aria-label="View Resume in new tab"] {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(217, 119, 6, 0.45) !important;
+  color: #b45309 !important;
+}
+
+html.light header a[aria-label="View Resume in new tab"]:hover {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  border-color: #d97706 !important;
+}
+
+html.light .bg-lime {
+  background-color: #0f172a !important;
+  border-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+html.light .proj-filter-pill {
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+  background-color: #ffffff !important;
+}
+
+html.light .proj-filter-pill:hover {
+  border-color: #0f172a !important;
+  color: #0f172a !important;
+}
+
+html.light .project-close-btn {
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  background-color: #f8fafc !important;
+}
+
+html.light .project-close-btn:hover {
+  border-color: #d97706 !important;
+  color: #d97706 !important;
+}
+
+html.light .project-github-btn {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+html.light .project-github-btn:hover {
+  background-color: #1e293b !important;
 }
 
 /* Warm Orange Accents for Primary CTAs & Active Highlights */
@@ -241,12 +347,17 @@ html.light .border-amber-500\/30 {
   border-color: rgba(217, 119, 6, 0.4) !important;
 }
 
-/* Purple Accent Badges & Tags (Royal Purple for domain chips & highlights) */
+/* Rich Amber Accent Badges & Mono Highlights in Light Mode */
 html.light .font-mono.text-amber-400,
 html.light .font-mono.text-amber-400\/80,
 html.light .font-mono.text-amber-400\/90 {
-  color: #6d28d9 !important; /* Royal Purple */
+  color: #b45309 !important; /* Rich Honey Amber */
   font-weight: 600 !important;
+}
+
+/* Modal Backdrops in Light Mode */
+html.light .bg-ink\/80 {
+  background-color: rgba(15, 23, 42, 0.45) !important;
 }
 
 /* About Section Profile Card & Elements in Light Mode */
@@ -265,7 +376,7 @@ html.light .edu-connector {
 }
 
 html.light .about-vision-quote {
-  color: #064e3b !important;
+  color: #0f172a !important;
 }
 
 html.light .text-emerald-400 {
@@ -293,7 +404,7 @@ html.light .available-status-badge .bg-emerald-400 {
 html.light input,
 html.light textarea {
   background-color: #f8fafc !important;
-  color: #064e3b !important;
+  color: #0f172a !important;
   border-color: #cbd5e1 !important;
 }
 
@@ -305,15 +416,15 @@ html.light textarea::placeholder {
 html.light input:focus,
 html.light textarea:focus {
   background-color: #ffffff !important;
-  border-color: #7c3aed !important; /* Royal Purple Focus Ring */
-  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2) !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2) !important;
 }
 
 /* Social Sidebar & Floating Icons in Light Mode */
 html.light aside div.rounded-2xl {
   background-color: rgba(255, 255, 255, 0.95) !important;
   border-color: #e2e8f0 !important;
-  box-shadow: 0 10px 30px rgba(6, 78, 59, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
 }
 
 html.light aside a {
@@ -339,15 +450,25 @@ html.light .bg-black\/85 {
   background-color: rgba(15, 23, 42, 0.6) !important;
 }
 
-/* Mobile App Dock & Drawer in Light Mode */
+/* Mobile & Desktop Floating Navigation Dock in Light Mode */
+html.light nav[aria-label="Floating Navigation Dock"],
 html.light nav[aria-label="Mobile App Dock Navigation"] {
   background-color: rgba(255, 255, 255, 0.94) !important;
   border-color: #cbd5e1 !important;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12) !important;
 }
 
+html.light nav[aria-label="Floating Navigation Dock"] button,
+html.light nav[aria-label="Floating Navigation Dock"] a,
 html.light nav[aria-label="Mobile App Dock Navigation"] button {
   color: #334155 !important;
+}
+
+html.light nav[aria-label="Floating Navigation Dock"] button:hover,
+html.light nav[aria-label="Floating Navigation Dock"] a:hover {
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  background-color: #f1f5f9 !important;
 }
 
 html.light nav[aria-label="Mobile App Dock Navigation"] button span {
@@ -376,7 +497,25 @@ html.light header div.md\:hidden a {
 
 html.light header div.md\:hidden a:hover {
   background-color: #f1f5f9 !important;
-  color: #064e3b !important;
+  color: #0f172a !important;
+}
+
+/* ScrollStack Card Surfaces in Light Mode */
+html.light .scroll-stack-card > div,
+html.light .bento-tile {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 35px -5px rgba(15, 23, 42, 0.08), 0 2px 8px -2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light .scroll-stack-card h3,
+html.light .scroll-stack-card h4 {
+  color: #0f172a !important;
+}
+
+html.light .scroll-stack-card p,
+html.light .scroll-stack-card li {
+  color: #334155 !important;
 }
 
 /* Original Signature in Light & Dark Mode */
@@ -404,11 +543,11 @@ html.light .preserve-dark {
 @keyframes signatureGlow {
   0%, 100% {
     opacity: 0.85;
-    filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.15));
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.18));
   }
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 28px rgba(245, 158, 11, 0.35));
+    filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.35));
   }
 }
 
@@ -614,4 +753,146 @@ html.light .project-stack-card {
 .mountain-star-3 {
   animation: starTwinkle3 3.2s ease-in-out infinite 1.4s;
   transform-origin: 105px 12px;
+}
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Theme toggle button in light mode */
+html.light .theme-toggle-btn {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+html.light .theme-toggle-btn svg {
+  stroke: #0f172a !important;
+}
+
+html.light .app-shell {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.hero-section {
+  background-color: #08090c;
+  color: #f1f5f9;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html.light .hero-section {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  color: #0f172a !important;
+}
+
+html.light .hero-section .hero-greeting,
+html.light .hero-section .hero-greeting span {
+  color: #334155 !important;
+}
+
+html.light .hero-section .hero-role {
+  color: #0f172a !important;
+}
+
+html.light .hero-section .hero-role .text-amber-400,
+html.light .hero-section .text-amber-400 {
+  color: #d97706 !important;
+}
+
+html.light .hero-section .hero-pitch {
+  color: #334155 !important;
+}
+
+html.light .hero-section .hero-pitch strong {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+html.light .hero-section a.hero-btn-primary {
+  background-color: #f59e0b !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.24) !important;
+}
+
+html.light .hero-section a.hero-btn-primary span,
+html.light .hero-section a.hero-btn-primary svg {
+  color: #0f172a !important;
+}
+
+html.light .hero-section a.hero-btn-primary:hover {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+html.light .hero-section a.hero-btn-primary:hover span,
+html.light .hero-section a.hero-btn-primary:hover svg {
+  color: #ffffff !important;
+}
+
+html.light .hero-section a.hero-btn-secondary {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light .hero-section a.hero-btn-secondary span {
+  color: #0f172a !important;
+}
+
+html.light .hero-section a.hero-btn-secondary svg {
+  color: #d97706 !important;
+}
+
+html.light .hero-section a.hero-btn-secondary:hover {
+  background-color: #fffbeb !important;
+  border-color: #d97706 !important;
+}
+
+html.light .hero-section a.hero-btn-ghost {
+  color: #334155 !important;
+}
+
+html.light .hero-section a.hero-btn-ghost span {
+  color: #334155 !important;
+}
+
+html.light .hero-section a.hero-btn-ghost:hover {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light .hero-section a.hero-btn-ghost:hover span {
+  color: #0f172a !important;
+}
+
+html.light .hero-section .hero-mobile-social {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light .hero-section .hero-mobile-social:hover {
+  border-color: #d97706 !important;
+  color: #d97706 !important;
+}
+
+/* Tech Swap Cloud section below Hero in Light Mode */
+html.light .tech-swap-cloud {
+  background-color: rgba(248, 250, 252, 0.92) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Hand-drawn Section Curly Arrows & Brush Underlines in Light Mode */
+html.light .section-curly-arrow path {
+  stroke: #475569 !important;
+}
+
+html.light svg path[fill*="brush-grad"] {
+  fill: #d97706 !important;
+  opacity: 0.7 !important;
 }

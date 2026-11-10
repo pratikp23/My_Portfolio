@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import BounceCards from "../Components/BounceCards/BounceCards";
+import SectionParticleHeading from "../Components/SectionParticleHeading";
 
 const certificationsList = [
   {
@@ -111,135 +112,140 @@ const certificationsList = [
   },
 ];
 
-const categories = ["All", "Software Engineering", "AI & Data", "Networking & Cloud"];
-
 const Certifications = () => {
-  const location = useLocation();
-  const isStandalone = location.pathname === "/certifications";
-
-  const [activeTab, setActiveTab] = useState("All");
   const [selectedCert, setSelectedCert] = useState(null);
 
-  const filteredCerts =
-    activeTab === "All"
-      ? certificationsList
-      : certificationsList.filter((c) => c.category === activeTab);
+  // Responsive calculations for BounceCards container and card sizing
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 640;
+  const isTablet = windowWidth >= 640 && windowWidth < 1024;
+
+  // Stop Lenis smooth scroll while inspecting certificate modal
+  useEffect(() => {
+    if (selectedCert) {
+      window.__lenis?.stop();
+    } else {
+      window.__lenis?.start();
+    }
+  }, [selectedCert]);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedCert(null);
+    };
+    if (selectedCert) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedCert]);
+
+  // Map certificates to BounceCards images format
+  const bounceImages = certificationsList.map((cert) => ({
+    src: cert.image,
+    alt: cert.title,
+  }));
+
+  const count = certificationsList.length;
+  const containerWidth = isMobile
+    ? Math.min(windowWidth - 24, 380)
+    : isTablet
+    ? Math.min(windowWidth - 48, 640)
+    : 860;
+
+  const containerHeight = isMobile ? 260 : isTablet ? 320 : 380;
+  const cardSize = isMobile ? 140 : isTablet ? 175 : 220;
+  const maxSpreadAllowed =
+    count > 1 ? Math.floor((containerWidth - cardSize - 16) / (count - 1)) : 80;
+  const baseSpread = isMobile ? 36 : isTablet ? 55 : 68;
+  const spread = Math.max(16, Math.min(baseSpread, maxSpreadAllowed));
+  const pushDistance = isMobile ? 75 : isTablet ? 115 : 150;
+  const rotation = isMobile ? 7 : 9;
+  const arc = isMobile ? -6 : -10;
 
   return (
-    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+      <div className="max-w-6xl mx-auto flex flex-col items-center">
         
-        {/* Section Header */}
-        <div className="mb-14 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
-            <span>Verified Credentials</span>
+        {/* Section Header Only */}
+        <div className="mb-12 sm:mb-16 text-center">
+          <div className="relative inline-block">
+            <svg
+              className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="arrow-grad-certifications" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#334155" />
+                  <stop offset="100%" stopColor="#f8fafc" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99"
+                stroke="url(#arrow-grad-certifications)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <SectionParticleHeading text="LICENSES & CERTIFICATIONS" align="center" maxWidth="max-w-xl mx-auto" />
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="relative inline-block">
-                <svg
-                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
-                  viewBox="0 0 100 100"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="arrow-grad-certifications" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#4e2a14" />
-                      <stop offset="100%" stopColor="#fb923c" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 90 10 C 105 35, 80 60, 60 60 C 40 60, 40 40, 60 40 C 80 40, 75 80, 50 90 C 35 95, 20 95, 10 87 M 10 87 L 22 81 M 10 87 L 18 99"
-                    stroke="url(#arrow-grad-certifications)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <h2 className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider">
-                  Licenses & <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">Certifications</span>
-                </h2>
-              </div>
-              <svg className="w-48 sm:w-56 h-3 mt-2 mx-auto sm:mx-0 select-none pointer-events-none" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="brush-grad-certifications" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#fb923c" />
-                    <stop offset="60%" stopColor="#d97706" />
-                    <stop offset="100%" stopColor="#4e2a14" />
-                  </linearGradient>
-                </defs>
-                <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-certifications)" />
-                <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-certifications)" opacity="0.8" />
-              </svg>
-              <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
-                Coursework and verified industry credentials in SWE, AI, and computer networking.
-              </p>
-            </div>
-            {!isStandalone && (
-              <Link
-                to="/certifications"
-                className="font-mono text-xs text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1"
-              >
-                <span>Full View</span>
-                <span>↗</span>
-              </Link>
-            )}
-          </div>
+          <svg
+            className="w-48 sm:w-56 h-3 mt-2 mx-auto select-none pointer-events-none"
+            viewBox="0 0 300 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="brush-grad-certifications" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f8fafc" />
+                <stop offset="60%" stopColor="#cbd5e1" />
+                <stop offset="100%" stopColor="#334155" />
+              </linearGradient>
+            </defs>
+              <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-certifications)" />
+              <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-certifications)" opacity="0.8" />
+            </svg>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                activeTab === cat
-                  ? "bg-amber-500 text-slate-950 font-bold shadow-md"
-                  : "bg-white/[0.04] text-slate-300 hover:text-white border border-white/[0.08]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Certifications Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCerts.map((cert, idx) => (
-            <div
-              key={idx}
-              onClick={() => setSelectedCert(cert)}
-              className="p-5 rounded-3xl bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] hover:border-amber-500/30 transition-all flex flex-col justify-between cursor-pointer group shadow-lg"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.04] text-amber-400 border border-white/[0.06]">
-                    {cert.category}
-                  </span>
-                  <span className="text-xs font-mono text-slate-400">{cert.date}</span>
-                </div>
-
-                <h3 className="text-sm sm:text-base font-bold text-white mb-1.5 leading-snug group-hover:text-amber-400 transition-colors">
-                  {cert.title}
-                </h3>
-                <p className="text-xs text-slate-300 mb-3 font-normal">{cert.issuer}</p>
-
-                {cert.credentialId && (
-                  <p className="text-[10px] font-mono text-slate-500 truncate mb-4">
-                    ID: {cert.credentialId}
-                  </p>
-                )}
-              </div>
-
-              <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-amber-400">
-                <span>View Certificate</span>
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </div>
-            </div>
-          ))}
+        {/* The Cards (Kept directly outside any card/stage div box) */}
+        <div className="w-full flex items-center justify-center overflow-visible">
+          <BounceCards
+            images={bounceImages}
+            containerWidth={containerWidth}
+            containerHeight={containerHeight}
+            cardSize={cardSize}
+            spread={spread}
+            rotation={rotation}
+            arc={arc}
+            pushDistance={pushDistance}
+            hoverScale={1.08}
+            bounciness={0.65}
+            animationDelay={0.2}
+            animationStagger={0.05}
+            borderWidth={4}
+            borderColor="#1c1917"
+            radius={20}
+            shadow
+            enableHover
+            onCardClick={(idx) => {
+              if (certificationsList[idx]) {
+                setSelectedCert(certificationsList[idx]);
+              }
+            }}
+          />
         </div>
 
       </div>
@@ -253,7 +259,8 @@ const Certifications = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0e1117] border border-white/[0.12] p-6 shadow-2xl text-left"
+              data-lenis-prevent
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#111115] border border-white/[0.12] p-6 shadow-2xl text-left"
             >
               <button
                 onClick={() => setSelectedCert(null)}
@@ -271,7 +278,7 @@ const Certifications = () => {
                 <p className="text-xs text-slate-300">{selectedCert.issuer} • {selectedCert.date}</p>
                 {selectedCert.credentialId && (
                   <p className="text-[11px] font-mono text-slate-400 mt-1">
-                    Credential ID: {selectedCert.credentialId}
+                    Credential ID: <span className="text-amber-400">{selectedCert.credentialId}</span>
                   </p>
                 )}
               </div>
@@ -282,7 +289,7 @@ const Certifications = () => {
                   alt={selectedCert.title}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-auto max-h-[60vh] object-contain"
+                  className="w-full h-auto max-h-[60vh] object-contain mx-auto"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
                   }}
@@ -301,7 +308,7 @@ const Certifications = () => {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 };
 

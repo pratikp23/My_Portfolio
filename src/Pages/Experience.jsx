@@ -1,6 +1,8 @@
 import { Calendar, CheckCircle2, Building2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Reveal } from "../Components/ScrollReveal";
+import ScrollStack from "../Components/ScrollStack";
+import SectionParticleHeading from "../Components/SectionParticleHeading";
 
 const Experience = () => {
   const location = useLocation();
@@ -41,9 +43,11 @@ const Experience = () => {
         
         {/* Section Header */}
         <div className="mb-14 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
-            <span>Career History</span>
-          </div>
+          <Reveal>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono text-xs uppercase tracking-wider mb-3">
+              <span>Career History</span>
+            </div>
+          </Reveal>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <div className="relative inline-block">
@@ -56,8 +60,8 @@ const Experience = () => {
                 >
                   <defs>
                     <linearGradient id="arrow-grad-experience" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#4e2a14" />
-                      <stop offset="100%" stopColor="#fb923c" />
+                      <stop offset="0%" stopColor="#334155" />
+                      <stop offset="100%" stopColor="#f8fafc" />
                     </linearGradient>
                   </defs>
                   <path
@@ -68,24 +72,24 @@ const Experience = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <h2 className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider">
-                  Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">Experience</span>
-                </h2>
+                <SectionParticleHeading text="WORK EXPERIENCE" maxWidth="max-w-md sm:max-w-lg" />
               </div>
               <svg className="w-48 sm:w-56 h-3 mt-2 mx-auto sm:mx-0 select-none pointer-events-none" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="brush-grad-experience" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#fb923c" />
-                    <stop offset="60%" stopColor="#d97706" />
-                    <stop offset="100%" stopColor="#4e2a14" />
+                    <stop offset="0%" stopColor="#f8fafc" />
+                    <stop offset="60%" stopColor="#cbd5e1" />
+                    <stop offset="100%" stopColor="#334155" />
                   </linearGradient>
                 </defs>
                 <path d="M 10 14 C 70 4, 170 3, 290 8 C 210 13, 110 13, 15 17 Z" fill="url(#brush-grad-experience)" />
                 <path d="M 25 18 C 90 12, 190 12, 275 16 C 190 19, 100 19, 30 18 Z" fill="url(#brush-grad-experience)" opacity="0.8" />
               </svg>
-              <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
-                Hands-on professional software engineering internship and technical leadership roles.
-              </p>
+              <Reveal delay={0.1}>
+                <p className="text-sm sm:text-base text-slate-400 mt-2 max-w-xl font-normal">
+                  Hands-on professional software engineering internship and technical leadership roles.
+                </p>
+              </Reveal>
             </div>
             {!isStandalone && (
               <Link
@@ -99,16 +103,19 @@ const Experience = () => {
           </div>
         </div>
 
-        {/* Experience Timeline Cards */}
-        <div className="space-y-6">
+        {/* Experience Timeline Cards — ScrollStack Pinning & Layering */}
+        <ScrollStack
+          topOffset={95}
+          itemStackDistance={28}
+          scaleStep={0.035}
+          blurStep={1.5}
+          dimStep={0.12}
+          itemGap="mb-14 sm:mb-20"
+        >
           {experiences.map((exp, idx) => (
-            <motion.div
+            <div
               key={idx}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: idx * 0.12 }}
-              className="p-6 sm:p-8 rounded-3xl bg-[#0e1117]/80 backdrop-blur-md border border-white/[0.08] hover:border-amber-500/30 transition-all shadow-xl"
+              className="p-6 sm:p-8 rounded-3xl bg-[#111115]/95 backdrop-blur-xl border border-white/[0.09] hover:border-amber-500/40 transition-all shadow-[0_15px_40px_rgba(0,0,0,0.55)]"
             >
               {/* Header Row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-white/[0.08]">
@@ -161,9 +168,9 @@ const Experience = () => {
                 ))}
               </div>
 
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </ScrollStack>
 
       </div>
     </div>
