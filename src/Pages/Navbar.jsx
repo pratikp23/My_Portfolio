@@ -172,12 +172,12 @@ const Navbar = () => {
         {/* Desktop Navigation Capsule */}
         <nav 
           aria-label="Main Navigation"
-          className="hidden md:flex items-center gap-1 bg-[#111115]/85 light:bg-white/90 backdrop-blur-xl border border-white/[0.08] light:border-slate-300/80 p-1.5 rounded-full shadow-lg"
+          className="hidden md:flex items-center md:gap-0.5 lg:gap-1 bg-[#111115]/85 light:bg-white/90 backdrop-blur-xl border border-white/[0.08] light:border-slate-300/80 p-1 lg:p-1.5 rounded-full shadow-lg"
         >
           <Link
             to="/"
             onClick={(e) => handleNavLinkClick("home", e)}
-            className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 z-10 ${
+            className={`relative md:px-2.5 lg:px-4 py-1.5 rounded-full text-[11px] lg:text-xs font-semibold transition-colors duration-200 z-10 whitespace-nowrap ${
               currentSection === "home"
                 ? "text-slate-950 font-bold"
                 : "text-slate-300 light:text-slate-600 hover:text-white light:hover:text-slate-950"
@@ -200,7 +200,7 @@ const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 onClick={(e) => handleNavLinkClick(link.id, e)}
-                className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 z-10 ${
+                className={`relative md:px-2.5 lg:px-4 py-1.5 rounded-full text-[11px] lg:text-xs font-semibold transition-colors duration-200 z-10 whitespace-nowrap ${
                   isActive
                     ? "text-slate-950 font-bold"
                     : "text-slate-300 light:text-slate-600 hover:text-white light:hover:text-slate-950"

@@ -68,7 +68,7 @@ export default function ProjectShowcase({ onOpen }) {
                 data-cursor=""
                 className={`text-[13px] rounded-full px-5 py-2 border transition-all duration-300 ${
                   isActive
-                    ? "bg-lime text-ink border-lime font-medium"
+                    ? "proj-filter-pill-active bg-[#f8fafc] text-ink border-[#f8fafc] font-medium"
                     : "proj-filter-pill border-white/15 text-white/60 hover:border-white/40 hover:text-white"
                 }`}
               >
@@ -145,14 +145,14 @@ export default function ProjectShowcase({ onOpen }) {
 
                   {/* Title + Tagline + Quick Action Links + Mobile Inline Preview */}
                   <div className="col-span-10 md:col-span-6">
-                    <h3 className="row-title font-grotesk font-semibold text-3xl md:text-5xl tracking-tight text-white/90 group-hover:text-white">
+                    <h3 className="row-title font-grotesk font-semibold text-2xl sm:text-3xl md:text-5xl tracking-tight text-white/90 group-hover:text-white break-words">
                       {p.title}
                     </h3>
                     <p className="mt-2 text-sm text-white/40 max-w-md">{p.tagline}</p>
 
                     {/* Direct Quick Links on Row */}
                     <div
-                      className="flex items-center gap-2.5 mt-3 pointer-events-auto"
+                      className="flex flex-wrap items-center gap-2 sm:gap-2.5 mt-3 pointer-events-auto"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {p.github && (

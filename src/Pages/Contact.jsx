@@ -184,7 +184,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="relative w-full px-4 py-20 text-white sm:px-6 lg:px-8">
+    <div className="relative w-full px-4 py-16 sm:py-20 text-white sm:px-6 md:pl-20 md:pr-8 xl:px-8">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
@@ -198,7 +198,7 @@ const Contact = () => {
             <div>
               <div className="relative inline-block">
                 <svg
-                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+                  className="section-curly-arrow absolute -left-4 -top-6 w-7 h-7 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
                   viewBox="0 0 100 100"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +451,7 @@ const Contact = () => {
 
                   {/* Email Input */}
                   <div>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                       <label htmlFor="email" className="block text-xs font-semibold text-slate-300">
                         Email Address <span className="text-green-400">*</span>
                       </label>

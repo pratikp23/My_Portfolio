@@ -251,7 +251,7 @@ export default function MobileAppDock() {
               <button
                 key={item.id}
                 onClick={() => handleDockClick(item.id)}
-                className={`relative flex flex-col items-center justify-center py-1.5 px-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                className={`relative flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 sm:px-2 rounded-xl transition-all duration-200 cursor-pointer ${
                   isActive ? "text-amber-400 font-bold" : "text-slate-400 hover:text-slate-200"
                 }`}
                 aria-label={`Navigate to ${item.label}`}
@@ -263,8 +263,8 @@ export default function MobileAppDock() {
                     transition={{ type: "spring", stiffness: 450, damping: 32 }}
                   />
                 )}
-                <Icon size={18} className="relative z-10 transition-transform active:scale-90" />
-                <span className="relative z-10 text-[9px] font-mono tracking-tight mt-0.5 leading-none">
+                <Icon size={17} className="relative z-10 transition-transform active:scale-90" />
+                <span className="relative z-10 text-[8px] sm:text-[9px] font-mono tracking-tight mt-0.5 leading-none truncate max-w-full">
                   {item.label}
                 </span>
               </button>
@@ -277,11 +277,11 @@ export default function MobileAppDock() {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="CV"
-            className="relative flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-slate-300 hover:text-amber-400 transition-colors"
+            className="relative flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 sm:px-2 rounded-xl text-slate-300 hover:text-amber-400 transition-colors"
             aria-label="Open Resume"
           >
-            <FileText size={17} className="transition-transform active:scale-90" />
-            <span className="text-[9px] font-mono tracking-tight mt-0.5 leading-none text-amber-400/90 font-medium">
+            <FileText size={16} className="transition-transform active:scale-90" />
+            <span className="text-[8px] sm:text-[9px] font-mono tracking-tight mt-0.5 leading-none text-amber-400/90 font-medium">
               CV
             </span>
           </a>

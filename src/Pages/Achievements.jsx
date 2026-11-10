@@ -33,7 +33,7 @@ const Achievements = () => {
   const isStandalone = location.pathname === "/achievements";
 
   return (
-    <div className="relative w-full px-4 py-20 text-white sm:px-6 lg:px-8">
+    <div className="relative w-full px-4 py-16 sm:py-20 text-white sm:px-6 md:pl-20 md:pr-8 xl:px-8">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
@@ -47,7 +47,7 @@ const Achievements = () => {
             <div>
               <div className="relative inline-block">
                 <svg
-                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+                  className="section-curly-arrow absolute -left-4 -top-6 w-7 h-7 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
                   viewBox="0 0 100 100"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -128,32 +128,32 @@ const Achievements = () => {
                     {item.icon}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                    <span className="px-3 py-1 rounded-lg text-xs sm:text-[13px] font-semibold tracking-tight bg-amber-500/15 text-amber-400 border border-amber-500/30">
                       {item.badge}
                     </span>
-                    <span className="inline-flex items-center gap-1 font-mono text-xs text-slate-400">
-                      <Calendar size={12} />
+                    <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium tracking-tight text-slate-400">
+                      <Calendar size={13} />
                       {item.date}
                     </span>
                   </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white mb-1.5">
+                <h3 className="text-xl sm:text-2xl lg:text-[1.75rem] font-semibold leading-snug tracking-tight text-white mb-2">
                   {item.title}
                 </h3>
-                <p className="mb-4 font-mono text-xs sm:text-sm text-amber-400/90 font-medium">
+                <p className="mb-4 text-sm sm:text-base text-amber-400/90 font-semibold tracking-tight">
                   {item.organization}
                 </p>
 
-                <p className="mb-5 text-sm font-normal leading-relaxed text-slate-300">
+                <p className="mb-5 text-sm sm:text-base md:text-[17px] font-normal leading-relaxed text-slate-300">
                   {item.description}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-white/[0.06] flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div className="pt-4 border-t border-white/[0.06] flex items-start gap-2.5 text-sm sm:text-base font-normal leading-relaxed text-slate-300">
+                <CheckCircle2 size={17} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                 <span>
-                  <strong className="font-mono font-semibold text-amber-400">Key Competency:</strong> {item.takeaway}
+                  <strong className="font-semibold tracking-tight text-amber-400">Key Competency:</strong> {item.takeaway}
                 </span>
               </div>
             </div>

@@ -38,7 +38,7 @@ const Experience = () => {
   ];
 
   return (
-    <div className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white">
+    <div className="relative w-full py-16 sm:py-20 px-4 sm:px-6 md:pl-20 md:pr-8 xl:px-8 text-white">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
@@ -52,7 +52,7 @@ const Experience = () => {
             <div>
               <div className="relative inline-block">
                 <svg
-                  className="section-curly-arrow absolute -left-7 -top-6 w-8 h-8 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
+                  className="section-curly-arrow absolute -left-4 -top-6 w-7 h-7 sm:-left-10 sm:-top-8 sm:w-11 sm:h-11 md:-left-12 md:-top-9 md:w-12 md:h-12 scale-x-[-1] pointer-events-none select-none"
                   viewBox="0 0 100 100"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

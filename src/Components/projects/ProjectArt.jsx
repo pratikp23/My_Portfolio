@@ -7,11 +7,11 @@ export default function ProjectArt({ project, id, hue }) {
 
   if (project?.image) {
     return (
-      <div className="w-full h-full rounded-2xl overflow-hidden relative">
+      <div className="w-full h-full rounded-2xl overflow-hidden relative border border-slate-200/80 dark:border-white/10">
         <img
           src={project.image}
           alt={`${project.title || "Project"} screenshot`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
           loading="lazy"
           decoding="async"
         />

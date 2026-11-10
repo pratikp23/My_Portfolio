@@ -291,6 +291,7 @@ html.light header a[aria-label="View Resume in new tab"]:hover {
   border-color: #d97706 !important;
 }
 
+html.light .proj-filter-pill-active,
 html.light .bg-lime {
   background-color: #0f172a !important;
   border-color: #0f172a !important;

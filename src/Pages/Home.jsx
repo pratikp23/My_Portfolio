@@ -19,10 +19,22 @@ import TextLoop from '../Components/TextLoop/TextLoop';
 const Home = () => {
   const heroRef = useRef(null);
   const [isLight, setIsLight] = useState(() => document.documentElement.classList.contains('light'));
+  const [screenWidth, setScreenWidth] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1280
+  );
   const isReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  useEffect(() => {
+    const onResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const isMobileView = screenWidth < 768;
+  const isTabletView = screenWidth >= 768 && screenWidth < 1024;
 
   useEffect(() => {
     const themeObserver = new MutationObserver(() => {
@@ -135,7 +147,7 @@ const Home = () => {
       {/* HERO SECTION */}
       <section
         ref={heroRef}
-        className="hero-section relative w-full min-h-screen min-h-[100dvh] flex flex-col justify-between items-center pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12 overflow-hidden"
+        className="hero-section relative w-full min-h-screen min-h-[100dvh] flex flex-col justify-start md:justify-center items-center pt-16 sm:pt-20 md:pt-28 lg:pt-32 pb-8 sm:pb-12 overflow-hidden"
       >
         
         {/* Interactive Dynamic Cursor Grid Background */}
@@ -162,35 +174,37 @@ const Home = () => {
           <div className={`absolute top-1/2 right-1/4 w-[70vw] max-w-[380px] h-[260px] ${isLight ? 'bg-amber-600/[0.08]' : 'bg-slate-400/[0.03]'} rounded-full blur-[130px]`} />
         </motion.div>
 
-        {/* 3D Physics Lanyard — Free on the Right Side of the Hero Section */}
-        <Lanyard
-          frontImage="/card-front.png"
-          backImage="/card-back.png"
-          strapImage="/band.png"
-          imageFit="cover"
-          cardColor="#111115"
-          orientation="portrait"
-          finish="glossy"
-          cornerRadius={0.3}
-          size={0.36}
-          anchor={0.84}
-          strapLength={0.05}
-          strapColor="#111111"
-          strapWidth={0.65}
-          metal="silver"
-          gravity={1}
-          damping={0.5}
-          elasticity={0.5}
-          breeze={0.35}
-          interactive={true}
-          intro={true}
-          className="absolute inset-0 z-20 w-full h-full pointer-events-none"
-        />
+        {/* 3D Physics Lanyard — Centered dedicated stage on Mobile, Free on the Right on Tablet/Desktop */}
+        <div className="relative w-full h-[250px] sm:h-[290px] mb-1 md:mb-0 md:absolute md:inset-0 md:h-full z-20 pointer-events-none">
+          <Lanyard
+            frontImage="/card-front.png"
+            backImage="/card-back.png"
+            strapImage="/band.png"
+            imageFit="cover"
+            cardColor="#111115"
+            orientation="portrait"
+            finish="glossy"
+            cornerRadius={0.3}
+            size={isMobileView ? 0.58 : isTabletView ? 0.31 : 0.36}
+            anchor={isMobileView ? 0.5 : isTabletView ? 0.8 : 0.84}
+            strapLength={isMobileView ? 0.04 : isTabletView ? 0.06 : 0.05}
+            strapColor="#111111"
+            strapWidth={0.65}
+            metal="silver"
+            gravity={1}
+            damping={0.5}
+            elasticity={0.5}
+            breeze={0.35}
+            interactive={true}
+            intro={true}
+            className="w-full h-full pointer-events-none"
+          />
+        </div>
 
-        {/* Main Hero Content Container — Aligned to the Left Side */}
+        {/* Main Hero Content Container — Full width on Mobile, Left-aligned with Lanyard clearance on Tablet/Desktop */}
         <motion.div
           style={{ opacity: isReduced ? 1 : contentOpacity }}
-          className="relative z-10 flex flex-col items-start w-full max-w-4xl px-4 mb-4 ml-0 mr-auto text-left pointer-events-none lg:max-w-5xl xl:max-w-6xl sm:px-8 md:pl-24 md:pr-12 lg:pl-28 lg:pr-16"
+          className="relative z-10 flex flex-col items-start w-full max-w-7xl px-4 mb-4 ml-0 mr-auto text-left pointer-events-none sm:px-8 md:pl-20 md:pr-[220px] lg:pl-24 lg:pr-[285px] xl:pr-[315px]"
         >
           {/* Greeting Salutation */}
           <motion.div
@@ -228,14 +242,14 @@ const Home = () => {
             initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="w-full h-[95px] sm:h-[135px] md:h-[165px] lg:h-[195px] mb-2 sm:mb-3 pointer-events-auto relative self-start"
+            className="w-[calc(100%+16px)] -ml-2 sm:w-[calc(100%+24px)] sm:-ml-3 md:w-[calc(100%+32px)] md:-ml-4 lg:w-[calc(100%+40px)] lg:-ml-5 h-[104px] sm:h-[145px] md:h-[175px] lg:h-[205px] xl:h-[225px] mb-1 sm:mb-2 pointer-events-auto relative self-start"
           >
             <TechText
               text="PRATIK PATHAK"
               fontWeight={800}
-              fontSize={155}
+              fontSize={195}
               fontFamily="'Space Grotesk', 'Plus Jakarta Sans', sans-serif"
-              letterSpacing={-0.02}
+              letterSpacing={-0.025}
               color={isLight ? "#0f172a" : "#F8FAFC"}
               accentColor={isLight ? "#d97706" : "#E2E8F0"}
               reveal="letter"

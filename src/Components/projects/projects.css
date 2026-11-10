@@ -29,6 +29,13 @@
   transform: translateX(1.5rem);
 }
 
+@media (max-width: 640px) {
+  .proj-row:hover .row-title,
+  .proj-row:focus-visible .row-title {
+    transform: none;
+  }
+}
+
 .proj-row .row-arrow {
   opacity: 0;
   transform: translate(-10px, 10px);

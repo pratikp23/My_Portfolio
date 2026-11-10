@@ -262,3 +262,23 @@ html.light .flowing-menu__tech-badge {
   background: rgba(255, 255, 255, 0.16) !important;
   border-color: rgba(255, 255, 255, 0.28) !important;
 }
+
+/* Mobile Responsive FlowingMenu Layout (320px - 640px) */
+@media (max-width: 640px) {
+  .flowing-menu__link {
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .flowing-menu__label {
+    justify-self: start;
+    font-size: clamp(14px, 4.3vw, 22px);
+    white-space: normal;
+    line-height: 1.15;
+  }
+
+  .flowing-menu__meta {
+    display: none;
+  }
+}

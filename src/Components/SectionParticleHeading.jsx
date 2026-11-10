@@ -45,7 +45,7 @@ export default function SectionParticleHeading({
         loop={false}
         loopDelay={0}
         textAlign={align === 'center' ? 'center' : 'left'}
-        className="section-heading-font text-3xl sm:text-4xl md:text-5xl uppercase text-white tracking-wider drop-shadow-sm leading-tight transition-colors cursor-pointer hover:text-slate-200"
+        className="section-heading-font text-[1.6rem] sm:text-4xl md:text-5xl uppercase text-white tracking-wider drop-shadow-sm leading-tight transition-colors cursor-pointer hover:text-slate-200"
       />
     </div>
   );
